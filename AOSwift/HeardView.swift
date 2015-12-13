@@ -51,6 +51,7 @@ class HeardView: UIView {
         
     }
     
+    
     func initImageBtnLayout(){
         
     }
