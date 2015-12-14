@@ -58,7 +58,7 @@
 		</data>
 		<key>Headers/ArtLog.h</key>
 		<data>
-		PVenUpp71DZigpsv2Ms8VqpXF08=
+		uWnygzAUQogTtqXWATL22VTMNmc=
 		</data>
 		<key>Headers/ArtNumberToCapital.h</key>
 		<data>
@@ -110,7 +110,7 @@
 		</data>
 		<key>Headers/NSObject+AOCocoa.h</key>
 		<data>
-		vc2a3LilVCzZIObHFymz6mb9D7o=
+		2iUbXTiLfhrsIm2HcLNXeEAo0uY=
 		</data>
 		<key>Headers/RData.h</key>
 		<data>
@@ -154,7 +154,7 @@
 		</data>
 		<key>Headers/SqliteHelper.h</key>
 		<data>
-		m+u8PcS9M2EymycTZq29Sk9KyWI=
+		PKgtifq3bA+YBCAcFQUJ6ziuIL4=
 		</data>
 		<key>Headers/Utils.h</key>
 		<data>
@@ -162,7 +162,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Xyi/Axvch0SNRt9F8Nd2wr2IrbM=
+		sShl5JFG2ZS6OhACxxkg1wYg3jQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -170,7 +170,7 @@
 		</data>
 		<key>SidebarViewController.nib</key>
 		<data>
-		bS0Bn7hH0mOU5oqv7T8kBakoGkU=
+		Z64w7lScMYQe5DNkv7Mm5r429sE=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -229,7 +229,7 @@
 		</data>
 		<key>Headers/ArtLog.h</key>
 		<data>
-		PVenUpp71DZigpsv2Ms8VqpXF08=
+		uWnygzAUQogTtqXWATL22VTMNmc=
 		</data>
 		<key>Headers/ArtNumberToCapital.h</key>
 		<data>
@@ -281,7 +281,7 @@
 		</data>
 		<key>Headers/NSObject+AOCocoa.h</key>
 		<data>
-		vc2a3LilVCzZIObHFymz6mb9D7o=
+		2iUbXTiLfhrsIm2HcLNXeEAo0uY=
 		</data>
 		<key>Headers/RData.h</key>
 		<data>
@@ -325,7 +325,7 @@
 		</data>
 		<key>Headers/SqliteHelper.h</key>
 		<data>
-		m+u8PcS9M2EymycTZq29Sk9KyWI=
+		PKgtifq3bA+YBCAcFQUJ6ziuIL4=
 		</data>
 		<key>Headers/Utils.h</key>
 		<data>
@@ -337,7 +337,7 @@
 		</data>
 		<key>SidebarViewController.nib</key>
 		<data>
-		bS0Bn7hH0mOU5oqv7T8kBakoGkU=
+		Z64w7lScMYQe5DNkv7Mm5r429sE=
 		</data>
 	</dict>
 	<key>rules</key>

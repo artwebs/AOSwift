@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject(AOCocoa)
--(void)log:(NSObject *)obj;
+-(void)log:(NSObject *)obj,...;
 -(NSString *)tag;
+-(void)setDebugger:(BOOL)flag;
+-(BOOL)isDebugger;
 @end
 
 @interface NSObject_AOCocoa
