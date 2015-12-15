@@ -21,3 +21,9 @@ func setRootViewController(identifier : String){
     app().window?.makeKeyAndVisible()
     
 }
+
+
+func instantViewController(identifier : String)->UIViewController{
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    return  storyboard.instantiateViewControllerWithIdentifier(identifier)
+}
