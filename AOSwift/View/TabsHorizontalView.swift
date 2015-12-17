@@ -9,23 +9,27 @@
 import UIKit
 import AOCocoa
 
-protocol TabsHorizontalViewDataSource{
-    func selectItem(tabsHorizontalView tabsHorizontalView : TabsHorizontalView,index : Int ,data : Dictionary<String,String>)
+@objc protocol TabsHorizontalViewDataSource{
+    func tabsHorizontalViewCellCount(tabsHorizontalView : TabsHorizontalView)->Int
+    optional func tabsHorizontalViewCellWidth(tabsHorizontalView : TabsHorizontalView)->CGFloat
+    optional func tabsHorizontalViewForCellSelectStyle(tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
+    optional func tabsHorizontalViewForCellUnSelectStyle(tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
+    func tabsHorizontalViewForCell(tabsHorizontalView : TabsHorizontalView,cell : UIButton,index: Int)
+    optional func tabsHorizontalViewLineView(tabsHorizontalView : TabsHorizontalView)->UIView
 }
 
-
-protocol TabsHorizontalViewDelegate{
-    func selectItem(tabsHorizontalView tabsHorizontalView : TabsHorizontalView,index : Int ,data : Dictionary<String,String>)
+@objc protocol TabsHorizontalViewDelegate{
+    optional func tabsHorizontalViewDidSelectedCell(tabsHorizontalView : TabsHorizontalView,index: Int)
 }
 
 
 class TabsHorizontalView: UIScrollView {
-    let lineView : UIView = UIView()
-    var tabs :[UIButton]=[]
+    var lineView : UIView?
     var tabData :[Dictionary<String,String>] = []
     var tagStart=1000;
     var allWith :CGFloat = 0
     var tabDelegate : TabsHorizontalViewDelegate?
+    var dataSource : TabsHorizontalViewDataSource?
 
     
     
@@ -34,50 +38,44 @@ class TabsHorizontalView: UIScrollView {
         self.showsVerticalScrollIndicator=false
     }
     
-    
-    func show(data:[Dictionary<String,String>]){
+    func reload(){
+        self.backgroundColor = UIColor.clearColor()
         self.clear()
-        tabData += data
+        if self.dataSource == nil {
+            return
+        }
+        var width :CGFloat = 0
+        if let tmp = self.dataSource!.tabsHorizontalViewCellWidth?(self){
+            width = tmp
+        }
         
-        for (index , value ) in tabData.enumerate(){
-            let btn = initTabItem(index,item: value)
-            tabs.append(btn)
-            self.addSubview(btn);
+        for(var index = 0; index < self.dataSource!.tabsHorizontalViewCellCount(self) ; index++){
+            
+            let view = UIButton(frame: CGRectMake(allWith,0,width,frame.height))
+            self.dataSource?.tabsHorizontalViewForCell(self, cell: view, index: index)
+            view.setTag(tagStart+index)
+            view.addTarget(self, action: "btnOnClick:", forControlEvents: UIControlEvents.TouchUpInside)
+            allWith += view.frame.width
+            self.addSubview(view);
         }
         self.contentSize=CGSizeMake(allWith, frame.height)
-        initLineView(frame);
-        self.addSubview(lineView)
-        self.backgroundColor=UIColor.clearColor()
-        self.selectItem(0, isDelegateSelect: false)
+        lineView = self.dataSource!.tabsHorizontalViewLineView?(self)
+        if lineView != nil{
+            self.addSubview(lineView!)
+            lineView!.hidden = true
+        }
+        if self.dataSource!.tabsHorizontalViewCellCount(self)>0{
+            self.selectItem(0, isDelegateSelect: false)
+        }
     }
+    
     
     func clear(){
         allWith=0;
         for view in self.subviews{
             view.removeFromSuperview()
         }
-        tabs.removeAll()
         tabData.removeAll()
-        
-    }
-    
-    func initTabItem(index : Int,item : Dictionary<String,String>)->UIButton{
-        let btn = UIButton()
-        if let text = item["title"]{
-            let fontSize = Utils.stringLength(text, fontSize: Float(UIFont.buttonFontSize()))
-            btn.frame = CGRectMake(allWith, 0, fontSize.width+16, frame.height)
-            btn.setTitle(text, forState: UIControlState.Normal)
-            
-        }
-        btn.contentHorizontalAlignment=UIControlContentHorizontalAlignment.Center
-        btn.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        btn.addTarget(self, action: "btnOnClick:", forControlEvents: UIControlEvents.TouchUpInside)
-        btn.setTag(index+tagStart)
-        allWith += btn.frame.width
-        return btn;
-    }
-    
-    func initLineView(rect:CGRect){
         
     }
     
@@ -86,18 +84,22 @@ class TabsHorizontalView: UIScrollView {
     }
     
     func selectItem(index : Int, isDelegateSelect:Bool){
-        for (i,item) in tabs.enumerate(){
+        for (var i=0;i<self.dataSource?.tabsHorizontalViewCellCount(self);i++){
+            let item = self.viewWithTag(tagStart+i) as! UIButton
             if i==index {
-                lineView.hidden=false
-                lineView.center=CGPointMake(item.center.x, lineView.center.y)
+                if lineView != nil {
+                    lineView?.hidden=false
+                    lineView?.center=CGPointMake(item.center.x, lineView!.center.y)
+                }
                 //滚动到中心位置
+                self.dataSource?.tabsHorizontalViewForCellSelectStyle?(self,cell:item, index: i )
                 self.setContentOffViewCenter(view: item)
             }else{
-                item.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+                self.dataSource?.tabsHorizontalViewForCellUnSelectStyle?(self,cell:item, index: i)
             }
         }
         if isDelegateSelect {
-            tabDelegate?.selectItem(tabsHorizontalView:self,index:index,data:tabData[index])
+            tabDelegate?.tabsHorizontalViewDidSelectedCell?(self, index: index)
         }
         
     }
