@@ -50,7 +50,6 @@ class TabsHorizontalView: UIScrollView {
         }
         
         for(var index = 0; index < self.dataSource!.tabsHorizontalViewCellCount(self) ; index++){
-            
             let view = UIButton(frame: CGRectMake(allWith,0,width,frame.height))
             self.dataSource?.tabsHorizontalViewForCell(self, cell: view, index: index)
             view.setTag(tagStart+index)
