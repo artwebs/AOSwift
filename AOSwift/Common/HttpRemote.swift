@@ -145,7 +145,7 @@ class HttpRemote {
         }
         
         var success = false
-        var msg :String!
+        var msg :String = "连接服务器超时！"
         var data :Any? = nil
         if let rs = service!.sendParems(param){
             let dic = Utils.JSONOjbectFromString(rs) as? NSDictionary
@@ -157,11 +157,11 @@ class HttpRemote {
                     if tmp.intValue == 2002{
                         serviceObject.status=HttpServiceStatus.success
                         success=true
-                        msg = dic?["msg"] as? String
+                        msg = dic?["msg"] as! String
                         data = dic?["data"]
                         
                     }else{
-                        msg = dic?["msg"] as? String
+                        msg = dic?["msg"]as! String
                     }
                 }
             }

@@ -20,7 +20,13 @@ protocol FlashHorizontalViewDelegate{
 class FlashHorizontalView: UIScrollView {
     var dataSource : FlashHorizontalViewDataSource?
     var flashDelegate : FlashHorizontalViewDelegate?
-    var startTag = 1000
+    
+    var startTag : Int{
+        get{
+            return 10300
+        }
+    }
+    
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -31,6 +37,7 @@ class FlashHorizontalView: UIScrollView {
     }
     
     func reload(){
+        self.backgroundColor = UIColor.clearColor()
         for view in self.subviews {
             view.removeFromSuperview()
         }

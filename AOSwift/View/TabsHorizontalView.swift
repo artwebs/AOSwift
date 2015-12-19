@@ -26,10 +26,15 @@ import AOCocoa
 class TabsHorizontalView: UIScrollView {
     var lineView : UIView?
     var tabData :[Dictionary<String,String>] = []
-    var tagStart=1000;
     var allWith :CGFloat = 0
     var tabDelegate : TabsHorizontalViewDelegate?
     var dataSource : TabsHorizontalViewDataSource?
+    
+    var tagStart : Int{
+        get{
+            return 10100
+        }
+    }
 
     
     
