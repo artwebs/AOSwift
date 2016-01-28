@@ -9,9 +9,9 @@
 import UIKit
 
 @objc protocol AOHeardViewDataSource{
-    optional func heardViewForMiddleView(hearView : AOHeardView , size: CGSize)->UIView;
-    optional func heardViewForLeftView(hearView : AOHeardView , size: CGSize)->UIView;
-    optional func heardViewForRightView(hearView : AOHeardView , size: CGSize)->UIView;
+    optional func heardViewForMiddleView(heardView : AOHeardView , size: CGSize)->UIView;
+    optional func heardViewForLeftView(heardView : AOHeardView , size: CGSize)->UIView;
+    optional func heardViewForRightView(heardView : AOHeardView , size: CGSize)->UIView;
 }
 
 protocol HeardViewDelegate{
@@ -39,12 +39,12 @@ class AOHeardView : UIView {
         self.middleView = dataSource?.heardViewForMiddleView?(self, size: frame.size)
         
         if self.leftView != nil {
-            self.leftView?.center = CGPoint(x: self.leftView!.center.x, y: (frame.height+20)*0.50)
+            self.leftView?.center = CGPoint(x: self.leftView!.center.x+10, y: (frame.height+20)*0.50)
             self.addSubview(self.leftView!)
         }
         
         if self.rightView != nil {
-            self.rightView?.center = CGPoint(x: frame.width - self.rightView!.frame.width * 0.5, y: (frame.height+20)*0.50)
+            self.rightView?.center = CGPoint(x: frame.width - self.rightView!.frame.width * 0.5-10, y: (frame.height+20)*0.50)
             self.addSubview(self.rightView!)
         }
         
@@ -80,17 +80,17 @@ class AOHeardView : UIView {
 
 class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
     
-    func heardViewForLeftView(hearView: AOHeardView, size: CGSize) -> UIView {
+    func heardViewForLeftView(heardView: AOHeardView, size: CGSize) -> UIView {
         let view =  UIButton(frame: CGRectMake(0,0,size.width,size.height))
         return view
     }
     
-    func heardViewForRightView(hearView: AOHeardView, size: CGSize) -> UIView {
+    func heardViewForRightView(heardView: AOHeardView, size: CGSize) -> UIView {
         let view =  UIButton(frame: CGRectMake(0,0,size.width,size.height))
         return view
     }
     
-    func heardViewForMiddleView(hearView: AOHeardView, size: CGSize) -> UIView {
+    func heardViewForMiddleView(heardView: AOHeardView, size: CGSize) -> UIView {
         let view =  UILabel(frame: CGRectMake(0,0,size.width,size.height))
         view.textAlignment = NSTextAlignment.Center
         view.textColor = UIColor.blackColor()
