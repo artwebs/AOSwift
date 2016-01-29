@@ -79,6 +79,10 @@ class HttpRemote {
         post(list:[HttpService(cmd: command, params: NSMutableDictionary(), callback: callback)])
     }
     
+    func post(command :HttpServiceInterface,params: NSMutableDictionary, callback : (cmd : HttpServiceInterface, success :Bool,msg : String , data : Any?)->()){
+        post(list:[HttpService(cmd: command, params: params, callback: callback)])
+    }
+    
     func post(obj obj:HttpService){
         post(list:[obj],rCallBack: nil)
     }
