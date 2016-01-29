@@ -79,6 +79,7 @@ class AOHeardView : UIView {
 }
 
 class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
+    private var titleText : String?
     
     func heardViewForLeftView(heardView: AOHeardView, size: CGSize) -> UIView {
         let view =  UIButton(frame: CGRectMake(0,0,size.width,size.height))
@@ -98,9 +99,8 @@ class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
     }
     
     func setTitle(title: String){
-        if let view = self.middleView as? UILabel{
-            view.text = title
-        }
+        titleText = title
+        reloadTitle()
     }
     
     override func drawRect(rect: CGRect) {
@@ -112,6 +112,13 @@ class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
     override func reload() {
         self.dataSource = self
         super.reload()
+        reloadTitle()
+    }
+    
+    private func reloadTitle(){
+        if let view = self.middleView as? UILabel{
+            view.text = titleText
+        }
     }
 
 }
