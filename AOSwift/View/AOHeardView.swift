@@ -26,6 +26,7 @@ class AOHeardView : UIView {
     var dataSource : AOHeardViewDataSource?
     internal var listeners = Dictionary<UIButton,()->()>()
     var viewController : UIViewController?
+    private var viewHidden = [false,false,false]
     
     
     
@@ -41,17 +42,30 @@ class AOHeardView : UIView {
         if self.leftView != nil {
             self.leftView?.center = CGPoint(x: self.leftView!.center.x+10, y: (frame.height+20)*0.50)
             self.addSubview(self.leftView!)
+            self.leftView?.hidden = viewHidden[0]
         }
         
         if self.rightView != nil {
             self.rightView?.center = CGPoint(x: frame.width - self.rightView!.frame.width * 0.5-10, y: (frame.height+20)*0.50)
             self.addSubview(self.rightView!)
+            self.rightView?.hidden = viewHidden[2]
         }
         
         if self.middleView != nil {
             self.middleView?.center = CGPoint(x: frame.width * 0.5, y: (frame.height+20)*0.50)
             self.addSubview(self.middleView!)
+            self.middleView?.hidden = viewHidden[1]
         }
+    }
+    
+    func setViewHidden(left:Bool,middle:Bool,right:Bool){
+        viewHidden[0] = left
+        viewHidden[1] = middle
+        viewHidden[2] = right
+        
+        self.leftView?.hidden = viewHidden[0]
+        self.rightView?.hidden = viewHidden[2]
+        self.middleView?.hidden = viewHidden[1]
     }
     
     func setOnClick(sender : UIButton , listener: ()->()){
@@ -61,7 +75,7 @@ class AOHeardView : UIView {
     
     func setBackViewController(sender : UIButton){
         setOnClick(sender) { [unowned self] in
-            self.viewController?.navigationController?.popToRootViewControllerAnimated(true)
+            self.viewController?.navigationController?.popViewControllerAnimated(true)
         }
     }
     
