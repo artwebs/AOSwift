@@ -54,11 +54,11 @@ class TabsHorizontalView: UIScrollView {
             width = tmp
         }
         
-        for(var index = 0; index < self.dataSource!.tabsHorizontalViewCellCount(self) ; index++){
+        for index in 0 ..< self.dataSource!.tabsHorizontalViewCellCount(self){
             let view = UIButton(frame: CGRectMake(allWith,0,width,frame.height))
             self.dataSource?.tabsHorizontalViewForCell(self, cell: view, index: index)
             view.setTag(tagStart+index)
-            view.addTarget(self, action: "btnOnClick:", forControlEvents: UIControlEvents.TouchUpInside)
+            view.addTarget(self, action: #selector(TabsHorizontalView.btnOnClick(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             allWith += view.frame.width
             self.addSubview(view);
         }
