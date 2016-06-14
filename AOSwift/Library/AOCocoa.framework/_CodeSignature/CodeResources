@@ -126,11 +126,11 @@
 		</data>
 		<key>Headers/Security.h</key>
 		<data>
-		u5pgfFZtYjskI588dgUG+MbM58k=
+		yU0TZVt1/sckqBgVu+i9kqEZAjs=
 		</data>
 		<key>Headers/SecurityDES.h</key>
 		<data>
-		vvn1Kww/UiAJio+fqaO5e4c6HYo=
+		L8Yh+1ulCSQZ5AjoAv+Z+5ffM2Q=
 		</data>
 		<key>Headers/ServiceTask.h</key>
 		<data>
@@ -162,7 +162,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		sShl5JFG2ZS6OhACxxkg1wYg3jQ=
+		4sQwHjAkREa3/jL0hu9W0Y8YoXQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -170,175 +170,462 @@
 		</data>
 		<key>SidebarViewController.nib</key>
 		<data>
-		Z64w7lScMYQe5DNkv7Mm5r429sE=
+		+M7l0Y5UzyCj/Mlduh+YsIRVHDo=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
 		<key>Headers/AOCocoa.h</key>
-		<data>
-		b2rLiD28F5s2t/UZ6YvF6/L85jQ=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			b2rLiD28F5s2t/UZ6YvF6/L85jQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			EVNygFr2Ys9aE48bEXB9k1WVm5ZEXnKS5YamIoDfPZ4=
+			</data>
+		</dict>
 		<key>Headers/AOHelpView.h</key>
-		<data>
-		PTdhnVZHy21s4W00aT7mbXQAPu4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			PTdhnVZHy21s4W00aT7mbXQAPu4=
+			</data>
+			<key>hash2</key>
+			<data>
+			O465WTKjbcRZgTHGxLqRdtCRdqYIhGQFJvrDZLCaYQA=
+			</data>
+		</dict>
 		<key>Headers/AddressBook.h</key>
-		<data>
-		KxARDvzkoOBv50L6z0sitLErUYo=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			KxARDvzkoOBv50L6z0sitLErUYo=
+			</data>
+			<key>hash2</key>
+			<data>
+			V0FdKPkLc6xD1e90GPDdUg7NeQZSpwdiTzJVh3Wl62c=
+			</data>
+		</dict>
 		<key>Headers/ArtAlert.h</key>
-		<data>
-		faryDM4Up9gpNt6JxYPU1+h+aGQ=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			faryDM4Up9gpNt6JxYPU1+h+aGQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			hcLOBkEsURs8S4Q62KkFjMPWlFYLxnpNu8+Iq+Rtkrc=
+			</data>
+		</dict>
 		<key>Headers/ArtAlertView.h</key>
-		<data>
-		QSWmQzdIuUcVMyNkjkoXBbBiKe4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			QSWmQzdIuUcVMyNkjkoXBbBiKe4=
+			</data>
+			<key>hash2</key>
+			<data>
+			OqLdmQ16XD8UbPaL+QzAalnCl8sx5fJg0D//pfnFX7I=
+			</data>
+		</dict>
 		<key>Headers/ArtButtonMove.h</key>
-		<data>
-		kgyapDtwQ2UMB+fmgqWuZl0Uf8U=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			kgyapDtwQ2UMB+fmgqWuZl0Uf8U=
+			</data>
+			<key>hash2</key>
+			<data>
+			BDtHJDuiwgokf6MKuftYOLZcn4lLZGJ0UfdStndFK2M=
+			</data>
+		</dict>
 		<key>Headers/ArtCircleProcessView.h</key>
-		<data>
-		o71JOzy4hMt2/0OhcGZhRqy6FMQ=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			o71JOzy4hMt2/0OhcGZhRqy6FMQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			yxs0kM30jBufgIcb6rQ4NjE8ad8dco5Jy2dF7RxX8GU=
+			</data>
+		</dict>
 		<key>Headers/ArtEditView.h</key>
-		<data>
-		MP6heZSm/ov+RUKlTAlT/YrrIRc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			MP6heZSm/ov+RUKlTAlT/YrrIRc=
+			</data>
+			<key>hash2</key>
+			<data>
+			3zxF/JYAd45atK6VVqRAHSJgBo08/jqyktIWJNJjHyE=
+			</data>
+		</dict>
 		<key>Headers/ArtFrameCellView.h</key>
-		<data>
-		MM4rYB6RBPXcKMFEcZv6Gr2pH0U=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			MM4rYB6RBPXcKMFEcZv6Gr2pH0U=
+			</data>
+			<key>hash2</key>
+			<data>
+			frBq5EamhewOHrDLw8ZyP03tvo+726fbPSJo99CKi0U=
+			</data>
+		</dict>
 		<key>Headers/ArtFrameDragView.h</key>
-		<data>
-		5ddn3D1PDHFhWIqiWAp7nIxlyds=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			5ddn3D1PDHFhWIqiWAp7nIxlyds=
+			</data>
+			<key>hash2</key>
+			<data>
+			y26TkUbw9Ba6RA/aZPXihFo0UOpUleuwIp+LqlaPf4c=
+			</data>
+		</dict>
 		<key>Headers/ArtFramePlayView.h</key>
-		<data>
-		gphampG0Qc3dsCludEzG89IwTy0=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			gphampG0Qc3dsCludEzG89IwTy0=
+			</data>
+			<key>hash2</key>
+			<data>
+			yaQ9mXwQjMB5mGldeJgHMAR5e9u2LZzQcn6udDTMPUM=
+			</data>
+		</dict>
 		<key>Headers/ArtFrameSuperView.h</key>
-		<data>
-		XYp0s5nR3tOLS95qTvVbFuOt/iU=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			XYp0s5nR3tOLS95qTvVbFuOt/iU=
+			</data>
+			<key>hash2</key>
+			<data>
+			XKJSHalYV2Icpkho96L4YwK8/1GKOAmDwTJKAFscyv4=
+			</data>
+		</dict>
 		<key>Headers/ArtListControlPage.h</key>
-		<data>
-		RifTYILWWEcGVMchAkY7Ahf+TxQ=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			RifTYILWWEcGVMchAkY7Ahf+TxQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			3oNLJBKrt+jMy2Dxr4lUQn7O/WP4HbQ1rhtHJfTM3hY=
+			</data>
+		</dict>
 		<key>Headers/ArtLog.h</key>
-		<data>
-		uWnygzAUQogTtqXWATL22VTMNmc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			uWnygzAUQogTtqXWATL22VTMNmc=
+			</data>
+			<key>hash2</key>
+			<data>
+			nowqLCD+06Q+0OOZ74yxylCxVNn2xu8J2iLtacHMiz8=
+			</data>
+		</dict>
 		<key>Headers/ArtNumberToCapital.h</key>
-		<data>
-		Gnh28NFry7wUXSF3faJVTn0F6T8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			Gnh28NFry7wUXSF3faJVTn0F6T8=
+			</data>
+			<key>hash2</key>
+			<data>
+			j8wbhxva0AuQNk1ykvMoT4Jx9Wt3mZkmlFNYtLPc1Ds=
+			</data>
+		</dict>
 		<key>Headers/ArtQrCodeDeView.h</key>
-		<data>
-		wIahZJ97Gmkt8xN8pOt1yzkl/WE=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			wIahZJ97Gmkt8xN8pOt1yzkl/WE=
+			</data>
+			<key>hash2</key>
+			<data>
+			la1SJ2Yqejz8kOhDdx7eoR7xYZ+AXkdOMKurs6XR9SQ=
+			</data>
+		</dict>
 		<key>Headers/ArtSubmitControl.h</key>
-		<data>
-		+W2PmIGsbzNojFNFwW6tHaVfDUE=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			+W2PmIGsbzNojFNFwW6tHaVfDUE=
+			</data>
+			<key>hash2</key>
+			<data>
+			D9KoCTwCuoyn0nv6BD/BlZYqfk7xzi/XfB96M6DwjM0=
+			</data>
+		</dict>
 		<key>Headers/ArtSubmitViewCell.h</key>
-		<data>
-		GH5bu4tvIiHPQvAf/Febmsct2rY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			GH5bu4tvIiHPQvAf/Febmsct2rY=
+			</data>
+			<key>hash2</key>
+			<data>
+			iZHWLUx6BNPO/8+HC2AiiyADj8mb9lzw5O8wpEOKr40=
+			</data>
+		</dict>
 		<key>Headers/ArtSubmitViewCellButton.h</key>
-		<data>
-		i7q4Gm7Xyyj6eB60vmyVWX5XH7E=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			i7q4Gm7Xyyj6eB60vmyVWX5XH7E=
+			</data>
+			<key>hash2</key>
+			<data>
+			hiCQ6NYL87bWQVm0oL7WyLuJEExpSoCB2X+oNLoAYwY=
+			</data>
+		</dict>
 		<key>Headers/ArtView.h</key>
-		<data>
-		OEmf9OBz87dcBzxRU4lu6fRx7sk=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			OEmf9OBz87dcBzxRU4lu6fRx7sk=
+			</data>
+			<key>hash2</key>
+			<data>
+			4nlCaIBVkgGf64Y0NBj+aFOGOpGQpX0NbzO7IFuDVw8=
+			</data>
+		</dict>
 		<key>Headers/AsyncRemoteOperation.h</key>
-		<data>
-		wTCi7dK2xxlAAbtb6clRfenB/44=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			wTCi7dK2xxlAAbtb6clRfenB/44=
+			</data>
+			<key>hash2</key>
+			<data>
+			c49xf1gmgbQtA/Bxh8Gykhajsq5+YYXQiV9F+vPYsK8=
+			</data>
+		</dict>
 		<key>Headers/DicListView.h</key>
-		<data>
-		eVQG+MwaSiTFrC2hpxQqYMKs1T4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			eVQG+MwaSiTFrC2hpxQqYMKs1T4=
+			</data>
+			<key>hash2</key>
+			<data>
+			qim1YYaXYPriQm8q/FFY9Gwv+dnlpv26ZMYrRBS/bN4=
+			</data>
+		</dict>
 		<key>Headers/IService.h</key>
-		<data>
-		xESgowpqYb4YMbPcgruPPHmcQq4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			xESgowpqYb4YMbPcgruPPHmcQq4=
+			</data>
+			<key>hash2</key>
+			<data>
+			f2H5upkSPc37Qi+yGGcMy+ZnqSygyGsB9wILgebsrAc=
+			</data>
+		</dict>
 		<key>Headers/IServiceHttp.h</key>
-		<data>
-		OZAz3IYuecB4b0DyEZ8PEQdwCfA=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			OZAz3IYuecB4b0DyEZ8PEQdwCfA=
+			</data>
+			<key>hash2</key>
+			<data>
+			Rw3x0VD65W1IKJ1GyuASSRDn9SYxHnKrzQ3MG4zNVuI=
+			</data>
+		</dict>
 		<key>Headers/IServiceHttpSync.h</key>
-		<data>
-		IWMOr1ca6U8DWQlt+jCRkqRe9+k=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			IWMOr1ca6U8DWQlt+jCRkqRe9+k=
+			</data>
+			<key>hash2</key>
+			<data>
+			/1MRN4hV9k1noaiuYZN5FemTdNmaIW6n84a5bPshRMQ=
+			</data>
+		</dict>
 		<key>Headers/NSData+Base64.h</key>
-		<data>
-		bhtlriahgGxNVF6V/exzPx8JoQ4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			bhtlriahgGxNVF6V/exzPx8JoQ4=
+			</data>
+			<key>hash2</key>
+			<data>
+			3GaKUMfqHqD0ElrRyKNP8GFEiJl4GvvB8WPlyJb+eBQ=
+			</data>
+		</dict>
 		<key>Headers/NSObject+AOCocoa.h</key>
-		<data>
-		2iUbXTiLfhrsIm2HcLNXeEAo0uY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			2iUbXTiLfhrsIm2HcLNXeEAo0uY=
+			</data>
+			<key>hash2</key>
+			<data>
+			mWtDOjE71kbhdlIWDXhKjxdRRbkCxOsHkHBx/H6mdV8=
+			</data>
+		</dict>
 		<key>Headers/RData.h</key>
-		<data>
-		fSAWiZIEGU4b0VvGMaI/ZQQ9bKo=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			fSAWiZIEGU4b0VvGMaI/ZQQ9bKo=
+			</data>
+			<key>hash2</key>
+			<data>
+			bl+sWv+kSQzXVBlRL9zjhzQ7pw/vzHv8VBI06svGJrU=
+			</data>
+		</dict>
 		<key>Headers/RemoteFactory.h</key>
-		<data>
-		Lo0Gxv/pG/z9r5Leq/Ys4EtdMqM=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			Lo0Gxv/pG/z9r5Leq/Ys4EtdMqM=
+			</data>
+			<key>hash2</key>
+			<data>
+			CO6DYxWPcou3F+/i7EjUrxjxmkuY12dUS0CDsXNnl/c=
+			</data>
+		</dict>
 		<key>Headers/Response.h</key>
-		<data>
-		xfuSprFUsAQ3zB9UYHhjajvIzeY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			xfuSprFUsAQ3zB9UYHhjajvIzeY=
+			</data>
+			<key>hash2</key>
+			<data>
+			R+fY3UCRY5HHDfjRqG26S2RbwkjkvtVHIan2AHESdDA=
+			</data>
+		</dict>
 		<key>Headers/Security.h</key>
-		<data>
-		u5pgfFZtYjskI588dgUG+MbM58k=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			yU0TZVt1/sckqBgVu+i9kqEZAjs=
+			</data>
+			<key>hash2</key>
+			<data>
+			alOFzux6IBSbkMsZYqn/1pyKRtz2sf15GHK6VR+eURU=
+			</data>
+		</dict>
 		<key>Headers/SecurityDES.h</key>
-		<data>
-		vvn1Kww/UiAJio+fqaO5e4c6HYo=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			L8Yh+1ulCSQZ5AjoAv+Z+5ffM2Q=
+			</data>
+			<key>hash2</key>
+			<data>
+			g7qAyLy40x/AknmGG9dJOQyeVdtnbQlqsu3DbIVjOHc=
+			</data>
+		</dict>
 		<key>Headers/ServiceTask.h</key>
-		<data>
-		z/FpwxxbAJHA0h0EU4JXiB2NE60=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			z/FpwxxbAJHA0h0EU4JXiB2NE60=
+			</data>
+			<key>hash2</key>
+			<data>
+			8Enf5nwayfA/pllu4jQ0HBwR8rXPtLw1DiCzC25igmw=
+			</data>
+		</dict>
 		<key>Headers/SideBarSelectedDelegate.h</key>
-		<data>
-		/m28G8gKgzo22GJ5Oqm3P0RVuoY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			/m28G8gKgzo22GJ5Oqm3P0RVuoY=
+			</data>
+			<key>hash2</key>
+			<data>
+			7I95XjQ2gljDNTvzy3UcKu8WMbGO9p/C3R8a1Svnk9k=
+			</data>
+		</dict>
 		<key>Headers/SidebarMenuViewController.h</key>
-		<data>
-		FZJWtjYU/n51zCJwWxwFVlP1Yb8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			FZJWtjYU/n51zCJwWxwFVlP1Yb8=
+			</data>
+			<key>hash2</key>
+			<data>
+			0K//7S5uIg/bTAQTD9Qfqj/qpvl5tXgfZPgMqo7cI+c=
+			</data>
+		</dict>
 		<key>Headers/SidebarViewController.h</key>
-		<data>
-		NcS2GLPADwEUTV2erwMjx3+k3Dc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			NcS2GLPADwEUTV2erwMjx3+k3Dc=
+			</data>
+			<key>hash2</key>
+			<data>
+			m5JdgNjANNY922qRi0cxufDMv+V0AhsoMWN6CvzMG18=
+			</data>
+		</dict>
 		<key>Headers/SimpleTable.h</key>
-		<data>
-		FRNUwFdFX8cdF+FuvMQy8I7jqFk=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			FRNUwFdFX8cdF+FuvMQy8I7jqFk=
+			</data>
+			<key>hash2</key>
+			<data>
+			w6vcgJgBy4rkrEQowctgd72QGPoe5JNtG3cyKYddhhA=
+			</data>
+		</dict>
 		<key>Headers/SqliteHelper.h</key>
-		<data>
-		PKgtifq3bA+YBCAcFQUJ6ziuIL4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			PKgtifq3bA+YBCAcFQUJ6ziuIL4=
+			</data>
+			<key>hash2</key>
+			<data>
+			UaBhORcmxbY5fQ47M6xT5ot8TceRVklois10IpdPWs8=
+			</data>
+		</dict>
 		<key>Headers/Utils.h</key>
-		<data>
-		8V9ycdsmxVW+HJRMjkviA3qu+Bs=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			8V9ycdsmxVW+HJRMjkviA3qu+Bs=
+			</data>
+			<key>hash2</key>
+			<data>
+			B6tgtJQcvz/WxLGuLD8/xGqU+S15REK64oyzDf2NcQk=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		U0Y83y9hNN1LhmHutGUtekKq9G0=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			U0Y83y9hNN1LhmHutGUtekKq9G0=
+			</data>
+			<key>hash2</key>
+			<data>
+			Yy+miJaFykIOpJ3p1C99ybQR3UNu8ydWpg5HzuKxims=
+			</data>
+		</dict>
 		<key>SidebarViewController.nib</key>
-		<data>
-		Z64w7lScMYQe5DNkv7Mm5r429sE=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			+M7l0Y5UzyCj/Mlduh+YsIRVHDo=
+			</data>
+			<key>hash2</key>
+			<data>
+			SnCFtVNN0pwo8UH4LFed1lecd7Imzlda4MoY3zGvoI4=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>
