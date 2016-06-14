@@ -58,7 +58,6 @@ class HttpRemote {
         }
     }
     private func newService(perfixUrl :String)->IServiceHttpSync?{
-        //        println(AppDefault.DATA_API_ROOT+perfixUrl)
         if let root = self.apiRoot {
             return IServiceHttpSync(url:root+perfixUrl)
         }
