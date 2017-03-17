@@ -16,7 +16,7 @@ extension UIView{
         set{}
     }
     
-    class func translatesAutoresizingMaskIntoConstraintsFalse(views : Dictionary<String,UIView>){
+    class func translatesAutoresizingMaskIntoConstraintsFalse(_ views : Dictionary<String,UIView>){
         for (_ , view) in views{
             view.translatesAutoresizingMaskIntoConstraints = false
         }

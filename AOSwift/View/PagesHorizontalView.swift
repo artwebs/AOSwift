@@ -7,15 +7,35 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 protocol PagesHorizontalViewDataSource{
-    func pagesHorizontalViewCellCount(pagesHorizontalView : PagesHorizontalView)->Int
-    func pagesHorizontalViewForCell(pagesHorizontalView : PagesHorizontalView,cell : UIView,index: Int)
+    func pagesHorizontalViewCellCount(_ pagesHorizontalView : PagesHorizontalView)->Int
+    func pagesHorizontalViewForCell(_ pagesHorizontalView : PagesHorizontalView,cell : UIView,index: Int)
 }
 
 protocol PagesHorizontalViewDelegate{
-    func pagesHorizontalViewDidSelectedCell(pagesHorizontalView : PagesHorizontalView,index: Int)
+    func pagesHorizontalViewDidSelectedCell(_ pagesHorizontalView : PagesHorizontalView,index: Int)
 }
 
 class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
@@ -24,7 +44,7 @@ class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
     
     var startContentOffsetX : CGFloat = 0
     var endContentOffsetX : CGFloat = 0
-    private var selectIndex = 0
+    fileprivate var selectIndex = 0
     
     var startTag : Int{
         get{
@@ -37,7 +57,7 @@ class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     */
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
         self.delegate = self
@@ -45,7 +65,7 @@ class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
 
     
     func reload(){
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         for view in self.subviews{
             view.removeFromSuperview()
         }
@@ -54,21 +74,24 @@ class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
         }
         
         var allWidth : CGFloat = 0
-        for var index = 0 ; index < dataSource?.pagesHorizontalViewCellCount(self) ; index++ {
-            let view = UIView(frame: CGRectMake(allWidth,0,frame.width,frame.height))
-            self.dataSource!.pagesHorizontalViewForCell(self, cell:view,index: index)
-            view.setTag(index+startTag)
-            allWidth += view.frame.width
-            self.addSubview(view)
+        if let count = dataSource?.pagesHorizontalViewCellCount(self){
+            for index in 0 ..< count {
+                let view = UIView(frame: CGRect(x: allWidth,y: 0,width: frame.width,height: frame.height))
+                self.dataSource!.pagesHorizontalViewForCell(self, cell:view,index: index)
+                view.setTag(index+startTag)
+                allWidth += view.frame.width
+                self.addSubview(view)
+            }
         }
-        self.contentSize = CGSizeMake(allWidth, frame.height)
-        self.pagingEnabled=true
+        
+        self.contentSize = CGSize(width: allWidth, height: frame.height)
+        self.isPagingEnabled=true
         if dataSource?.pagesHorizontalViewCellCount(self)>0{
             selectItem(0, isDelegateSelect: false)
         }
     }
     
-    func selectItem(index : Int, isDelegateSelect:Bool){
+    func selectItem(_ index : Int, isDelegateSelect:Bool){
         selectIndex = index
         if let item = self.viewWithTag(startTag+index){
             self.setContentOffViewCenter(view: item)
@@ -80,25 +103,27 @@ class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
     }
     
     //MARK --- UIScrollViewDelegate
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         startContentOffsetX = scrollView.contentOffset.x
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         endContentOffsetX = scrollView.contentOffset.x
     }
     
-    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         if dataSource?.pagesHorizontalViewCellCount(self)  == 0 {
             return
         }
         if (endContentOffsetX - startContentOffsetX > 0 ){
             if selectIndex < (dataSource?.pagesHorizontalViewCellCount(self))! - 1{
-                self.pageDelegate?.pagesHorizontalViewDidSelectedCell(self, index: ++selectIndex)
+                selectIndex+=1;
+                self.pageDelegate?.pagesHorizontalViewDidSelectedCell(self, index: selectIndex)
             }
         }else{
             if selectIndex > 0 {
-                self.pageDelegate?.pagesHorizontalViewDidSelectedCell(self, index: --selectIndex)
+                selectIndex-=1;
+                self.pageDelegate?.pagesHorizontalViewDidSelectedCell(self, index: selectIndex)
             }
         }
     }

@@ -9,9 +9,9 @@
 import UIKit
 
 @objc protocol AOHeardViewDataSource{
-    optional func heardViewForMiddleView(heardView : AOHeardView , size: CGSize)->UIView;
-    optional func heardViewForLeftView(heardView : AOHeardView , size: CGSize)->UIView;
-    optional func heardViewForRightView(heardView : AOHeardView , size: CGSize)->UIView;
+    @objc optional func heardViewForMiddleView(_ heardView : AOHeardView , size: CGSize)->UIView;
+    @objc optional func heardViewForLeftView(_ heardView : AOHeardView , size: CGSize)->UIView;
+    @objc optional func heardViewForRightView(_ heardView : AOHeardView , size: CGSize)->UIView;
 }
 
 protocol HeardViewDelegate{
@@ -26,7 +26,7 @@ class AOHeardView : UIView {
     var dataSource : AOHeardViewDataSource?
     internal var listeners = Dictionary<UIButton,()->()>()
     var viewController : UIViewController?
-    private var viewHidden = [false,false,false]
+    fileprivate var viewHidden = [false,false,false]
     
     
     
@@ -42,50 +42,50 @@ class AOHeardView : UIView {
         if self.leftView != nil {
             self.leftView?.center = CGPoint(x: self.leftView!.center.x+10, y: (frame.height+20)*0.50)
             self.addSubview(self.leftView!)
-            self.leftView?.hidden = viewHidden[0]
+            self.leftView?.isHidden = viewHidden[0]
         }
         
         if self.rightView != nil {
             self.rightView?.center = CGPoint(x: frame.width - self.rightView!.frame.width * 0.5-10, y: (frame.height+20)*0.50)
             self.addSubview(self.rightView!)
-            self.rightView?.hidden = viewHidden[2]
+            self.rightView?.isHidden = viewHidden[2]
         }
         
         if self.middleView != nil {
             self.middleView?.center = CGPoint(x: frame.width * 0.5, y: (frame.height+20)*0.50)
             self.addSubview(self.middleView!)
-            self.middleView?.hidden = viewHidden[1]
+            self.middleView?.isHidden = viewHidden[1]
         }
     }
     
-    func setViewHidden(left:Bool,middle:Bool,right:Bool){
+    func setViewHidden(_ left:Bool,middle:Bool,right:Bool){
         viewHidden[0] = left
         viewHidden[1] = middle
         viewHidden[2] = right
         
-        self.leftView?.hidden = viewHidden[0]
-        self.rightView?.hidden = viewHidden[2]
-        self.middleView?.hidden = viewHidden[1]
+        self.leftView?.isHidden = viewHidden[0]
+        self.rightView?.isHidden = viewHidden[2]
+        self.middleView?.isHidden = viewHidden[1]
     }
     
-    func setOnClick(sender : UIButton , listener: ()->()){
-        sender.addTarget(self, action: "onClick:", forControlEvents: UIControlEvents.TouchUpInside)
+    func setOnClick(_ sender : UIButton , listener: @escaping ()->()){
+        sender.addTarget(self, action: #selector(AOHeardView.onClick(_:)), for: UIControlEvents.touchUpInside)
         listeners[sender] = listener
     }
     
-    func setBackViewController(sender : UIButton){
+    func setBackViewController(_ sender : UIButton){
         setOnClick(sender) { [unowned self] in
-            self.viewController?.navigationController?.popViewControllerAnimated(true)
+            self.viewController?.navigationController?.popViewController(animated: true)
         }
     }
     
-    func setpushViewController(sender : UIButton , identifier : String){
+    func setpushViewController(_ sender : UIButton , identifier : String){
         setOnClick(sender) { [unowned self] in
             self.viewController?.navigationController?.pushViewController(instantViewController(identifier), animated: true)
         }
     }
     
-    internal  func onClick(sender : UIButton){
+    internal  func onClick(_ sender : UIButton){
         if let listener = listeners[sender]{
             listener()
         }
@@ -93,32 +93,32 @@ class AOHeardView : UIView {
 }
 
 class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
-    private var titleText : String?
+    fileprivate var titleText : String?
     
-    func heardViewForLeftView(heardView: AOHeardView, size: CGSize) -> UIView {
-        let view =  UIButton(frame: CGRectMake(0,0,size.width,size.height))
+    func heardViewForLeftView(_ heardView: AOHeardView, size: CGSize) -> UIView {
+        let view =  UIButton(frame: CGRect(x: 0,y: 0,width: size.width,height: size.height))
         return view
     }
     
-    func heardViewForRightView(heardView: AOHeardView, size: CGSize) -> UIView {
-        let view =  UIButton(frame: CGRectMake(0,0,size.width,size.height))
+    func heardViewForRightView(_ heardView: AOHeardView, size: CGSize) -> UIView {
+        let view =  UIButton(frame: CGRect(x: 0,y: 0,width: size.width,height: size.height))
         return view
     }
     
-    func heardViewForMiddleView(heardView: AOHeardView, size: CGSize) -> UIView {
-        let view =  UILabel(frame: CGRectMake(0,0,size.width,size.height))
-        view.textAlignment = NSTextAlignment.Center
-        view.textColor = UIColor.blackColor()
+    func heardViewForMiddleView(_ heardView: AOHeardView, size: CGSize) -> UIView {
+        let view =  UILabel(frame: CGRect(x: 0,y: 0,width: size.width,height: size.height))
+        view.textAlignment = NSTextAlignment.center
+        view.textColor = UIColor.black
         return view
     }
     
-    func setTitle(title: String){
+    func setTitle(_ title: String){
         titleText = title
         reloadTitle()
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         self.dataSource = self
         self.reload()
     }
@@ -129,7 +129,7 @@ class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
         reloadTitle()
     }
     
-    private func reloadTitle(){
+    fileprivate func reloadTitle(){
         if let view = self.middleView as? UILabel{
             view.text = titleText
         }

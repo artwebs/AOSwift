@@ -7,14 +7,25 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 protocol FlashHorizontalViewDataSource{
-    func flashHorizontalViewCellCount(flashView : FlashHorizontalView)->Int
-    func flashHorizontalViewForCell(flashView : FlashHorizontalView,cell : UIButton,index: Int)
+    func flashHorizontalViewCellCount(_ flashView : FlashHorizontalView)->Int
+    func flashHorizontalViewForCell(_ flashView : FlashHorizontalView,cell : UIButton,index: Int)
 }
 
 protocol FlashHorizontalViewDelegate{
-    func flashHorizontalViewDidSelectedCell(flashView : FlashHorizontalView,index: Int)
+    func flashHorizontalViewDidSelectedCell(_ flashView : FlashHorizontalView,index: Int)
 }
 
 class FlashHorizontalView: UIScrollView {
@@ -32,12 +43,12 @@ class FlashHorizontalView: UIScrollView {
     // An empty implementation adversely affects performance during animation.
     
     */
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         // Drawing code
     }
     
     func reload(){
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         for view in self.subviews {
             view.removeFromSuperview()
         }
@@ -45,19 +56,21 @@ class FlashHorizontalView: UIScrollView {
             return;
         }
         var allWidth : CGFloat = 0
-        for var index = 0 ; index < dataSource?.flashHorizontalViewCellCount(self) ; index++ {
-            let view = UIButton(frame: CGRectMake(allWidth,0,frame.width,frame.height))
-            self.dataSource!.flashHorizontalViewForCell(self, cell:view,index: index)
-            view.addTarget(self, action: "btnOnClick:", forControlEvents: UIControlEvents.TouchUpInside)
-            view.setTag(index+startTag)
-            allWidth += view.frame.width
-            self.addSubview(view)
+        if let count = dataSource?.flashHorizontalViewCellCount(self){
+            for index in 0..<count{
+                let view = UIButton(frame: CGRect(x: allWidth,y: 0,width: frame.width,height: frame.height))
+                self.dataSource!.flashHorizontalViewForCell(self, cell:view,index: index)
+                view.addTarget(self, action: #selector(FlashHorizontalView.btnOnClick(_:)), for: UIControlEvents.touchUpInside)
+                view.setTag(index+startTag)
+                allWidth += view.frame.width
+                self.addSubview(view)
+            }
         }
-        self.contentSize = CGSizeMake(allWidth, frame.height)
-        self.pagingEnabled=true
+        self.contentSize = CGSize(width: allWidth, height: frame.height)
+        self.isPagingEnabled=true
     }
     
-    func btnOnClick( sender: UIButton){
+    func btnOnClick( _ sender: UIButton){
         flashDelegate?.flashHorizontalViewDidSelectedCell(self, index: sender.tag()-startTag)
     }
     

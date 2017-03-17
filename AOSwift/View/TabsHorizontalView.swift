@@ -8,18 +8,29 @@
 
 import UIKit
 import AOCocoa
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 @objc protocol TabsHorizontalViewDataSource{
-    func tabsHorizontalViewCellCount(tabsHorizontalView : TabsHorizontalView)->Int
-    optional func tabsHorizontalViewCellWidth(tabsHorizontalView : TabsHorizontalView)->CGFloat
-    optional func tabsHorizontalViewForCellSelectStyle(tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
-    optional func tabsHorizontalViewForCellUnSelectStyle(tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
-    func tabsHorizontalViewForCell(tabsHorizontalView : TabsHorizontalView,cell : UIButton,index: Int)
-    optional func tabsHorizontalViewLineView(tabsHorizontalView : TabsHorizontalView)->UIView
+    func tabsHorizontalViewCellCount(_ tabsHorizontalView : TabsHorizontalView)->Int
+    @objc optional func tabsHorizontalViewCellWidth(_ tabsHorizontalView : TabsHorizontalView)->CGFloat
+    @objc optional func tabsHorizontalViewForCellSelectStyle(_ tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
+    @objc optional func tabsHorizontalViewForCellUnSelectStyle(_ tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
+    func tabsHorizontalViewForCell(_ tabsHorizontalView : TabsHorizontalView,cell : UIButton,index: Int)
+    @objc optional func tabsHorizontalViewLineView(_ tabsHorizontalView : TabsHorizontalView)->UIView
 }
 
 @objc protocol TabsHorizontalViewDelegate{
-    optional func tabsHorizontalViewDidSelectedCell(tabsHorizontalView : TabsHorizontalView,index: Int)
+    @objc optional func tabsHorizontalViewDidSelectedCell(_ tabsHorizontalView : TabsHorizontalView,index: Int)
 }
 
 
@@ -38,13 +49,13 @@ class TabsHorizontalView: UIScrollView {
 
     
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
     }
     
     func reload(){
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.clear()
         if self.dataSource == nil {
             return
@@ -55,18 +66,18 @@ class TabsHorizontalView: UIScrollView {
         }
         
         for index in 0 ..< self.dataSource!.tabsHorizontalViewCellCount(self){
-            let view = UIButton(frame: CGRectMake(allWith,0,width,frame.height))
+            let view = UIButton(frame: CGRect(x: allWith,y: 0,width: width,height: frame.height))
             self.dataSource?.tabsHorizontalViewForCell(self, cell: view, index: index)
             view.setTag(tagStart+index)
-            view.addTarget(self, action: #selector(TabsHorizontalView.btnOnClick(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            view.addTarget(self, action: #selector(TabsHorizontalView.btnOnClick(_:)), for: UIControlEvents.touchUpInside)
             allWith += view.frame.width
             self.addSubview(view);
         }
-        self.contentSize=CGSizeMake(allWith, frame.height)
+        self.contentSize=CGSize(width: allWith, height: frame.height)
         lineView = self.dataSource!.tabsHorizontalViewLineView?(self)
         if lineView != nil{
             self.addSubview(lineView!)
-            lineView!.hidden = true
+            lineView!.isHidden = true
         }
         if self.dataSource!.tabsHorizontalViewCellCount(self)>0{
             self.selectItem(0, isDelegateSelect: false)
@@ -83,25 +94,29 @@ class TabsHorizontalView: UIScrollView {
         
     }
     
-    func btnOnClick(sender:UIButton){
+    func btnOnClick(_ sender:UIButton){
         self.selectItem(sender.tag()-tagStart, isDelegateSelect: true)
     }
     
-    func selectItem(index : Int, isDelegateSelect:Bool){
-        for (var i=0;i<self.dataSource?.tabsHorizontalViewCellCount(self);i++){
-            let item = self.viewWithTag(tagStart+i) as! UIButton
-            if i==index {
-                if lineView != nil {
-                    lineView?.hidden=false
-                    lineView?.center=CGPointMake(item.center.x, lineView!.center.y)
+    func selectItem(_ index : Int, isDelegateSelect:Bool){
+        if let count = self.dataSource?.tabsHorizontalViewCellCount(self){
+            for i in 0 ..< count{
+                let item = self.viewWithTag(tagStart+i) as! UIButton
+                if i==index {
+                    if lineView != nil {
+                        lineView?.isHidden=false
+                        lineView?.center=CGPoint(x: item.center.x, y: lineView!.center.y)
+                    }
+                    //滚动到中心位置
+                    self.dataSource?.tabsHorizontalViewForCellSelectStyle?(self,cell:item, index: i )
+                    self.setContentOffViewCenter(view: item)
+                }else{
+                    self.dataSource?.tabsHorizontalViewForCellUnSelectStyle?(self,cell:item, index: i)
                 }
-                //滚动到中心位置
-                self.dataSource?.tabsHorizontalViewForCellSelectStyle?(self,cell:item, index: i )
-                self.setContentOffViewCenter(view: item)
-            }else{
-                self.dataSource?.tabsHorizontalViewForCellUnSelectStyle?(self,cell:item, index: i)
+
             }
         }
+        
         if isDelegateSelect {
             tabDelegate?.tabsHorizontalViewDidSelectedCell?(self, index: index)
         }

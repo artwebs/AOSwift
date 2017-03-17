@@ -9,12 +9,12 @@
 import UIKit
 
 func app()->AppDelegate{
-    return UIApplication.sharedApplication().delegate as! AppDelegate
+    return UIApplication.shared.delegate as! AppDelegate
 }
 
-func setRootViewController(identifier : String){
+func setRootViewController(_ identifier : String){
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    let rootViewController =  storyboard.instantiateViewControllerWithIdentifier(identifier)
+    let rootViewController =  storyboard.instantiateViewController(withIdentifier: identifier)
     let nvc: UINavigationController = UINavigationController(rootViewController: rootViewController)
     
     app().window?.rootViewController = nvc
@@ -23,8 +23,8 @@ func setRootViewController(identifier : String){
 }
 
 
-func instantViewController(identifier : String)->UIViewController{
+func instantViewController(_ identifier : String)->UIViewController{
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    return  storyboard.instantiateViewControllerWithIdentifier(identifier)
+    return  storyboard.instantiateViewController(withIdentifier: identifier)
 }
 

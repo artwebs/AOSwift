@@ -10,7 +10,7 @@ import UIKit
 
 extension UIScrollView{
     //滚动到中心位置
-    func setContentOffViewCenter(view view :UIView){
+    func setContentOffViewCenter(view :UIView){
         if self.contentSize.width<self.frame.width{
             return;
         }
@@ -20,7 +20,7 @@ extension UIScrollView{
         }else if(self.contentSize.width - posx < self.frame.width){
             posx = self.contentSize.width - self.frame.width
         }
-        self.setContentOffset(CGPointMake(posx, 0), animated: true)
+        self.setContentOffset(CGPoint(x: posx, y: 0), animated: true)
     }
     
 }

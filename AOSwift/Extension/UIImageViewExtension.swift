@@ -11,49 +11,49 @@ import AOCocoa
 
 extension UIImageView{
     
-    func imagePath( filename : String)->String{
+    func imagePath( _ filename : String)->String{
         let path = Utils.documentsPath("CacheImage")
-        if (NSFileManager.defaultManager().fileExistsAtPath(path)) == false {
+        if (FileManager.default.fileExists(atPath: path!)) == false {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: true , attributes: nil )
+                try FileManager.default.createDirectory(atPath: path!, withIntermediateDirectories: true , attributes: nil )
             } catch _ {
             }
         }
-        return (NSURL(string: path)?.URLByAppendingPathComponent(filename).absoluteString)!
+        return (URL(string: path!)?.appendingPathComponent(filename).absoluteString)!
     }
     
-    func loadRemoteUrl( url : String){
+    func loadRemoteUrl( _ url : String){
         self.loadRemoteUrl(url, def: nil)
     }
     
-    func loadRemoteUrlBig( url : String){
+    func loadRemoteUrlBig( _ url : String){
         self.loadRemoteUrl(url, def: "icon_img_loading_big.jpg")
     }
     
-    func loadRemoteUrlSmall( url : String){
+    func loadRemoteUrlSmall( _ url : String){
         self.loadRemoteUrl(url, def: "icon_img_loading_small.jpg")
     }
     
-    func loadRemoteUrl( url : String, def : String?){
+    func loadRemoteUrl( _ url : String, def : String?){
         if def != nil{
             self.image=UIImage(named: def!)
         }
         
-        let filename = imagePath(Utils.base64EncodeWithString(url))
-        if NSFileManager.defaultManager().fileExistsAtPath(filename){
+        let filename = imagePath(Utils.base64Encode(with: url))
+        if FileManager.default.fileExists(atPath: filename){
             self.image = UIImage(contentsOfFile:filename)
             return
         }
         
-        let daemonQueue = NSOperationQueue()
+        let daemonQueue = OperationQueue()
         daemonQueue.maxConcurrentOperationCount = 1
-        daemonQueue.addOperationWithBlock({
+        daemonQueue.addOperation({
             //            UIImage(data: NSData(contentsOfURL: NSURL(string: imageList[0])!)!)
             
-            if let data = NSData(contentsOfURL: NSURL(string: url)!){
-                data.writeToFile(filename, atomically: true)
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                    dispatch_sync(dispatch_get_main_queue(),{
+            if let data = try? Data(contentsOf: URL(string: url)!){
+                try? data.write(to: URL(fileURLWithPath: filename), options: [.atomic])
+                DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
+                    DispatchQueue.main.sync(execute: {
                         self.image = UIImage(data:data)
                     })
                 })
