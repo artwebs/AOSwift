@@ -34,6 +34,7 @@ FOUNDATION_EXPORT const unsigned char AOCocoaVersionString[];
 //#import <AOCocoa/RtspClientLinstener.h>
 #import <AOCocoa/Security.h>
 #import <AOCocoa/SecurityDES.h>
+#import <AOCocoa/SecurityAES.h>
 #import <AOCocoa/ServiceTask.h>
 //#import <AOCocoa/AOSocket.h>
 #import <AOCocoa/ArtNumberToCapital.h>

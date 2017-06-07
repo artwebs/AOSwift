@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/AOCocoa.h</key>
 		<data>
-		b2rLiD28F5s2t/UZ6YvF6/L85jQ=
+		0gc4D2qft3vZtAwafCO60ArH4b8=
 		</data>
 		<key>Headers/AOHelpView.h</key>
 		<data>
@@ -128,6 +128,10 @@
 		<data>
 		yU0TZVt1/sckqBgVu+i9kqEZAjs=
 		</data>
+		<key>Headers/SecurityAES.h</key>
+		<data>
+		4n/pukwmYZOrt7o988ADWFePCBA=
+		</data>
 		<key>Headers/SecurityDES.h</key>
 		<data>
 		L8Yh+1ulCSQZ5AjoAv+Z+5ffM2Q=
@@ -162,7 +166,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		4sQwHjAkREa3/jL0hu9W0Y8YoXQ=
+		P4jsxa2WFcHWdKB0iwsAn9vcjOc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -170,7 +174,7 @@
 		</data>
 		<key>SidebarViewController.nib</key>
 		<data>
-		+M7l0Y5UzyCj/Mlduh+YsIRVHDo=
+		vLnkB9IOBZXm2sF2sAkkS4alHWQ=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -179,11 +183,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			b2rLiD28F5s2t/UZ6YvF6/L85jQ=
+			0gc4D2qft3vZtAwafCO60ArH4b8=
 			</data>
 			<key>hash2</key>
 			<data>
-			EVNygFr2Ys9aE48bEXB9k1WVm5ZEXnKS5YamIoDfPZ4=
+			J1bwJPSA2/gJU/pdBY5yjv8CrerdQLituSJ465ldbks=
 			</data>
 		</dict>
 		<key>Headers/AOHelpView.h</key>
@@ -516,6 +520,17 @@
 			alOFzux6IBSbkMsZYqn/1pyKRtz2sf15GHK6VR+eURU=
 			</data>
 		</dict>
+		<key>Headers/SecurityAES.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			4n/pukwmYZOrt7o988ADWFePCBA=
+			</data>
+			<key>hash2</key>
+			<data>
+			pNUqvKY75zlcrN2Sg3aaPHITY37Qj2AO3EYe0XR97kI=
+			</data>
+		</dict>
 		<key>Headers/SecurityDES.h</key>
 		<dict>
 			<key>hash</key>
@@ -619,11 +634,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+M7l0Y5UzyCj/Mlduh+YsIRVHDo=
+			vLnkB9IOBZXm2sF2sAkkS4alHWQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			SnCFtVNN0pwo8UH4LFed1lecd7Imzlda4MoY3zGvoI4=
+			5UL0Vxum2VtU5nRHxvk5rxtSwKdBQ5NItfIUNHwFnSs=
 			</data>
 		</dict>
 	</dict>
@@ -644,6 +659,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -689,6 +709,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^Info\.plist$</key>
 		<dict>
