@@ -85,7 +85,7 @@ class AOHeardView : UIView {
         }
     }
     
-    internal  func onClick(_ sender : UIButton){
+    @objc internal  func onClick(_ sender : UIButton){
         if let listener = listeners[sender]{
             listener()
         }

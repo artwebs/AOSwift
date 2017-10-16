@@ -94,7 +94,7 @@ class TabsHorizontalView: UIScrollView {
         
     }
     
-    func btnOnClick(_ sender:UIButton){
+    @objc func btnOnClick(_ sender:UIButton){
         self.selectItem(sender.tag()-tagStart, isDelegateSelect: true)
     }
     

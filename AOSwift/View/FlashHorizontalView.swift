@@ -70,7 +70,7 @@ class FlashHorizontalView: UIScrollView {
         self.isPagingEnabled=true
     }
     
-    func btnOnClick( _ sender: UIButton){
+    @objc func btnOnClick( _ sender: UIButton){
         flashDelegate?.flashHorizontalViewDidSelectedCell(self, index: sender.tag()-startTag)
     }
     
