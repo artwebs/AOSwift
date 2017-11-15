@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/AOCocoa.h</key>
 		<data>
-		0gc4D2qft3vZtAwafCO60ArH4b8=
+		1FVw/dhLMD4iEePOVmZ+eFmVRiE=
 		</data>
 		<key>Headers/AOHelpView.h</key>
 		<data>
@@ -88,6 +88,10 @@
 		<data>
 		wTCi7dK2xxlAAbtb6clRfenB/44=
 		</data>
+		<key>Headers/DataMatrix.h</key>
+		<data>
+		Rismorpmq1XJlUkvLAwiTPn1Snc=
+		</data>
 		<key>Headers/DicListView.h</key>
 		<data>
 		eVQG+MwaSiTFrC2hpxQqYMKs1T4=
@@ -111,6 +115,14 @@
 		<key>Headers/NSObject+AOCocoa.h</key>
 		<data>
 		2iUbXTiLfhrsIm2HcLNXeEAo0uY=
+		</data>
+		<key>Headers/QREncoder.h</key>
+		<data>
+		mbf0Jg/EzYyP60oor4BbAvS7dP0=
+		</data>
+		<key>Headers/QR_Encode.h</key>
+		<data>
+		3N4OHmNWzbn06P7RZ+nQb5jBKHw=
 		</data>
 		<key>Headers/RData.h</key>
 		<data>
@@ -166,7 +178,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		P4jsxa2WFcHWdKB0iwsAn9vcjOc=
+		cMDzOnxLNn/4OdX2VdTGWTFch7U=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -174,7 +186,7 @@
 		</data>
 		<key>SidebarViewController.nib</key>
 		<data>
-		vLnkB9IOBZXm2sF2sAkkS4alHWQ=
+		sE18A/q+1NIB8HDWsKFVevBHHWw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -183,11 +195,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			0gc4D2qft3vZtAwafCO60ArH4b8=
+			1FVw/dhLMD4iEePOVmZ+eFmVRiE=
 			</data>
 			<key>hash2</key>
 			<data>
-			J1bwJPSA2/gJU/pdBY5yjv8CrerdQLituSJ465ldbks=
+			IS4GKjPGMEgIdOqRs0kcxVl3H2PVpPZJ95KpGBpzn+A=
 			</data>
 		</dict>
 		<key>Headers/AOHelpView.h</key>
@@ -410,6 +422,17 @@
 			c49xf1gmgbQtA/Bxh8Gykhajsq5+YYXQiV9F+vPYsK8=
 			</data>
 		</dict>
+		<key>Headers/DataMatrix.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Rismorpmq1XJlUkvLAwiTPn1Snc=
+			</data>
+			<key>hash2</key>
+			<data>
+			0bP96vyAjJKADRsVGg5GVNojq6bhDc7si77Z6N6CBo0=
+			</data>
+		</dict>
 		<key>Headers/DicListView.h</key>
 		<dict>
 			<key>hash</key>
@@ -474,6 +497,28 @@
 			<key>hash2</key>
 			<data>
 			mWtDOjE71kbhdlIWDXhKjxdRRbkCxOsHkHBx/H6mdV8=
+			</data>
+		</dict>
+		<key>Headers/QREncoder.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			mbf0Jg/EzYyP60oor4BbAvS7dP0=
+			</data>
+			<key>hash2</key>
+			<data>
+			s7oaLnH0SHYW8IVAiNLXv3f9MbHe+pZYNRlo1eVcZXM=
+			</data>
+		</dict>
+		<key>Headers/QR_Encode.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3N4OHmNWzbn06P7RZ+nQb5jBKHw=
+			</data>
+			<key>hash2</key>
+			<data>
+			a3E17fV2cHPc8w5sMg95Kn84SyR7QUTS73NiNtMnO2A=
 			</data>
 		</dict>
 		<key>Headers/RData.h</key>
@@ -634,11 +679,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			vLnkB9IOBZXm2sF2sAkkS4alHWQ=
+			sE18A/q+1NIB8HDWsKFVevBHHWw=
 			</data>
 			<key>hash2</key>
 			<data>
-			5UL0Vxum2VtU5nRHxvk5rxtSwKdBQ5NItfIUNHwFnSs=
+			mzKjrpLWHJQzqPqbT6xxehbUGxNqidqlSPcxRuoU09M=
 			</data>
 		</dict>
 	</dict>
