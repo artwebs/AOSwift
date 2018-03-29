@@ -14,6 +14,15 @@ enum HttpServiceStatus{
     case run,success,fail,cancel
 }
 
+class Secret{
+    var key:String
+    var iv:String
+    init(key:String,iv:String) {
+        self.key=key
+        self.iv=iv
+    }
+}
+
 protocol HttpRemoteCallBack{
     func remoteFinished(success:[HttpService],fail:[HttpService])
 }
@@ -25,10 +34,10 @@ protocol HttpServiceInterface {
 class HttpService {
     var cmd : HttpServiceInterface
     var params : NSMutableDictionary?
-    var callback : ((_ cmd : HttpServiceInterface, _ success :Bool,_ msg : String , _ data : Any?)->())?
+    var callback : ((_ cmd : HttpServiceInterface,_ result:Dictionary<String,Any>?)->())?
     var status = HttpServiceStatus.run
     
-    init(cmd:HttpServiceInterface,callback:@escaping (_ cmd : HttpServiceInterface, _ success :Bool,_ msg : String , _ data : Any?)->()){
+    init(cmd:HttpServiceInterface,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
         self.cmd=cmd
         self.params=nil
         self.callback=callback
@@ -40,7 +49,7 @@ class HttpService {
         self.callback=nil
     }
     
-    init(cmd:HttpServiceInterface,params :NSMutableDictionary?,callback:@escaping (_ cmd : HttpServiceInterface, _ success :Bool,_ msg : String , _ data : Any?)->()){
+    init(cmd:HttpServiceInterface,params :NSMutableDictionary?,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
         self.cmd=cmd
         self.params=params
         self.callback=callback
@@ -69,16 +78,24 @@ class HttpRemote {
         
     }
     
-    func postSync(_ command :HttpServiceInterface)->( HttpServiceInterface, Bool,String?, Any?){
-        let (serviceObject,success,msg,data)=self.request(serviceObject: HttpService(cmd: command, params: NSMutableDictionary()))
-        return (serviceObject.cmd, success, msg, data)
+    func secrets()->Dictionary<String,Secret>{
+        return Dictionary<String,Secret>()
     }
     
-    func post(_ command :HttpServiceInterface,callback : @escaping (_ cmd : HttpServiceInterface, _ success :Bool,_ msg : String , _ data : Any?)->()){
+    func decode(rs:String,secret:Secret)->String{
+        return  SecurityDES(model: Int32(CBC.rawValue)).decode(with:rs, key: secret.key, iv: secret.iv)
+    }
+    
+    func postSync(_ command :HttpServiceInterface)->( HttpServiceInterface,Dictionary<String,Any>?){
+        let (serviceObject,result)=self.request(serviceObject: HttpService(cmd: command, params: NSMutableDictionary()))
+        return (serviceObject.cmd, result)
+    }
+    
+    func post(_ command :HttpServiceInterface,callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
         post(list:[HttpService(cmd: command, params: NSMutableDictionary(), callback: callback)])
     }
     
-    func post(_ command :HttpServiceInterface,params: NSMutableDictionary, callback : @escaping (_ cmd : HttpServiceInterface, _ success :Bool,_ msg : String , _ data : Any?)->()){
+    func post(_ command :HttpServiceInterface,params: NSMutableDictionary, callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
         post(list:[HttpService(cmd: command, params: params, callback: callback)])
     }
     
@@ -100,10 +117,10 @@ class HttpRemote {
         queue.maxConcurrentOperationCount = list.count;
         for item in list {
             queue.addOperation({
-                let (serviceObject,success,msg,data)=self.request(serviceObject: item)
+                let (serviceObject,result)=self.request(serviceObject: item)
                 DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
                     DispatchQueue.main.sync(execute: {
-                        item.callback?(serviceObject.cmd, success, msg, data)
+                        item.callback?(serviceObject.cmd, result)
                     })
                 })
                 
@@ -138,7 +155,7 @@ class HttpRemote {
     }
     
     
-    fileprivate func request(serviceObject:HttpService)->(serviceObject : HttpService, success :Bool,msg : String , data : Any?){
+    fileprivate func request(serviceObject:HttpService)->(serviceObject : HttpService, result:Dictionary<String,Any>?){
         let service = self.newService(serviceObject.cmd.cmd)
         let param = NSMutableDictionary()
         self.defaultParams(param)
@@ -147,29 +164,14 @@ class HttpRemote {
             param.addEntries(from: (sparam as NSDictionary) as! [AnyHashable: Any])
         }
         
-        var success = false
-        var msg :String = "连接服务器超时！"
-        var data :Any? = nil
         if let rs = service!.sendParems(param){
-            let dic = Utils.jsonOjbect(from: rs) as? NSDictionary
-            serviceObject.status=HttpServiceStatus.fail
-            msg = "数据解析错误"
-            
-            if dic != nil {
-                if let tmp = dic?["status"] as? NSNumber{
-                    if tmp.int32Value == 2002{
-                        serviceObject.status=HttpServiceStatus.success
-                        success=true
-                        msg = dic?["msg"] as! String
-                        data = dic?["data"]
-                        
-                    }else{
-                        msg = dic?["msg"]as! String
-                    }
+            for (id,secret) in self.secrets(){
+                let start=rs.index(rs.startIndex, offsetBy: 2)
+                if rs.substring(to: start) == id{
+                    return ( serviceObject: serviceObject,result : self.decode(rs: rs.substring(from: start), secret: secret).toDictionary)
                 }
             }
-            
         }
-        return ( serviceObject: serviceObject,success: success,msg: msg,data: data)
+        return ( serviceObject: serviceObject,result : nil)
     }
 }
