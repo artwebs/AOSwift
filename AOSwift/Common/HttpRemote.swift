@@ -83,7 +83,7 @@ class HttpRemote {
     }
     
     func decode(rs:String,secret:Secret)->String{
-        return  SecurityDES(model: Int32(CBC.rawValue)).decode(with:rs, key: secret.key, iv: secret.iv)
+        return  SecurityDES(model: Int32(CBC.rawValue|PKCS7.rawValue)).decode(with:rs, key: secret.key, iv: secret.iv)
     }
     
     func postSync(_ command :HttpServiceInterface)->( HttpServiceInterface,Dictionary<String,Any>?){

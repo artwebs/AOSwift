@@ -14,10 +14,7 @@ extension String {
     }
     
     var toDictionary : Dictionary<String,Any>?{
-        print(self.data(using: .utf8)?.hexString())
-        let str = "{\"Code\":-1,\"Count\":0,\"Message\":\"成功\",\"Data\":null}"
-        print(str.data(using: .utf8)?.hexString())
-        if let data = str.data(using: .utf8){
+        if let data = self.data(using: .utf8){
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
