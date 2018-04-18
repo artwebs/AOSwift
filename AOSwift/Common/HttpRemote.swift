@@ -34,10 +34,10 @@ protocol HttpServiceInterface {
 class HttpService {
     var cmd : HttpServiceInterface
     var params : NSMutableDictionary?
-    var callback : ((_ cmd : HttpServiceInterface,_ result:Dictionary<String,Any>?)->())?
+    var callback : ((_ cmd : HttpServiceInterface,_ result:Dictionary<String,Any>)->())?
     var status = HttpServiceStatus.run
     
-    init(cmd:HttpServiceInterface,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
+    init(cmd:HttpServiceInterface,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>)->()){
         self.cmd=cmd
         self.params=nil
         self.callback=callback
@@ -49,7 +49,7 @@ class HttpService {
         self.callback=nil
     }
     
-    init(cmd:HttpServiceInterface,params :NSMutableDictionary?,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
+    init(cmd:HttpServiceInterface,params :NSMutableDictionary?,callback:@escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>)->()){
         self.cmd=cmd
         self.params=params
         self.callback=callback
@@ -86,16 +86,16 @@ class HttpRemote {
         return  SecurityDES(model: Int32(CBC.rawValue|PKCS7.rawValue)).decode(with:rs, key: secret.key, iv: secret.iv)
     }
     
-    func postSync(_ command :HttpServiceInterface)->( HttpServiceInterface,Dictionary<String,Any>?){
+    func postSync(_ command :HttpServiceInterface)->( HttpServiceInterface,Dictionary<String,Any>){
         let (serviceObject,result)=self.request(serviceObject: HttpService(cmd: command, params: NSMutableDictionary()))
         return (serviceObject.cmd, result)
     }
     
-    func post(_ command :HttpServiceInterface,callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
+    func post(_ command :HttpServiceInterface,callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>)->()){
         post(list:[HttpService(cmd: command, params: NSMutableDictionary(), callback: callback)])
     }
     
-    func post(_ command :HttpServiceInterface,params: NSMutableDictionary, callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>?)->()){
+    func post(_ command :HttpServiceInterface,params: NSMutableDictionary, callback : @escaping (_ cmd : HttpServiceInterface, _ result:Dictionary<String,Any>)->()){
         post(list:[HttpService(cmd: command, params: params, callback: callback)])
     }
     
@@ -155,7 +155,7 @@ class HttpRemote {
     }
     
     
-    fileprivate func request(serviceObject:HttpService)->(serviceObject : HttpService, result:Dictionary<String,Any>?){
+    fileprivate func request(serviceObject:HttpService)->(serviceObject : HttpService, result:Dictionary<String,Any>){
         let service = self.newService(serviceObject.cmd.cmd)
         let param = NSMutableDictionary()
         self.defaultParams(param)
@@ -168,10 +168,10 @@ class HttpRemote {
             for (id,secret) in self.secrets(){
                 let start=rs.index(rs.startIndex, offsetBy: 2)
                 if rs.substring(to: start) == id{
-                    return ( serviceObject: serviceObject,result : self.decode(rs: rs.substring(from: start), secret: secret).toDictionary)
+                    return ( serviceObject: serviceObject,result : self.decode(rs: rs.substring(from: start), secret: secret).toDictionary! )
                 }
             }
         }
-        return ( serviceObject: serviceObject,result : nil)
+        return ( serviceObject: serviceObject,result :Dictionary<String,Any>())
     }
 }
