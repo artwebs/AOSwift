@@ -65,7 +65,7 @@ class Table: NSObject {
                 key+=","
                 value+=","
             }
-             key+=",\(item.key)"
+             key+="\(item.key)"
             switch item.value {
             case is Int:
                 value+="\(item.value)"
