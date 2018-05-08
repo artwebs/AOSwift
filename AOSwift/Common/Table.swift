@@ -50,7 +50,12 @@ class Table: NSObject {
     }
     
     func find()->Dictionary<String,Any>{
-        return self.limit(limit: "0,1").select()[0]
+        let list=self.limit(limit: "0,1").select();
+        if list.count==0{
+            return Dictionary<String,Any>()
+        }else{
+            return list[0]
+        }
     }
     
     func total()->Int{
