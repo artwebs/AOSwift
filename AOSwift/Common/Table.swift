@@ -60,7 +60,8 @@ class Table: NSObject {
     
     func total()->Int{
         self.field = "count(*) as c"
-        return self.select()[0]["c"] as? Int ?? 0
+        let list = self.select()
+        return list.count>0 ? (self.select()[0]["c"] as? Int ?? 0) : 0
     }
     
     func insert(row:Dictionary<String,Any>)->Int32{
