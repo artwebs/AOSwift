@@ -54,7 +54,7 @@ class TabsHorizontalView: UIScrollView {
         self.showsVerticalScrollIndicator=false
     }
     
-    func reload(){
+    func reload(didSelected sindex:Int){
         self.backgroundColor = UIColor.clear
         self.clear()
         if self.dataSource == nil {
@@ -80,10 +80,9 @@ class TabsHorizontalView: UIScrollView {
             lineView!.isHidden = true
         }
         if self.dataSource!.tabsHorizontalViewCellCount(self)>0{
-            self.selectItem(0, isDelegateSelect: false)
+            self.selectItem(sindex, isDelegateSelect: false)
         }
     }
-    
     
     func clear(){
         allWith=0;
