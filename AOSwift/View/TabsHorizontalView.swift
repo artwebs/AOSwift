@@ -113,7 +113,6 @@ class TabsHorizontalView: UIScrollView {
                 }else{
                     self.dataSource?.tabsHorizontalViewForCellUnSelectStyle?(self,cell:item, index: i)
                 }
-
             }
         }
         
