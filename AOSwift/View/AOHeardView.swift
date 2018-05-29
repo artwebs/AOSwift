@@ -24,11 +24,14 @@ class AOHeardView : UIView {
     internal var rightView : UIView?
     internal var middleView : UIView?
     var dataSource : AOHeardViewDataSource?
-    internal var listeners = Dictionary<UIButton,()->()>()
     var viewController : UIViewController?
     fileprivate var viewHidden = [false,false,false]
-    
-    
+    private var _listener = UIListener()
+    override var listener: UIListener{
+        get{
+            return _listener
+        }
+    }
     
     func reload(){
         for view in self.subviews{
@@ -68,28 +71,21 @@ class AOHeardView : UIView {
         self.middleView?.isHidden = viewHidden[1]
     }
     
-    func setOnClick(_ sender : UIButton , listener: @escaping ()->()){
-        sender.addTarget(self, action: #selector(AOHeardView.onClick(_:)), for: UIControlEvents.touchUpInside)
-        listeners[sender] = listener
-    }
+   
     
     func setBackViewController(_ sender : UIButton){
-        setOnClick(sender) { [unowned self] in
+        click(sender) { [unowned self] in
             self.viewController?.navigationController?.popViewController(animated: true)
         }
     }
     
     func setpushViewController(_ sender : UIButton , identifier : String){
-        setOnClick(sender) { [unowned self] in
+        click(sender) { [unowned self] in
             self.viewController?.navigationController?.pushViewController(instantViewController(identifier), animated: true)
         }
     }
     
-    @objc internal  func onClick(_ sender : UIButton){
-        if let listener = listeners[sender]{
-            listener()
-        }
-    }
+    
 }
 
 class AOHeardViewSimple: AOHeardView , AOHeardViewDataSource {
