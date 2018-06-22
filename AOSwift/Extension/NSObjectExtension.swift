@@ -8,5 +8,16 @@
 
 import Foundation
 extension NSObject{
-    class var identifier: String { return String.className(self) }
+    class var className: String { return String.className(self) }
+    
+    func reflect(row:Dictionary<String,Any>){
+        let mirror: Mirror = Mirror(reflecting:self)
+        for  children in mirror.children {
+            if let val = row[children.label!]{
+                self.setValue(val, forKey: children.label!)
+            }else{
+                print(children.label!)
+            }
+        }
+    }
 }
