@@ -8,20 +8,13 @@
 
 import UIKit
 var AOSwiftViewID = 10000
-private var AOSwiftViews=Dictionary<String,Dictionary<String,UIView>>()
+
 extension UIView{
     var listener : UIListener{
         get{
             return UIListener()
         }
     }
-    
-    var views : Dictionary<String,UIView>{
-        get{
-            return Dictionary<String,UIView>()
-        }
-    }
-    
     
     var vController : UIViewController?{
         get{
@@ -42,17 +35,6 @@ extension UIView{
         }
     }
     
-    func initSubView<T:UIView>(name:String,h:String,v:String) -> T {
-        let view = T()
-        self.addSubview(view)
-        var views = self.views
-        views[name] = view
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: h.replacingOccurrences(of: "?", with: name), options: [], metrics: nil, views: views))
-        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: v.replacingOccurrences(of: "?", with: name), options: [], metrics: nil, views: views))
-        return view
-    }
-    
     func initViews()->Dictionary<String,UIView>{
         return Dictionary<String,UIView>();
     }
@@ -66,4 +48,33 @@ extension UIView{
         self.listener.get(view: sender)?()
     }
     
+    func layoutInit<T:UIView>(name:String,delegate:(T)->Void)->Dictionary<String,UIView>{
+        return self.layoutInit(name: name, views: self.initViews(), delegate: delegate)
+    }
+    
+    func layoutInit<T:UIView>(name:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
+        let view = T()
+        view.backgroundColor = UIColor.clear
+        self.addSubview(view)
+        delegate(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        var _views = views
+        _views[name] = view
+        return _views
+    }
+    
+    func layoutDraw(views:Dictionary<String,UIView>,layout:String...)  {
+        for lay in layout {
+            self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: lay, options: [], metrics: nil, views: views))
+        }
+    }
+    
+    func layoutHelper<T:UIView>(name:String,h:String,v:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
+        let _views=self.layoutInit(name: name, views: views, delegate: delegate)
+        layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
+        return _views
+    }
+    
 }
+
+
