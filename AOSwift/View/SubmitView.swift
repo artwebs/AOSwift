@@ -23,6 +23,7 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         self.register(UITableViewCell.self, forCellReuseIdentifier: "cellID")
         self.delegate = self;
         self.dataSource=self;
+        self.tableFooterView = UIView(frame: CGRect.zero)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -42,10 +43,29 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             cellViews = cell.layoutHelper(name: row["field"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellView) in
                 view.reflect(row: row)
                 self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                if param.count>indexPath.row+1{
+                    view.doNext={
+                        self.cellViews[param[indexPath.row+1]["field"] as! String]?.edit?.becomeFirstResponder()
+                    }
+                }else{
+                    view.doDone={
+                         self.cellViews[param[indexPath.row]["field"] as! String]?.edit?.resignFirstResponder()
+                    }
+                }
                 } as! [String : SubmitCellView]
         }
+        cell.selectionStyle = .none
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let param = self.submitViewdelegate?.submitViewForParam(submitView: self){
+            let row=param[indexPath.row]
+            if  let cell = cellViews[row["field"] as! String]{
+                cell.edit?.becomeFirstResponder()
+            }
+        }
     }
     
     func clear(){
@@ -82,13 +102,22 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 }
 
 
-class SubmitCellView:UIView{
+class SubmitCellView:UIView,UITextFieldDelegate{
     var field:String = ""
     var title:String = ""
     var type:String = "textbox"
     var readOnly:Bool = true
     var value:Any = ""
     var defautlValue:Any = ""
+    var views:Dictionary<String,UIView>?
+    var doNext:(()->Void)?
+    var doDone:(()->Void)?
+    
+    var edit:UITextField?{
+        get{
+            return views?["textbox"] as? UITextField
+        }
+    }
     
     func setDefaultValue(v:Any) {
         self.value = v
@@ -101,15 +130,29 @@ class SubmitCellView:UIView{
     
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
-        var views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:self.initViews()) { (view:UILabel) in
+        views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:self.initViews()) { (view:UILabel) in
             view.text = self.title
         }
-        views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
-            view.layer.cornerRadius = 4.0
+        views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views!) { (view:UITextField) in
             view.layer.backgroundColor = AppDefault.DefaultLightGray.cgColor;
-            view.textAlignment = .right
             view.setValue(12, forKey: "paddingLeft")
+            view.setValue(12, forKey: "paddingRight")
+            view.delegate = self
+            if doNext==nil{
+                view.returnKeyType = .done
+            }else{
+                view.returnKeyType = .next
+            }
+            
         }
-        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if doNext == nil{
+            doDone?()
+        }else{
+            doNext?()
+        }
+        return true
     }
 }
