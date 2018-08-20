@@ -12,7 +12,7 @@ import AOCocoa
    func submitViewForParam(submitView:SubmitView)->Array<Dictionary<String,Any>>;
    @objc optional func submitViewForCell(submitView:SubmitView,cell:SubmitCellView,index:Int);
 }
-class SubmitView: UIScrollView {
+class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     var submitViewdelegate:SubmitViewDelegate?
     private var defaultCellHeight:Float32 = 60
     private var cellViews = Dictionary<String,SubmitCellView>()
@@ -20,6 +20,32 @@ class SubmitView: UIScrollView {
     override func draw(_ rect: CGRect) {
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
+        self.register(UITableViewCell.self, forCellReuseIdentifier: "cellID")
+        self.delegate = self;
+        self.dataSource=self;
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var rs=0;
+        if let list = submitViewdelegate?.submitViewForParam(submitView: self){
+            rs = list.count;
+        }
+        return rs;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell=tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as UITableViewCell
+      
+        if let param = self.submitViewdelegate?.submitViewForParam(submitView: self){
+            let row=param[indexPath.row]
+            let v = "V:|-0-[?(40)]"
+            cellViews = cell.layoutHelper(name: row["field"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellView) in
+                view.reflect(row: row)
+                self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                } as! [String : SubmitCellView]
+        }
+        
+        return cell
     }
     
     func clear(){
@@ -75,13 +101,13 @@ class SubmitCellView:UIView{
     
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
-        var views = self.layoutHelper(name: "label", h: "H:|-0-[?(100)]", v: "V:|-0-[label(60)]",views:self.initViews()) { (view:UILabel) in
+        var views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:self.initViews()) { (view:UILabel) in
             view.text = self.title
         }
-        views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-0-|", v: "V:|-12-[?(36)]",views:views) { (view:UITextField) in
-            view.layer.cornerRadius  = 4.0
-            view.layer.borderWidth = 1
-            view.layer.borderColor = UIColor.lightGray.cgColor
+        views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
+            view.layer.cornerRadius = 4.0
+            view.layer.backgroundColor = AppDefault.DefaultLightGray.cgColor;
+            view.textAlignment = .right
             view.setValue(12, forKey: "paddingLeft")
         }
         
