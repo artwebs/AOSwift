@@ -16,7 +16,7 @@ extension NSObject{
             if let val = row[children.label!]{
                 self.setValue(val, forKey: children.label!)
             }else{
-                print(children.label!)
+//                print(children.label!)
             }
         }
     }

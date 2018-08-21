@@ -24,6 +24,20 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         self.delegate = self;
         self.dataSource=self;
         self.tableFooterView = UIView(frame: CGRect.zero)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification){
+        let info = notification.userInfo
+        let kbRect = (info?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, kbRect.size.height, 0)
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, 0, 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,6 +47,15 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         }
         return rs;
     }
+    
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "提交内容"
+//    }
+//
+//    override var numberOfSections: Int{
+//        return 1;
+//
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell=tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as UITableViewCell
@@ -107,8 +130,8 @@ class SubmitCellView:UIView,UITextFieldDelegate{
     var title:String = ""
     var type:String = "textbox"
     var readOnly:Bool = true
-    var value:Any = ""
-    var defautlValue:Any = ""
+    var value:String = ""
+    var defautlValue:String = ""
     var views:Dictionary<String,UIView>?
     var doNext:(()->Void)?
     var doDone:(()->Void)?
@@ -119,13 +142,18 @@ class SubmitCellView:UIView,UITextFieldDelegate{
         }
     }
     
-    func setDefaultValue(v:Any) {
+    func setDefaultValue(v:String) {
         self.value = v
         self.defautlValue = v
     }
     
     func getValue() -> Any {
-        return defautlValue;
+        if let val = edit?.text{
+            return val
+        }else{
+           return ""
+        }
+        
     }
     
     override func draw(_ rect: CGRect) {
@@ -138,6 +166,7 @@ class SubmitCellView:UIView,UITextFieldDelegate{
             view.setValue(12, forKey: "paddingLeft")
             view.setValue(12, forKey: "paddingRight")
             view.delegate = self
+            view.text = self.value
             if doNext==nil{
                 view.returnKeyType = .done
             }else{
