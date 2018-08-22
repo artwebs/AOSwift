@@ -185,3 +185,8 @@ class SubmitCellView:UIView,UITextFieldDelegate{
         return true
     }
 }
+
+class SubmitCellOptions{
+    var value = ""
+    var height = 40
+}
