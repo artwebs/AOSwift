@@ -79,6 +79,22 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                     }
                     } as! [String : SubmitCellViewTextbox]
                 break
+            case "textbox":
+                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewTextbox) in
+//                    view.reflect(row: row)
+                    self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                    if param.count>indexPath.row+1{
+                        view.didFinish={
+                            if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? SubmitCellViewTextbox{
+                               next.edit?.becomeFirstResponder()
+                            }
+                        }
+                    }else{
+                        view.didFinish={
+                            view.edit?.resignFirstResponder()
+                        }
+                    }
+                    } as! [String : SubmitCellViewTextbox]
             default:
                 break
 //                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewButton) in
