@@ -60,7 +60,7 @@ class FlashHorizontalView: UIScrollView {
             for index in 0..<count{
                 let view = UIButton(frame: CGRect(x: allWidth,y: 0,width: frame.width,height: frame.height))
                 self.dataSource!.flashHorizontalViewForCell(self, cell:view,index: index)
-                view.addTarget(self, action: #selector(FlashHorizontalView.btnOnClick(_:)), for: UIControlEvents.touchUpInside)
+                view.addTarget(self, action: #selector(FlashHorizontalView.btnOnClick(_:)), for: UIControl.Event.touchUpInside)
                 view.setTag(index+startTag)
                 allWidth += view.frame.width
                 self.addSubview(view)

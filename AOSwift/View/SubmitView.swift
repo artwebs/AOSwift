@@ -25,19 +25,19 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         self.dataSource=self;
         self.tableFooterView = UIView(frame: CGRect.zero)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func keyboardWillShow(notification: NSNotification){
+    @objc func keyboardWillShow(notification: NSNotification){
         let info = notification.userInfo
-        let kbRect = (info?[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, kbRect.size.height, 0)
+        let kbRect = (info?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        self.contentInset = UIEdgeInsets(top: self.contentInset.top, left: 0, bottom: kbRect.size.height, right: 0)
     }
     
-    func keyboardWillHide(notification: NSNotification) {
-        self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, 0, 0)
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.contentInset = UIEdgeInsets(top: self.contentInset.top, left: 0, bottom: 0, right: 0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -198,7 +198,8 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
         views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:self.initViews()) { (view:UILabel) in
-            view.text = self.label
+            view.text = "121"
+            view.textColor = UIColor.black
         }
         views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views!) { (view:UITextField) in
             view.layer.backgroundColor = AppDefault.DefaultLightGray.cgColor;
