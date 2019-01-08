@@ -198,7 +198,8 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
         views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:self.initViews()) { (view:UILabel) in
-            view.text = self.label
+            view.text = "121"
+            view.textColor = UIColor.black
         }
         views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views!) { (view:UITextField) in
             view.layer.backgroundColor = AppDefault.DefaultLightGray.cgColor;
