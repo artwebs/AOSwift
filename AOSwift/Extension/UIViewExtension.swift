@@ -40,7 +40,7 @@ extension UIView{
     }
     
     func click(_ sender : UIButton , listener: @escaping ()->()){
-        sender.addTarget(self, action: #selector(UIView.onClick(_:)), for: UIControlEvents.touchUpInside)
+        sender.addTarget(self, action: #selector(UIView.onClick(_:)), for: UIControl.Event.touchUpInside)
         self.listener.set(view:sender,listener:listener)
     }
     
