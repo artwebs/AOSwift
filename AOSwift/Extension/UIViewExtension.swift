@@ -10,7 +10,7 @@ import UIKit
 var AOSwiftViewID = 10000
 
 extension UIView{
-    var listener : UIListener{
+    @objc var listener : UIListener{
         get{
             return UIListener()
         }

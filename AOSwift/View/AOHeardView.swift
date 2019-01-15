@@ -27,7 +27,11 @@ class AOHeardView : UIView {
     var viewController : UIViewController?
     fileprivate var viewHidden = [false,false,false]
     private var _listener = UIListener()
-    
+    override  var listener : UIListener{
+        get{
+            return _listener
+        }
+    }
     
     func reload(){
         for view in self.subviews{
