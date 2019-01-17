@@ -75,13 +75,13 @@ class AOHeardView : UIView {
     
     func setBackViewController(_ sender : UIButton){
         click(sender) { [unowned self] in
-            self.viewController?.navigationController?.popViewController(animated: true)
+            self.vController?.navigationController?.popViewController(animated: true)
         }
     }
     
     func setpushViewController(_ sender : UIButton , identifier : String){
         click(sender) { [unowned self] in
-            self.viewController?.navigationController?.pushViewController(instantViewController(identifier), animated: true)
+            self.vController?.navigationController?.pushViewController(instantViewController(identifier), animated: true)
         }
     }
     
