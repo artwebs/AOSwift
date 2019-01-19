@@ -10,11 +10,14 @@ import UIKit
 var AOSwiftViewID = 10000
 
 extension UIView{
+    
+    
     @objc var listener : UIListener{
         get{
             return UIListener()
         }
     }
+    
     
     var vController : UIViewController?{
         get{
@@ -53,12 +56,12 @@ extension UIView{
     }
     
     func layoutInit<T:UIView>(name:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
+        var _views = views
         let view = T()
         view.backgroundColor = UIColor.clear
         self.addSubview(view)
         delegate(view)
         view.translatesAutoresizingMaskIntoConstraints = false
-        var _views = views
         _views[name] = view
         return _views
     }
@@ -70,14 +73,18 @@ extension UIView{
     }
     
     func layoutHelper<T:UIView>(name:String,h:String,v:String,delegate:(T)->Void)->Dictionary<String,UIView>{
-        let _views=self.layoutInit(name: name, views: self.initViews(), delegate: delegate)
-        layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
-        return _views
+        return layoutHelper(name: name, h: h, v: v, views: self.initViews(), delegate: delegate)
     }
     
     func layoutHelper<T:UIView>(name:String,h:String,v:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
-        let _views=self.layoutInit(name: name, views: views, delegate: delegate)
-        layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
+        var _views = views
+        if let view = _views[name] as? T{
+            delegate(view)
+        }else{
+            _views=self.layoutInit(name: name, views: views, delegate: delegate)
+            layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
+        }
+       
         return _views
     }
     
