@@ -10,7 +10,7 @@ import UIKit
 
 protocol ListViewDelegate {
     func listView(listView:ListView,page:Int,pageSize:Int)
-    func listVIew(listView:ListView,cell:UITableViewCell,row:[String:AnyObject])
+    func listView(listView:ListView,cell:UITableViewCell,row:[String:AnyObject])
 }
 
 class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
@@ -57,7 +57,7 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
         if cell == nil{
             cell = UITableViewCell(style: .default, reuseIdentifier: ListView.className)
         }
-        self.listViewDelegate?.listVIew(listView: self, cell: cell!,row: self.rows[indexPath.row])
+        self.listViewDelegate?.listView(listView: self, cell: cell!,row: self.rows[indexPath.row])
         return cell!
     }
     
@@ -68,8 +68,6 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
                 self.rows.append(item)
             }
         }
-        print(self.rows)
-        
     }
     
 

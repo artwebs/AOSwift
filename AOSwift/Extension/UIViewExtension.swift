@@ -69,6 +69,12 @@ extension UIView{
         }
     }
     
+    func layoutHelper<T:UIView>(name:String,h:String,v:String,delegate:(T)->Void)->Dictionary<String,UIView>{
+        let _views=self.layoutInit(name: name, views: self.initViews(), delegate: delegate)
+        layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
+        return _views
+    }
+    
     func layoutHelper<T:UIView>(name:String,h:String,v:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
         let _views=self.layoutInit(name: name, views: views, delegate: delegate)
         layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
