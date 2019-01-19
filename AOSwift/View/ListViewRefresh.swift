@@ -9,7 +9,6 @@
 import UIKit
 
 class ListViewRefresh: ListView {
-    var page=1, pageSize=5
     fileprivate var refreshOperate :(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     fileprivate var moreOperate:(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     
@@ -23,8 +22,8 @@ class ListViewRefresh: ListView {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        let options = PullToRefreshOption()
-        options.backgroundColor = UIColor.white
+//        let options = PullToRefreshOption()
+//        options.backgroundColor = UIColor.white
 //        self.addPullToRefresh(options, refreshCompletion: { [weak self] in
 //            // some code
 //            self?.page=1

@@ -8,14 +8,69 @@
 
 import UIKit
 
-class ListView: UIScrollView {
+protocol ListViewDelegate {
+    func listView(listView:ListView,page:Int,pageSize:Int)
+    func listVIew(listView:ListView,cell:UITableViewCell,row:[String:AnyObject])
+}
 
+class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
+    let listView = UITableView()
+    var rows:[[String:AnyObject]] = []
+    var listViewDelegate:ListViewDelegate?
+    var page = 1
+    var pageSize = 10
+    
+    func reload() {
+        self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)
+       
+    }
+    
+    func reloadData() {
+        DispatchQueue.main.async {
+            self.listView.reloadData()
+        }
+    }
+    
     /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
+     // Only override draw() if you perform custom drawing.
+     // An empty implementation adversely affects performance during animation.
+     
+     */
     override func draw(_ rect: CGRect) {
         // Drawing code
+        listView.frame = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
+        listView.dataSource = self
+        listView.delegate = self
+        self.addSubview(listView)
     }
-    */
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return rows.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 88
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: ListView.className)
+        if cell == nil{
+            cell = UITableViewCell(style: .default, reuseIdentifier: ListView.className)
+        }
+        self.listViewDelegate?.listVIew(listView: self, cell: cell!,row: self.rows[indexPath.row])
+        return cell!
+    }
+    
+    func setData(data:[[String:AnyObject]]?){
+        self.rows.removeAll()
+        if let val = data{
+            for item in val{
+                self.rows.append(item)
+            }
+        }
+        print(self.rows)
+        
+    }
+    
 
 }
