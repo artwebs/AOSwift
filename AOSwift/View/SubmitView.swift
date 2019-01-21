@@ -10,6 +10,7 @@ import UIKit
 import AOCocoa
 @objc protocol SubmitViewDelegate {
    func submitViewForParam(submitView:SubmitView)->Array<Array<Dictionary<String,Any>>>;
+    @objc optional func submitViewForValue(submitView:SubmitView)->[String:AnyObject];
    @objc optional func submitViewForCell(submitView:SubmitView,cell:SubmitCellView,index:Int);
 }
 class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
@@ -43,7 +44,7 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var rs=0;
         if let list = submitViewdelegate?.submitViewForParam(submitView: self){
-            rs = list.count;
+            rs = list[section].count;
         }
         return rs;
     }
@@ -91,6 +92,11 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                 cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewTextbox) in
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                    if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
+                        if let val = values[row["name"] as! String]{
+                             view.setValue(val: val )
+                        }
+                    }
                     if param.count>indexPath.row+1{
                         view.didFinish={
                             if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? SubmitCellViewTextbox{
@@ -105,9 +111,6 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                     } as! [String : SubmitCellViewTextbox]
             default:
                 break
-//                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewButton) in
-//                    view.reflect(row: row)
-//                    } as! [String : SubmitCellViewButton]
             }
             
         }
@@ -159,6 +162,14 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         }
         return rs
     }
+    
+    func setValues(row:[String:AnyObject]){
+        for item in self.cellViews {
+            if let val = row[item.key]{
+                item.value.setValue(val: val)
+            }
+        }
+    }
 }
 
 
@@ -166,6 +177,10 @@ class SubmitCellView:UIView{
     var didFinish:(()->Void)?
     func getVlaue() -> Any? {
         return nil;
+    }
+    
+    func setValue(val:AnyObject){
+        
     }
     
     func wilBegin(fn:(()->Void)?){
@@ -178,11 +193,9 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
     @objc var name:String = ""
     @objc var label:String = ""
     @objc var type:String = "textbox"
-    @objc var readOnly:Bool = true
+    @objc var readOnly:Bool = false
     @objc var value:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
-    
-//    @objc var options:SubmitCellOptions
     
     var edit:UITextField?{
         get{
@@ -201,7 +214,10 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
         }else{
             return ""
         }
-        
+    }
+    
+    override func setValue(val: AnyObject) {
+        self.value = val as! String
     }
     
     override func draw(_ rect: CGRect) {
@@ -216,6 +232,9 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
             view.setValue(12, forKey: "paddingRight")
             view.delegate = self
             view.text = self.value
+            if self.readOnly{
+                view.isEnabled = false
+            }
             didFinish?()
         }
     }
@@ -228,10 +247,5 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
 }
 
 class SubmitCellViewButton: UIButton {
-    var options:SubmitCellOptions?
-}
-
-class SubmitCellOptions{
-    var value = ""
-    var height = 40
+    
 }
