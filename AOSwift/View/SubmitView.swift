@@ -174,6 +174,8 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 
 
 class SubmitCellView:UIView{
+    
+    
     var didFinish:(()->Void)?
     func getVlaue() -> Any? {
         return nil;
@@ -194,6 +196,7 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
     @objc var label:String = ""
     @objc var type:String = "textbox"
     @objc var readOnly:Bool = false
+    @objc var display:Bool = true
     @objc var value:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     
