@@ -13,11 +13,8 @@ extension NSObject{
     func reflect(row:Dictionary<String,Any>){
         let mirror: Mirror = Mirror(reflecting:self)
         for  children in mirror.children {
-            print(children.label!)
             if let val = row[children.label!]{
                 self.setValue(val, forKey: children.label!)
-            }else{
-//                print(children.label!)
             }
         }
     }
