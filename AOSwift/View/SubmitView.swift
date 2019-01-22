@@ -108,7 +108,17 @@ class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             view.edit?.resignFirstResponder()
                         }
                     }
-                    } as! [String : SubmitCellViewTextbox]
+                    } as! [String : SubmitCellView]
+            case "combobox":
+                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewCombobox) in
+                    view.reflect(row: row)
+                    self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                    if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
+                        if let val = values[row["name"] as! String]{
+                            view.setValue(val: val )
+                        }
+                    }
+                    } as! [String : SubmitCellView]
             default:
                 break
             }
@@ -246,6 +256,40 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
         self.value = self.getValue()
         didFinish?()
         return true
+    }
+}
+
+class SubmitCellViewCombobox: SubmitCellView {
+    @objc var name:String = ""
+    @objc var label:String = ""
+    @objc var type:String = "textbox"
+    @objc var readOnly:Bool = false
+    @objc var display:Bool = true
+    @objc var value:String = ""
+    @objc var text:String = ""
+    @objc var views:Dictionary<String,UIView>=[:]
+    
+    func getValue() -> String {
+        return self.value
+    }
+    
+    override func draw(_ rect: CGRect) {
+        self.backgroundColor = UIColor.clear
+        views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+            view.text = label
+            view.textColor = UIColor.black
+        }
+        
+        views = self.layoutHelper(name: "ico", h: "H:[?(7)]-10-|", v: "V:|-15-[?(13)]",views:views) { (view:UIImageView) in
+            view.image = UIImage(named: "icon_combobox_ico")
+        }
+        
+        views = self.layoutHelper(name: "button", h: "H:[label]-[?]-[ico]", v: "V:|-0-[?(40)]",views:views) { (view:UIButton) in
+            view.setTitle(self.text, for: .normal)
+            view.contentVerticalAlignment = .center
+            view.contentHorizontalAlignment = .right
+            view.setTitleColor(UIColor.black, for: .normal)
+        }
     }
 }
 
