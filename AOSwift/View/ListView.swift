@@ -8,9 +8,10 @@
 
 import UIKit
 
-protocol ListViewDelegate {
+@objc protocol ListViewDelegate {
     func listView(listView:ListView,page:Int,pageSize:Int)
-    func listView(listView:ListView,cell:ListViewCell,row:[String:AnyObject])
+    @objc optional func listViewForCellHeight(listView:ListView,index:IndexPath)->CGFloat
+    func listView(listView:ListView,cell:ListViewCell,index:IndexPath,row:[String:AnyObject])
 }
 
 class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
@@ -49,7 +50,7 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 88
+       return self.listViewDelegate?.listViewForCellHeight?(listView: self, index: indexPath) ?? CGFloat(88)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,7 +59,7 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
             cell = ListViewCell(style: .default, reuseIdentifier: ListView.className)
         }
         
-        self.listViewDelegate?.listView(listView: self, cell: cell!,row: self.rows[indexPath.row])
+        self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
         return cell!
     }
     
