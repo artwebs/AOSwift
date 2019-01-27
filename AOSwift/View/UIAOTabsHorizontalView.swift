@@ -21,20 +21,20 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 @objc protocol UIAOTabsHorizontalViewDataSource{
-    func tabsHorizontalViewCellCount(_ tabsHorizontalView : TabsHorizontalView)->Int
-    @objc optional func tabsHorizontalViewCellWidth(_ tabsHorizontalView : TabsHorizontalView)->CGFloat
-    @objc optional func tabsHorizontalViewForCellSelectStyle(_ tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
-    @objc optional func tabsHorizontalViewForCellUnSelectStyle(_ tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
-    func tabsHorizontalViewForCell(_ tabsHorizontalView : TabsHorizontalView,cell : UIButton,index: Int)
-    @objc optional func tabsHorizontalViewLineView(_ tabsHorizontalView : TabsHorizontalView)->UIView
+    func tabsHorizontalViewCellCount(_ tabsHorizontalView : UIAOTabsHorizontalView)->Int
+    @objc optional func tabsHorizontalViewCellWidth(_ tabsHorizontalView : UIAOTabsHorizontalView)->CGFloat
+    @objc optional func tabsHorizontalViewForCellSelectStyle(_ tabsHorizontalView : UIAOTabsHorizontalView, cell :UIButton,index: Int)
+    @objc optional func tabsHorizontalViewForCellUnSelectStyle(_ tabsHorizontalView : UIAOTabsHorizontalView, cell :UIButton,index: Int)
+    func tabsHorizontalViewForCell(_ tabsHorizontalView : UIAOTabsHorizontalView,cell : UIButton,index: Int)
+    @objc optional func tabsHorizontalViewLineView(_ tabsHorizontalView : UIAOTabsHorizontalView)->UIView
 }
 
 @objc protocol UIAOTabsHorizontalViewDelegate{
-    @objc optional func tabsHorizontalViewDidSelectedCell(_ tabsHorizontalView : TabsHorizontalView,index: Int)
+    @objc optional func tabsHorizontalViewDidSelectedCell(_ tabsHorizontalView : UIAOTabsHorizontalView,index: Int)
 }
 
 
-class TabsHorizontalView: UIScrollView {
+class UIAOTabsHorizontalView: UIScrollView {
     var lineView : UIView?
     var tabData :[Dictionary<String,String>] = []
     var allWith :CGFloat = 0
@@ -50,6 +50,7 @@ class TabsHorizontalView: UIScrollView {
     
     
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         self.showsHorizontalScrollIndicator=false
         self.showsVerticalScrollIndicator=false
     }
@@ -69,7 +70,7 @@ class TabsHorizontalView: UIScrollView {
             let view = UIButton(frame: CGRect(x: allWith,y: 0,width: width,height: frame.height))
             self.dataSource?.tabsHorizontalViewForCell(self, cell: view, index: index)
             view.setTag(tagStart+index)
-            view.addTarget(self, action: #selector(TabsHorizontalView.btnOnClick(_:)), for: UIControl.Event.touchUpInside)
+            view.addTarget(self, action: #selector(UIAOTabsHorizontalView.btnOnClick(_:)), for: UIControl.Event.touchUpInside)
             allWith += view.frame.width
             self.addSubview(view);
         }

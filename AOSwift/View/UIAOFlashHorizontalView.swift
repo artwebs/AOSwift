@@ -44,6 +44,7 @@ class UIAOFlashHorizontalView: UIScrollView {
     
     */
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         // Drawing code
     }
     
