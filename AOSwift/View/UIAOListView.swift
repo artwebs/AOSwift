@@ -8,16 +8,16 @@
 
 import UIKit
 
-@objc protocol ListViewDelegate {
-    func listView(listView:ListView,page:Int,pageSize:Int)
-    @objc optional func listViewForCellHeight(listView:ListView,index:IndexPath)->CGFloat
-    func listView(listView:ListView,cell:ListViewCell,index:IndexPath,row:[String:AnyObject])
+@objc protocol UIAOListViewDelegate {
+    func listView(listView:UIAOListView,page:Int,pageSize:Int)
+    @objc optional func listViewForCellHeight(listView:UIAOListView,index:IndexPath)->CGFloat
+    func listView(listView:UIAOListView,cell:UIAOListViewCell,index:IndexPath,row:[String:AnyObject])
 }
 
-class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
+class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     let listView = UITableView()
     var rows:[[String:AnyObject]] = []
-    var listViewDelegate:ListViewDelegate?
+    var listViewDelegate:UIAOListViewDelegate?
     var page = 1
     var pageSize = 10
     
@@ -54,9 +54,9 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: ListView.className) as? ListViewCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: UIAOListView.className) as? UIAOListViewCell
         if cell == nil{
-            cell = ListViewCell(style: .default, reuseIdentifier: ListView.className)
+            cell = UIAOListViewCell(style: .default, reuseIdentifier: UIAOListView.className)
         }
         
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
@@ -73,4 +73,26 @@ class ListView: UIView,UITableViewDataSource,UITableViewDelegate {
     }
     
 
+}
+
+class UIAOListViewCell: UITableViewCell {
+    var views:[String:UIView] = [:]
+    private var _listener = UIListener()
+    override  var listener : UIListener{
+        get{
+            return _listener
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
+    }
+    
 }

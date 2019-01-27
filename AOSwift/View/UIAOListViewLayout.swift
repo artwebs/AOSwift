@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol ListViewLayoutDelegate{
-    func listViewLayout(_ layout : ListViewLayout , selectIndex : Int )
+protocol UIAOListViewLayoutDelegate{
+    func listViewLayout(_ layout : UIAOListViewLayout , selectIndex : Int )
 }
 
-class ListViewLayout: UIScrollView,UIScrollViewDelegate {
+class UIAOListViewLayout: UIScrollView,UIScrollViewDelegate {
 
     /*
     // Only override draw() if you perform custom drawing.

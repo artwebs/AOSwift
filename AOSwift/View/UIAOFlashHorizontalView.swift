@@ -19,18 +19,18 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-protocol FlashHorizontalViewDataSource{
-    func flashHorizontalViewCellCount(_ flashView : FlashHorizontalView)->Int
-    func flashHorizontalViewForCell(_ flashView : FlashHorizontalView,cell : UIButton,index: Int)
+protocol UIAOFlashHorizontalViewDataSource{
+    func flashHorizontalViewCellCount(_ flashView : UIAOFlashHorizontalView)->Int
+    func flashHorizontalViewForCell(_ flashView : UIAOFlashHorizontalView,cell : UIButton,index: Int)
 }
 
-protocol FlashHorizontalViewDelegate{
-    func flashHorizontalViewDidSelectedCell(_ flashView : FlashHorizontalView,index: Int)
+protocol UIAOFlashHorizontalViewDelegate{
+    func flashHorizontalViewDidSelectedCell(_ flashView : UIAOFlashHorizontalView,index: Int)
 }
 
-class FlashHorizontalView: UIScrollView {
-    var dataSource : FlashHorizontalViewDataSource?
-    var flashDelegate : FlashHorizontalViewDelegate?
+class UIAOFlashHorizontalView: UIScrollView {
+    var dataSource : UIAOFlashHorizontalViewDataSource?
+    var flashDelegate : UIAOFlashHorizontalViewDelegate?
     
     var startTag : Int{
         get{
@@ -60,7 +60,7 @@ class FlashHorizontalView: UIScrollView {
             for index in 0..<count{
                 let view = UIButton(frame: CGRect(x: allWidth,y: 0,width: frame.width,height: frame.height))
                 self.dataSource!.flashHorizontalViewForCell(self, cell:view,index: index)
-                view.addTarget(self, action: #selector(FlashHorizontalView.btnOnClick(_:)), for: UIControl.Event.touchUpInside)
+                view.addTarget(self, action: #selector(UIAOFlashHorizontalView.btnOnClick(_:)), for: UIControl.Event.touchUpInside)
                 view.setTag(index+startTag)
                 allWidth += view.frame.width
                 self.addSubview(view)

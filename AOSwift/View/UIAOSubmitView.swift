@@ -8,13 +8,13 @@
 
 import UIKit
 import AOCocoa
-@objc protocol SubmitViewDelegate {
-   func submitViewForParam(submitView:SubmitView)->Array<Array<Dictionary<String,Any>>>;
-    @objc optional func submitViewForValue(submitView:SubmitView)->[String:AnyObject];
-   @objc optional func submitViewForCell(submitView:SubmitView,cell:SubmitCellView,index:Int);
+@objc protocol UIAOSubmitViewDelegate {
+    func submitViewForParam(submitView:UIAOSubmitView)->Array<Array<Dictionary<String,Any>>>;
+    @objc optional func submitViewForValue(submitView:UIAOSubmitView)->[String:AnyObject];
+    @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:SubmitCellView,index:Int);
 }
-class SubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
-    var submitViewdelegate:SubmitViewDelegate?
+class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
+    var submitViewdelegate:UIAOSubmitViewDelegate?
     private var defaultCellHeight:Float32 = 60
     private var cellViews = Dictionary<String,SubmitCellView>()
     

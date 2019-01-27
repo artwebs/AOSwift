@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListViewRefresh: ListView {
+class UIAOListViewRefresh: UIAOListView {
     fileprivate var refreshOperate :(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     fileprivate var moreOperate:(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     

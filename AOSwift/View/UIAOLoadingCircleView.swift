@@ -8,16 +8,16 @@
 
 import UIKit
 
-@objc protocol LoadingCircleViewDelegate{
-     @objc optional func loadingCircleViewFromBackground(_ loadingView : LoadingCircleView , size: CGSize)->UIView;
-     @objc optional func loadingCircleViewFromProgress(_ loadingView : LoadingCircleView , size: CGSize)->UIView;
+@objc protocol UIAOLoadingCircleViewDelegate{
+     @objc optional func loadingCircleViewFromBackground(_ loadingView : UIAOLoadingCircleView , size: CGSize)->UIView;
+     @objc optional func loadingCircleViewFromProgress(_ loadingView : UIAOLoadingCircleView , size: CGSize)->UIView;
 }
 
 
-class LoadingCircleView: UIView {
+class UIAOLoadingCircleView: UIView {
     var backgroundView : UIView?
     var progressView : UIView?
-    var delegate : LoadingCircleViewDelegate?
+    var delegate : UIAOLoadingCircleViewDelegate?
     
     /*
     // Only override draw() if you perform custom drawing.

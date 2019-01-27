@@ -20,7 +20,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-@objc protocol TabsHorizontalViewDataSource{
+@objc protocol UIAOTabsHorizontalViewDataSource{
     func tabsHorizontalViewCellCount(_ tabsHorizontalView : TabsHorizontalView)->Int
     @objc optional func tabsHorizontalViewCellWidth(_ tabsHorizontalView : TabsHorizontalView)->CGFloat
     @objc optional func tabsHorizontalViewForCellSelectStyle(_ tabsHorizontalView : TabsHorizontalView, cell :UIButton,index: Int)
@@ -29,7 +29,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc optional func tabsHorizontalViewLineView(_ tabsHorizontalView : TabsHorizontalView)->UIView
 }
 
-@objc protocol TabsHorizontalViewDelegate{
+@objc protocol UIAOTabsHorizontalViewDelegate{
     @objc optional func tabsHorizontalViewDidSelectedCell(_ tabsHorizontalView : TabsHorizontalView,index: Int)
 }
 
@@ -38,8 +38,8 @@ class TabsHorizontalView: UIScrollView {
     var lineView : UIView?
     var tabData :[Dictionary<String,String>] = []
     var allWith :CGFloat = 0
-    var tabDelegate : TabsHorizontalViewDelegate?
-    var dataSource : TabsHorizontalViewDataSource?
+    var tabDelegate : UIAOTabsHorizontalViewDelegate?
+    var dataSource : UIAOTabsHorizontalViewDataSource?
     
     var tagStart : Int{
         get{

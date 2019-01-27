@@ -29,18 +29,18 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 
-protocol PagesHorizontalViewDataSource{
-    func pagesHorizontalViewCellCount(_ pagesHorizontalView : PagesHorizontalView)->Int
-    func pagesHorizontalViewForCell(_ pagesHorizontalView : PagesHorizontalView,cell : UIView,index: Int)
+protocol UIAOPagesHorizontalViewDataSource{
+    func pagesHorizontalViewCellCount(_ pagesHorizontalView : UIAOPagesHorizontalView)->Int
+    func pagesHorizontalViewForCell(_ pagesHorizontalView : UIAOPagesHorizontalView,cell : UIView,index: Int)
 }
 
-protocol PagesHorizontalViewDelegate{
-    func pagesHorizontalViewDidSelectedCell(_ pagesHorizontalView : PagesHorizontalView,index: Int)
+protocol UIAOPagesHorizontalViewDelegate{
+    func pagesHorizontalViewDidSelectedCell(_ pagesHorizontalView : UIAOPagesHorizontalView,index: Int)
 }
 
-class PagesHorizontalView: UIScrollView,UIScrollViewDelegate {
-    var dataSource : PagesHorizontalViewDataSource?
-    var pageDelegate : PagesHorizontalViewDelegate?
+class UIAOPagesHorizontalView: UIScrollView,UIScrollViewDelegate {
+    var dataSource : UIAOPagesHorizontalViewDataSource?
+    var pageDelegate : UIAOPagesHorizontalViewDelegate?
     
     var startContentOffsetX : CGFloat = 0
     var endContentOffsetX : CGFloat = 0
