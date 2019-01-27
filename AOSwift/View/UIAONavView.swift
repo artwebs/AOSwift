@@ -81,6 +81,7 @@ class UIAONavView: UITableView,UITableViewDelegate,UITableViewDataSource  {
         super.draw(rect)
         self.dataSource = self
         self.delegate = self
+        self.tableFooterView = UIView()
         self.reloadData()
     }
 

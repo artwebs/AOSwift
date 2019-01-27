@@ -42,6 +42,7 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         listView.frame = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
         listView.dataSource = self
         listView.delegate = self
+        listView.tableFooterView = UIView()
         self.addSubview(listView)
     }
     
