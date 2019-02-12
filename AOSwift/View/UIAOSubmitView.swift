@@ -268,6 +268,7 @@ class SubmitCellViewCombobox: SubmitCellView {
     @objc var display:Bool = true
     @objc var value:String = ""
     @objc var text:String = ""
+    @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     
     func getValue() -> String {
@@ -277,8 +278,10 @@ class SubmitCellViewCombobox: SubmitCellView {
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
         views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+            
             view.text = label
             view.textColor = UIColor.black
+            
         }
         
         views = self.layoutHelper(name: "ico", h: "H:[?(7)]-10-|", v: "V:|-15-[?(13)]",views:views) { (view:UIImageView) in
@@ -286,10 +289,17 @@ class SubmitCellViewCombobox: SubmitCellView {
         }
         
         views = self.layoutHelper(name: "button", h: "H:[label]-[?]-[ico]", v: "V:|-0-[?(40)]",views:views) { (view:UIButton) in
-            view.setTitle(self.text, for: .normal)
+            if "".elementsEqual(value){
+                view.setTitle(placeHolder, for: .normal)
+                view.setTitleColor(UIColor.gray, for: .normal)
+                return
+            }else{
+                view.setTitle(self.text, for: .normal)
+                view.setTitleColor(UIColor.black, for: .normal)
+            }
             view.contentVerticalAlignment = .center
             view.contentHorizontalAlignment = .right
-            view.setTitleColor(UIColor.black, for: .normal)
+            
         }
     }
 }
