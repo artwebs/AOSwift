@@ -12,6 +12,7 @@ import UIKit
     func listView(listView:UIAOListView,page:Int,pageSize:Int)
     @objc optional func listViewForCellHeight(listView:UIAOListView,index:IndexPath)->CGFloat
     func listView(listView:UIAOListView,cell:UIAOListViewCell,index:IndexPath,row:[String:AnyObject])
+    @objc optional func listViewDidClick(listView:UIAOListView,index:IndexPath,row:[String:AnyObject])
 }
 
 class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
@@ -62,6 +63,9 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
         return cell!
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.listViewDelegate?.listViewDidClick?(listView: self, index: indexPath, row: self.rows[indexPath.row])
     }
     
     func setData(data:[[String:AnyObject]]?){

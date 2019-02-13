@@ -11,12 +11,13 @@ import AOCocoa
 @objc protocol UIAOSubmitViewDelegate {
     func submitViewForParam(submitView:UIAOSubmitView)->Array<Array<Dictionary<String,Any>>>;
     @objc optional func submitViewForValue(submitView:UIAOSubmitView)->[String:AnyObject];
-    @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:SubmitCellView,index:Int);
+    @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:Int);
+    @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView);
 }
 class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     var submitViewdelegate:UIAOSubmitViewDelegate?
     private var defaultCellHeight:Float32 = 60
-    private var cellViews = Dictionary<String,SubmitCellView>()
+    private var cellViews = Dictionary<String,UIAOSubmitCellView>()
     
     override func draw(_ rect: CGRect) {
         self.showsHorizontalScrollIndicator=false
@@ -66,6 +67,8 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 //
 //    }
     
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell=tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as UITableViewCell
       
@@ -75,7 +78,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             let v = "V:|-0-[?(40)]"
             switch(row["type"] as! String){
             case "button":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewTextbox) in
+                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewTextbox) in
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if param.count>indexPath.row+1{
@@ -87,10 +90,10 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 //                            self.cellViews[param[indexPath.row]["name"] as! String]?.edit?.resignFirstResponder()
                         }
                     }
-                    } as! [String : SubmitCellViewTextbox]
+                    } as! [String : UIAOSubmitCellViewTextbox]
                 break
             case "textbox":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewTextbox) in
+                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewTextbox) in
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
@@ -100,7 +103,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                     }
                     if param.count>indexPath.row+1{
                         view.didFinish={
-                            if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? SubmitCellViewTextbox{
+                            if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? UIAOSubmitCellViewTextbox{
                                next.edit?.becomeFirstResponder()
                             }
                         }
@@ -109,9 +112,9 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             view.edit?.resignFirstResponder()
                         }
                     }
-                    } as! [String : SubmitCellView]
+                    } as! [String : UIAOSubmitCellView]
             case "combobox":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellViewCombobox) in
+                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewCombobox) in
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
@@ -119,7 +122,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             view.setValue(val: val )
                         }
                     }
-                    } as! [String : SubmitCellView]
+                    } as! [String : UIAOSubmitCellView]
             default:
                 break
             }
@@ -134,9 +137,11 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
             let row=params[indexPath.section][indexPath.row]
             if  let cell = cellViews[row["name"] as! String]{
+                
                 cell.wilBegin(fn: {
                     
                 })
+                self.submitViewdelegate?.submitViewDidClick?(submitView: self, cell: cell)
             }
         }
     }
@@ -157,10 +162,10 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                 let row=param[i]
                 let v = i==0 ? "V:|-0-[?(60)]" : "V:[\(param[i-1]["name"] as! String)]-2-[?(60)]"
                 
-                cellViews = self.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:SubmitCellView) in
+                cellViews = self.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellView) in
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: i)
-                    } as! [String : SubmitCellView]
+                    } as! [String : UIAOSubmitCellView]
             }
         }
         
@@ -183,8 +188,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     }
 }
 
-
-class SubmitCellView:UIView{
+class UIAOSubmitCellView:UIView{
     private var _listener = UIListener()
     override  var listener : UIListener{
         get{
@@ -196,8 +200,19 @@ class SubmitCellView:UIView{
     func getVlaue() -> Any? {
         return nil;
     }
+    func getName() -> String {
+        return ""
+    }
+    
+    func setText(val:String) {
+        
+    }
     
     func setValue(val:AnyObject){
+        
+    }
+    
+    func setLabel(val:String) {
         
     }
     
@@ -205,9 +220,13 @@ class SubmitCellView:UIView{
         
     }
     
+    func reload(){
+        
+    }
+    
 }
 
-class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
+class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var name:String = ""
     @objc var label:String = ""
     @objc var type:String = "textbox"
@@ -235,12 +254,25 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
         }
     }
     
+    
     override func setValue(val: AnyObject) {
         self.value = val as! String
     }
     
+    override func getName() -> String {
+        return self.name
+    }
+    
+    override func setText(val: String) {
+        self.name = val
+    }
+    
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
+        self.reload()
+    }
+    
+    override func reload() {
         views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
             view.text = label
             view.textColor = UIColor.black
@@ -265,7 +297,7 @@ class SubmitCellViewTextbox:SubmitCellView,UITextFieldDelegate{
     }
 }
 
-class SubmitCellViewCombobox: SubmitCellView {
+class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     @objc var name:String = ""
     @objc var label:String = ""
     @objc var type:String = "textbox"
@@ -280,8 +312,27 @@ class SubmitCellViewCombobox: SubmitCellView {
         return self.value
     }
     
+    override func setValue(val: AnyObject) {
+        self.value = val as! String
+    }
+    
+    override func getName() -> String {
+        return self.name
+    }
+    
+    override func setText(val: String) {
+        self.text = val
+    }
+    
+    override func setLabel(val: String) {
+        self.label = val
+    }
+    
     override func draw(_ rect: CGRect) {
         self.backgroundColor = UIColor.clear
+        self.reload()
+    }
+    override func reload() {
         views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
             
             view.text = label
@@ -293,37 +344,38 @@ class SubmitCellViewCombobox: SubmitCellView {
             view.image = UIImage(named: "icon_combobox_ico")
         }
         
-        views = self.layoutHelper(name: "button", h: "H:[label]-[?]-[ico]", v: "V:|-0-[?(40)]",views:views) { (view:UIButton) in
+        views = self.layoutHelper(name: "button", h: "H:[label]-[?]-[ico]", v: "V:|-0-[?(40)]",views:views) { (view:UILabel) in
             if "".elementsEqual(value){
-                view.setTitle(placeHolder, for: .normal)
-                view.setTitleColor(UIColor.gray, for: .normal)
+                view.text = placeHolder
+                view.textColor = UIColor.gray
             }else{
-                view.setTitle(self.text, for: .normal)
-                view.setTitleColor(UIColor.black, for: .normal)
+                view.text = self.text
+                view.textColor = UIColor.black
             }
-            view.contentVerticalAlignment = .center
-            view.contentHorizontalAlignment = .right
             
-            self.click(view, listener: {
-//                let rect = self.vController?.view.bounds ?? CGRect.zero
-//                let alertView = UIView(frame: rect)
-//                alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-//                let contentView = UIView(frame: CGRect(x: 10, y: 40, width: rect.width-20, height: rect.height-80))
-//                contentView.layer.cornerRadius = 10
-//                contentView.layer.masksToBounds = true
-//                contentView.backgroundColor = UIColor.white
-//                alertView.addSubview(contentView)
-//                self.vController?.view.addSubview(alertView)
-                
-                HttpClient(view: (self.vController?.view)!).get(path: .sysUser_roleName_water_user, params: [:], callback: { (res, data, err) in
-                    print(data)
-                })
-            })
+            view.textAlignment = .right
+            
+            //                {
+            //                let rect = self.vController?.view.bounds ?? CGRect.zero
+            //                let alertView = UIView(frame: rect)
+            //                alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            //                let contentView = UIView(frame: CGRect(x: 10, y: 40, width: rect.width-20, height: rect.height-80))
+            //                contentView.layer.cornerRadius = 10
+            //                contentView.layer.masksToBounds = true
+            //                contentView.backgroundColor = UIColor.white
+            //                alertView.addSubview(contentView)
+            //                self.vController?.view.addSubview(alertView)
+            
+            //                HttpClient(view: (self.vController?.view)!).get(path: .sysUser_roleName_water_user, params: [:], callback: { (res, data, err) in
+            //                    print(data)
+            //                })
+            
+            //            }
             
         }
     }
 }
 
-class SubmitCellViewButton: UIButton {
+class UIAOSubmitCellViewButton: UIButton {
     
 }
