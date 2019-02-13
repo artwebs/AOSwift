@@ -313,7 +313,10 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     }
     
     override func setValue(val: AnyObject) {
-        self.value = val as! String
+        if let v = val as? String{
+            self.value = v
+        }
+        
     }
     
     override func getName() -> String {
