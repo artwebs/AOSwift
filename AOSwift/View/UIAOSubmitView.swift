@@ -185,7 +185,12 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 
 
 class SubmitCellView:UIView{
-    
+    private var _listener = UIListener()
+    override  var listener : UIListener{
+        get{
+            return _listener
+        }
+    }
     
     var didFinish:(()->Void)?
     func getVlaue() -> Any? {
@@ -292,13 +297,28 @@ class SubmitCellViewCombobox: SubmitCellView {
             if "".elementsEqual(value){
                 view.setTitle(placeHolder, for: .normal)
                 view.setTitleColor(UIColor.gray, for: .normal)
-                return
             }else{
                 view.setTitle(self.text, for: .normal)
                 view.setTitleColor(UIColor.black, for: .normal)
             }
             view.contentVerticalAlignment = .center
             view.contentHorizontalAlignment = .right
+            
+            self.click(view, listener: {
+//                let rect = self.vController?.view.bounds ?? CGRect.zero
+//                let alertView = UIView(frame: rect)
+//                alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//                let contentView = UIView(frame: CGRect(x: 10, y: 40, width: rect.width-20, height: rect.height-80))
+//                contentView.layer.cornerRadius = 10
+//                contentView.layer.masksToBounds = true
+//                contentView.backgroundColor = UIColor.white
+//                alertView.addSubview(contentView)
+//                self.vController?.view.addSubview(alertView)
+                
+                HttpClient(view: (self.vController?.view)!).get(path: .sysUser_roleName_water_user, params: [:], callback: { (res, data, err) in
+                    print(data)
+                })
+            })
             
         }
     }
