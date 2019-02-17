@@ -256,7 +256,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     
     
     override func setValue(val: AnyObject) {
-        self.value = val as! String
+        self.value = val as? String ?? ""
     }
     
     override func getName() -> String {
