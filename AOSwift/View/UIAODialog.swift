@@ -9,20 +9,21 @@
 import UIKit
 import AOCocoa
 
-@objc protocol UIAODialogSource{
-    func dialog(dialog:UIAODialog,view:UIView)
-}
 
-@objc protocol UIAODialogDelegate{
+protocol UIAODialogDelegate{
     func dialog(dialog:UIAODialog,result:[String:Any])
 }
 
 class UIAODialog: UIView {
     var delegate:UIAODialogDelegate?
-    var source:UIAODialogSource?
     var width:CGFloat = 0
     var height:CGFloat = 0
-    var value:[String:Any] = [:]
+    var value:[String:Any]{
+        get{
+            return [:]
+        }
+    }
+    var callback:(([String:Any])->Void)?
     
     private var _listener = UIListener()
     override  var listener : UIListener{
@@ -45,6 +46,11 @@ class UIAODialog: UIView {
         super.init(coder: aDecoder)
     }
     
+    func drawFromView(view:UIView){
+        
+        
+    }
+    
     override func draw(_ rect: CGRect) {
         let alertView = UIView(frame: rect)
         alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -65,6 +71,7 @@ class UIAODialog: UIView {
         submitBtn.setBackgroundImage(Utils.createImage(with: AppDefault.DefaultBlue), for: .normal)
         self.click(submitBtn) {
             self.delegate?.dialog(dialog: self, result:self.value)
+            self.callback?(self.value)
             self.removeFromSuperview()
         }
         container.addSubview(submitBtn)
@@ -86,8 +93,7 @@ class UIAODialog: UIView {
         
         alertView.addSubview(container)
         self.addSubview(alertView)
-        
-        self.source?.dialog(dialog: self, view: content)
+        self.drawFromView(view: content)
         
     }
     
