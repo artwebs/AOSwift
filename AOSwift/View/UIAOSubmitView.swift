@@ -70,41 +70,49 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell=tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as UITableViewCell
-      
+        var cell:UIAOSubmitCellView?
         if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
             let param = params[indexPath.section]
             let row=param[indexPath.row]
-            let v = "V:|-0-[?(40)]"
             switch(row["type"] as! String){
             case "button":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewTextbox) in
+                cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewTextbox
+                if cell == nil{
+                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                }
+                
+                if let view = cell{
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if param.count>indexPath.row+1{
                         view.didFinish={
-//                            self.cellViews[param[indexPath.row+1]["name"] as! String]?.edit?.becomeFirstResponder()
+                            //                            self.cellViews[param[indexPath.row+1]["name"] as! String]?.edit?.becomeFirstResponder()
                         }
                     }else{
                         view.didFinish={
-//                            self.cellViews[param[indexPath.row]["name"] as! String]?.edit?.resignFirstResponder()
+                            //                            self.cellViews[param[indexPath.row]["name"] as! String]?.edit?.resignFirstResponder()
                         }
                     }
-                    } as! [String : UIAOSubmitCellViewTextbox]
+                }
+                
                 break
-            case "textbox":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewTextbox) in
-                    view.reflect(row: row)
+            case "textbox": cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewTextbox
+                if cell == nil{
+                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                }
+                
+                if let view = cell as? UIAOSubmitCellViewTextbox{
+                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
                         if let val = values[row["name"] as! String]{
-                             view.setValue(val: val )
+                            view.setValue(val: val )
                         }
                     }
                     if param.count>indexPath.row+1{
                         view.didFinish={
                             if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? UIAOSubmitCellViewTextbox{
-                               next.edit?.becomeFirstResponder()
+                                next.edit?.becomeFirstResponder()
                             }
                         }
                     }else{
@@ -112,9 +120,12 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             view.edit?.resignFirstResponder()
                         }
                     }
-                    } as! [String : UIAOSubmitCellView]
-            case "combobox":
-                cellViews = cell.layoutHelper(name: row["name"] as! String, h: "H:|-0-[?(\(self.frame.width))]-0-|", v: v,views:cellViews ) { (view:UIAOSubmitCellViewCombobox) in
+                }
+            case "combobox": cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewCombobox
+                if cell == nil{
+                    cell = UIAOSubmitCellViewCombobox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                }
+                if let view = cell as? UIAOSubmitCellViewCombobox{
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
@@ -122,24 +133,27 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             view.setValue(val: val )
                         }
                     }
-                    } as! [String : UIAOSubmitCellView]
+                }
+                
             default:
                 break
             }
             
+            cellViews[row["name"] as! String]=cell
+            
         }
-        cell.selectionStyle = .none
-        
-        return cell
+        cell!.selectionStyle = .none
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
             let row=params[indexPath.section][indexPath.row]
             if  let cell = cellViews[row["name"] as! String]{
-                
+
                 cell.wilBegin(fn: {
-                    
+
                 })
                 self.submitViewdelegate?.submitViewDidClick?(submitView: self, cell: cell)
             }
@@ -188,7 +202,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     }
 }
 
-class UIAOSubmitCellView:UIView{
+class UIAOSubmitCellView:UITableViewCell{
     private var _listener = UIListener()
     override  var listener : UIListener{
         get{
@@ -273,7 +287,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     }
     
     override func reload() {
-        views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+        views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
             view.text = label
             view.textColor = UIColor.black
         }
@@ -304,7 +318,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     @objc var readOnly:Bool = false
     @objc var display:Bool = true
     @objc var value:String = ""
-    @objc var text:String = ""
+    @objc var textValue:String = ""
     @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     
@@ -324,7 +338,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     }
     
     override func setText(val: String) {
-        self.text = val
+        self.textValue = val
     }
     
     override func setLabel(val: String) {
@@ -336,7 +350,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
         self.reload()
     }
     override func reload() {
-        views = self.layoutHelper(name: "label", h: "H:|-20-[?(100)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+        views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
             
             view.text = label
             view.textColor = UIColor.black
@@ -352,7 +366,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
                 view.text = placeHolder
                 view.textColor = UIColor.gray
             }else{
-                view.text = self.text
+                view.text = self.textValue
                 view.textColor = UIColor.black
             }
             
