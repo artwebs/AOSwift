@@ -247,6 +247,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var readOnly:Bool = false
     @objc var display:Bool = true
     @objc var value:String = ""
+    @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     
     var edit:UITextField?{
@@ -296,9 +297,12 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
             view.setValue(12, forKey: "paddingLeft")
             view.setValue(12, forKey: "paddingRight")
             view.delegate = self
+            view.placeholder = placeHolder
             view.text = self.value
             if self.readOnly{
                 view.isEnabled = false
+            }else{
+                view.isEnabled = true
             }
             didFinish?()
         }
