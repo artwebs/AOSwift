@@ -105,7 +105,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                      view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
-                        if let val = values[row["name"] as! String]{
+                        if let val = values[row["name"] as! String] as? String{
                             view.setValue(val: val )
                         }
                     }
@@ -129,7 +129,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
-                        if let val = values[row["name"] as! String]{
+                        if let val = values[row["name"] as! String] as? String {
                             view.setValue(val: val )
                         }
                     }
@@ -188,7 +188,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     func getValues()->Dictionary<String,Any>{
         var rs = Dictionary<String,Any>()
         for item in self.cellViews {
-            rs[item.key] = item.value.getVlaue()
+            rs[item.key] = item.value.getValue()
         }
         return rs
     }
@@ -196,7 +196,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     func setValues(row:[String:AnyObject]){
         for item in self.cellViews {
             if let val = row[item.key]{
-                item.value.setValue(val: val)
+                item.value.setValue(val: val as! String)
             }
         }
     }
@@ -211,8 +211,8 @@ class UIAOSubmitCellView:UITableViewCell{
     }
     
     var didFinish:(()->Void)?
-    func getVlaue() -> Any? {
-        return nil;
+    func getValue() -> String {
+        return "";
     }
     func getName() -> String {
         return ""
@@ -222,7 +222,7 @@ class UIAOSubmitCellView:UITableViewCell{
         
     }
     
-    func setValue(val:AnyObject){
+    func setValue(val:String){
         
     }
     
@@ -261,7 +261,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
         fn?()
     }
     
-    func getValue() -> String {
+   override func getValue() -> String {
         if let val = edit?.text{
             return val
         }else{
@@ -270,8 +270,8 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     }
     
     
-    override func setValue(val: AnyObject) {
-        self.value = val as? String ?? ""
+    override func setValue(val: String) {
+        self.value = val
     }
     
     override func getName() -> String {
@@ -279,7 +279,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     }
     
     override func setText(val: String) {
-        self.name = val
+        self.value = val
     }
     
     override func draw(_ rect: CGRect) {
@@ -326,15 +326,12 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     
-    func getValue() -> String {
+    override func getValue() -> String {
         return self.value
     }
     
-    override func setValue(val: AnyObject) {
-        if let v = val as? String{
-            self.value = v
-        }
-        
+    override func setValue(val: String) {
+        self.value = val
     }
     
     override func getName() -> String {
