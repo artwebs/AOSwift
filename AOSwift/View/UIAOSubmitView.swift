@@ -13,11 +13,14 @@ import AOCocoa
     @objc optional func submitViewForValue(submitView:UIAOSubmitView)->[String:AnyObject];
     @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:Int);
     @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView);
+    @objc optional func submitViewForCellHeight(submitView:UIAOSubmitView,indexPath: IndexPath)->CGFloat
 }
 class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     var submitViewdelegate:UIAOSubmitViewDelegate?
-    private var defaultCellHeight:Float32 = 60
+    private var defaultCellHeight:CGFloat = 44
     private var cellViews = Dictionary<String,UIAOSubmitCellView>()
+    private var layoutParams:Array<Array<Dictionary<String,Any>>>?
+    private var layoutValues:[String:AnyObject]?
     
     override func draw(_ rect: CGRect) {
         self.showsHorizontalScrollIndicator=false
@@ -25,6 +28,8 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         self.register(UITableViewCell.self, forCellReuseIdentifier: "cellID")
         self.delegate = self;
         self.dataSource=self;
+        self.layoutParams = self.submitViewdelegate?.submitViewForParam(submitView: self)
+        self.layoutValues = self.submitViewdelegate?.submitViewForValue?(submitView: self)
         self.tableFooterView = UIView(frame: CGRect.zero)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
@@ -66,12 +71,19 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
 //        return 1;
 //
 //    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let height = self.submitViewdelegate?.submitViewForCellHeight?(submitView: self, indexPath: indexPath){
+            return height;
+        }else{
+            return defaultCellHeight;
+        }
+    }
     
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:UIAOSubmitCellView?
-        if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
+        if let params = self.layoutParams{
             let param = params[indexPath.section]
             let row=param[indexPath.row]
             switch(row["type"] as! String){
@@ -104,7 +116,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                 if let view = cell as? UIAOSubmitCellViewTextbox{
                      view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
-                    if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
+                    if let values = self.layoutValues  {
                         if let val = values[row["name"] as! String] as? String{
                             view.setValue(val: val )
                         }
@@ -128,7 +140,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                 if let view = cell as? UIAOSubmitCellViewCombobox{
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
-                    if let values = self.submitViewdelegate?.submitViewForValue?(submitView: self)  {
+                    if let values = self.layoutValues  {
                         if let val = values[row["name"] as! String] as? String {
                             view.setValue(val: val )
                         }
@@ -246,6 +258,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var type:String = "textbox"
     @objc var readOnly:Bool = false
     @objc var display:Bool = true
+    @objc var single:Bool = true
     @objc var value:String = ""
     @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
@@ -288,24 +301,47 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     }
     
     override func reload() {
-        views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
-            view.text = label
-            view.textColor = UIColor.black
-        }
-        views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
-            view.textAlignment = .right
-            view.setValue(12, forKey: "paddingLeft")
-            view.setValue(12, forKey: "paddingRight")
-            view.delegate = self
-            view.placeholder = placeHolder
-            view.text = self.value
-            if self.readOnly{
-                view.isEnabled = false
-            }else{
-                view.isEnabled = true
+        if single{
+            views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+                view.text = label
+                view.textColor = UIColor.black
             }
-            didFinish?()
+            views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
+                view.textAlignment = .right
+                view.setValue(12, forKey: "paddingLeft")
+                view.setValue(12, forKey: "paddingRight")
+                view.delegate = self
+                view.placeholder = placeHolder
+                view.text = self.value
+                if self.readOnly{
+                    view.isEnabled = false
+                }else{
+                    view.isEnabled = true
+                }
+                didFinish?()
+            }
+        }else{
+            views = self.layoutHelper(name: "textbox", h: "H:|-10-[?]-10-|", v: "V:|-4-[?(100)]",views:views) { (view:UITextField) in
+                view.textAlignment = .left
+                view.setValue(12, forKey: "paddingLeft")
+                view.setValue(12, forKey: "paddingRight")
+                view.delegate = self
+                view.placeholder = placeHolder
+                view.text = self.value
+                if self.readOnly{
+                    view.isEnabled = false
+                }else{
+                    view.isEnabled = true
+                }
+                didFinish?()
+            }
+            
         }
+        
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.value = self.getValue()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
