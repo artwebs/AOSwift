@@ -69,6 +69,7 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     }
     
     func setData(data:[[String:AnyObject]]?){
+        print(data)
         self.rows.removeAll()
         if let val = data{
             for item in val{
