@@ -88,11 +88,13 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         if let params = self.layoutParams{
             let param = params[indexPath.section]
             let row=param[indexPath.row]
+            let name = row["name"] as! String
+            
             switch(row["type"] as! String){
             case "button":
-                cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewTextbox
+                cell=tableView.dequeueReusableCell(withIdentifier:name) as? UIAOSubmitCellViewTextbox
                 if cell == nil{
-                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: name)
                 }
                 
                 if let view = cell{
@@ -110,9 +112,9 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                 }
                 
                 break
-            case "textbox": cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewTextbox
+            case "textbox": cell=tableView.dequeueReusableCell(withIdentifier:name) as? UIAOSubmitCellViewTextbox
                 if cell == nil{
-                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                    cell = UIAOSubmitCellViewTextbox(style: .default, reuseIdentifier: name)
                 }
                 
                 if let view = cell as? UIAOSubmitCellViewTextbox{
@@ -135,9 +137,9 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                         }
                     }
                 }
-            case "combobox": cell=tableView.dequeueReusableCell(withIdentifier:UIAOSubmitView.className) as? UIAOSubmitCellViewCombobox
+            case "combobox": cell=tableView.dequeueReusableCell(withIdentifier:name) as? UIAOSubmitCellViewCombobox
                 if cell == nil{
-                    cell = UIAOSubmitCellViewCombobox(style: .default, reuseIdentifier: UIAOSubmitView.className)
+                    cell = UIAOSubmitCellViewCombobox(style: .default, reuseIdentifier: name)
                 }
                 if let view = cell as? UIAOSubmitCellViewCombobox{
                     view.reflect(row: row)
@@ -154,7 +156,6 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             }
             
             cellViews[row["name"] as! String]=cell
-            
         }
         cell!.selectionStyle = .none
         return cell!
