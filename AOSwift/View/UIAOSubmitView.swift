@@ -9,7 +9,7 @@
 import UIKit
 import AOCocoa
 @objc protocol UIAOSubmitViewDelegate {
-    func submitViewForParam(submitView:UIAOSubmitView)->Array<Array<Dictionary<String,Any>>>;
+     @objc optional func submitViewForParam(submitView:UIAOSubmitView)->Array<Array<Dictionary<String,Any>>>;
     @objc optional func submitViewForValue(submitView:UIAOSubmitView)->[String:AnyObject];
     @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:Int);
     @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
@@ -28,7 +28,9 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         self.register(UITableViewCell.self, forCellReuseIdentifier: "cellID")
         self.delegate = self;
         self.dataSource=self;
-        self.layoutParams = self.submitViewdelegate?.submitViewForParam(submitView: self)
+        if let pms = self.submitViewdelegate?.submitViewForParam?(submitView: self){
+            self.layoutParams = pms
+        }
         self.layoutValues = self.submitViewdelegate?.submitViewForValue?(submitView: self)
         self.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -218,6 +220,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             var items = temp[index.section]
             items.append(param)
             self.layoutParams![index.section] = items
+            self.reloadData()
         }
         
     }
@@ -312,7 +315,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     override func reload() {
         if single{
             views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
-                view.text = label
+                view.text = self.label
                 view.textColor = UIColor.black
             }
             views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
@@ -320,8 +323,13 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
                 view.setValue(12, forKey: "paddingLeft")
                 view.setValue(12, forKey: "paddingRight")
                 view.delegate = self
-                view.placeholder = placeHolder
-                view.text = self.value
+                if "".elementsEqual(self.value){
+                    view.placeholder = placeHolder
+                    view.text = ""
+                }else{
+                    view.placeholder = placeHolder
+                    view.text = self.value
+                }
                 if self.readOnly{
                     view.isEnabled = false
                 }else{
@@ -408,7 +416,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
         }
         
         views = self.layoutHelper(name: "button", h: "H:[label]-[?]-[ico]", v: "V:|-0-[?(40)]",views:views) { (view:UILabel) in
-            if "".elementsEqual(value){
+            if "".elementsEqual(textValue){
                 view.text = placeHolder
                 view.textColor = UIColor.gray
             }else{
