@@ -22,4 +22,14 @@ class UtilHelper {
         layer.endPoint = CGPoint(x: 1, y: 0)
         view.layer.addSublayer(layer)
     }
+    
+    class func regexGetSub(pattern:String, str:String) -> [String] {
+        var subStr = [String]()
+        let regex = try! NSRegularExpression(pattern: pattern, options:[])
+        let matches = regex.matches(in: str, options: [], range: NSRange(str.startIndex...,in: str))
+        for  match in matches {
+            subStr.append(contentsOf: [String(str[Range(match.range(at: 1), in: str)!]),String(str[Range(match.range(at: 2), in: str)!])])
+        }
+        return subStr
+    }
 }
