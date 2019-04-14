@@ -12,14 +12,14 @@ import AOCocoa
     func submitViewForParam(submitView:UIAOSubmitView)->Array<Array<Dictionary<String,Any>>>;
     @objc optional func submitViewForValue(submitView:UIAOSubmitView)->[String:AnyObject];
     @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:Int);
-    @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView);
+    @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
     @objc optional func submitViewForCellHeight(submitView:UIAOSubmitView,indexPath: IndexPath)->CGFloat
 }
 class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     var submitViewdelegate:UIAOSubmitViewDelegate?
     private var defaultCellHeight:CGFloat = 44
     private var cellViews = Dictionary<String,UIAOSubmitCellView>()
-    private var layoutParams:Array<Array<Dictionary<String,Any>>>?
+    var layoutParams:Array<Array<Dictionary<String,Any>>>?
     private var layoutValues:[String:AnyObject]?
     
     override func draw(_ rect: CGRect) {
@@ -50,14 +50,14 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var rs=0;
-        if let list = submitViewdelegate?.submitViewForParam(submitView: self){
+        if let list = layoutParams{
             rs = list[section].count;
         }
         return rs;
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
+        if let params = layoutParams{
             return params.count
         }
         return 0
@@ -160,14 +160,14 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
+        if let params = self.layoutParams{
             let row=params[indexPath.section][indexPath.row]
             if  let cell = cellViews[row["name"] as! String]{
 
                 cell.wilBegin(fn: {
 
                 })
-                self.submitViewdelegate?.submitViewDidClick?(submitView: self, cell: cell)
+                self.submitViewdelegate?.submitViewDidClick?(submitView: self, cell: cell,index:indexPath)
             }
         }
     }
@@ -182,7 +182,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     func load() {
         self.clear()
         self.backgroundColor = UIColor.clear
-        if let params = self.submitViewdelegate?.submitViewForParam(submitView: self){
+        if let params = self.layoutParams{
             let param = params[0]
             for i in 0..<param.count{
                 let row=param[i]
@@ -212,6 +212,15 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             }
         }
     }
+    
+    func append(param:[String:Any],index:IndexPath){
+        if var temp = self.layoutParams{
+            var items = temp[index.section]
+            items.append(param)
+            self.layoutParams![index.section] = items
+        }
+        
+    }
 }
 
 class UIAOSubmitCellView:UITableViewCell{
@@ -221,11 +230,11 @@ class UIAOSubmitCellView:UITableViewCell{
             return _listener
         }
     }
-    
     var didFinish:(()->Void)?
     func getValue() -> String {
         return "";
     }
+    
     func getName() -> String {
         return ""
     }
@@ -408,24 +417,6 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
             }
             
             view.textAlignment = .right
-            
-            //                {
-            //                let rect = self.vController?.view.bounds ?? CGRect.zero
-            //                let alertView = UIView(frame: rect)
-            //                alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            //                let contentView = UIView(frame: CGRect(x: 10, y: 40, width: rect.width-20, height: rect.height-80))
-            //                contentView.layer.cornerRadius = 10
-            //                contentView.layer.masksToBounds = true
-            //                contentView.backgroundColor = UIColor.white
-            //                alertView.addSubview(contentView)
-            //                self.vController?.view.addSubview(alertView)
-            
-            //                HttpClient(view: (self.vController?.view)!).get(path: .sysUser_roleName_water_user, params: [:], callback: { (res, data, err) in
-            //                    print(data)
-            //                })
-            
-            //            }
-            
         }
     }
 }
