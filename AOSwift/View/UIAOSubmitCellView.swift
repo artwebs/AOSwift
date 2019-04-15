@@ -16,6 +16,7 @@ class UIAOSubmitCellView:UITableViewCell{
         }
     }
     var didFinish:(()->Void)?
+    var didChangeValue:(()->Void)?
     func getValue() -> String {
         return "";
     }

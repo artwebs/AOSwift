@@ -14,6 +14,8 @@ import AOCocoa
     @objc optional func submitViewForCell(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:Int);
     @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
     @objc optional func submitViewForCellHeight(submitView:UIAOSubmitView,indexPath: IndexPath)->CGFloat
+    @objc optional func submitViewForValueChange(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
+    
 }
 class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
     var submitViewdelegate:UIAOSubmitViewDelegate?
@@ -93,7 +95,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                     view.reflect(row: row)
                     self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
                     if param.count>indexPath.row+1{
-                        view.didFinish={
+                        view.didFinish={ 
                             //                            self.cellViews[param[indexPath.row+1]["name"] as! String]?.edit?.becomeFirstResponder()
                         }
                     }else{
@@ -122,11 +124,15 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                             if let next = self.cellViews[param[indexPath.row+1]["name"] as! String] as? UIAOSubmitCellViewTextbox{
                                 next.edit?.becomeFirstResponder()
                             }
+                           
                         }
                     }else{
                         view.didFinish={
                             view.edit?.resignFirstResponder()
                         }
+                    }
+                    view.didChangeValue={
+                         self.submitViewdelegate?.submitViewForValueChange?(submitView: self, cell: view, index: indexPath)
                     }
                 }
             case "combobox": cell=tableView.dequeueReusableCell(withIdentifier:name) as? UIAOSubmitCellViewCombobox
@@ -140,6 +146,12 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
                         if let val = values[row["name"] as! String] as? String {
                             view.setValue(val: val )
                         }
+                    }
+                    view.didFinish={
+                        
+                    }
+                    view.didChangeValue={
+                        self.submitViewdelegate?.submitViewForValueChange?(submitView: self, cell: view, index: indexPath)
                     }
                 }
                 
@@ -216,6 +228,23 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             self.reloadData()
         }
         
+    }
+    
+    func set(name:String,param:[String:Any],index:IndexPath) {
+        if var temp = self.layoutParams{
+            var items = temp[index.section]
+            items[index.row] = param
+            self.layoutParams![index.section] = items
+            self.reloadData()
+        }
+    }
+    
+    func setValue(name:String,textValue:String,value:String){
+        if let cell = cellViews[name]{
+            cell.setText(val: textValue)
+            cell.setValue(val: value)
+            cell.reload()
+        }
     }
 }
 

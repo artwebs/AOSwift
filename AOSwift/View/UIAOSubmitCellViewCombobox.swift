@@ -33,6 +33,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
     
     override func setText(val: String) {
         self.textValue = val
+        self.didChangeValue?()
     }
     
     override func setLabel(val: String) {

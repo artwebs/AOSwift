@@ -121,6 +121,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.value = self.getValue()
+        self.didChangeValue?()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
