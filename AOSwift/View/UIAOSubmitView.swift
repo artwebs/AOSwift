@@ -246,5 +246,14 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             cell.reload()
         }
     }
+    
+    func removeCell(index:IndexPath){
+        if var temp = self.layoutParams{
+            var items = temp[index.section]
+            items.remove(at: index.row)
+            self.layoutParams![index.section] = items
+            self.reloadData()
+        }
+    }
 }
 
