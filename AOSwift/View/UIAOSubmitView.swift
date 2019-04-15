@@ -65,14 +65,6 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         return 0
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "提交内容"
-//    }
-//
-//    override var numberOfSections: Int{
-//        return 1;
-//
-//    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if let height = self.submitViewdelegate?.submitViewForCellHeight?(submitView: self, indexPath: indexPath){
             return height;
@@ -275,6 +267,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var value:String = ""
     @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
+    @objc var model = "string"
     
     var edit:UITextField?{
         get{
@@ -324,6 +317,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
                 view.setValue(12, forKey: "paddingLeft")
                 view.setValue(12, forKey: "paddingRight")
                 view.delegate = self
+                
                 if "".elementsEqual(self.value){
                     view.placeholder = placeHolder
                     view.text = ""
@@ -344,8 +338,13 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
                 view.setValue(12, forKey: "paddingLeft")
                 view.setValue(12, forKey: "paddingRight")
                 view.delegate = self
-                view.placeholder = placeHolder
-                view.text = self.value
+                if "".elementsEqual(self.value){
+                    view.placeholder = placeHolder
+                    view.text = ""
+                }else{
+                    view.placeholder = placeHolder
+                    view.text = self.value
+                }
                 if self.readOnly{
                     view.isEnabled = false
                 }else{
