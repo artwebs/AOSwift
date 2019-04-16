@@ -34,7 +34,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     override func getValue() -> String {
         if let val = edit?.text{
             if "number".elementsEqual(self.model){
-                let tval = String((Int(val) ?? 0)) 
+                let tval = String((Int(val) ?? 0))
                 edit?.text = tval
                 return tval
             }
