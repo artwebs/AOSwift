@@ -37,6 +37,10 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
                 let tval = String((Int(val) ?? 0))
                 edit?.text = tval
                 return tval
+            }else if "decimal".elementsEqual(self.model){
+                let tval = String((Float(val) ?? 0))
+                edit?.text = tval
+                return tval
             }
             return val
         }else{

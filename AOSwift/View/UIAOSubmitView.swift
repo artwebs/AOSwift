@@ -15,9 +15,10 @@ import AOCocoa
     @objc optional func submitViewDidClick(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
     @objc optional func submitViewForCellHeight(submitView:UIAOSubmitView,indexPath: IndexPath)->CGFloat
     @objc optional func submitViewForValueChange(submitView:UIAOSubmitView,cell:UIAOSubmitCellView,index:IndexPath);
+    @objc optional func submitViewDidFinish(submitView:UIAOSubmitView);
     
 }
-class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
+class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate {
     var submitViewdelegate:UIAOSubmitViewDelegate?
     private var defaultCellHeight:CGFloat = 44
     private var cellViews = Dictionary<String,UIAOSubmitCellView>()
@@ -40,6 +41,8 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
         self.tableFooterView = UIView()
+        
+
     }
     
     @objc func keyboardWillShow(notification: NSNotification){
@@ -160,13 +163,17 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             }
             
             cellViews[row["name"] as! String]=cell
+            if indexPath.section == params.count - 1 && indexPath.row == params[indexPath.section].count - 1 {
+                self.submitViewdelegate?.submitViewDidFinish?(submitView: self)
+            }
         }
         cell!.selectionStyle = .none
+       
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        self.endEditing(false)
         if let params = self.layoutParams{
             let row=params[indexPath.section][indexPath.row]
             if  let cell = cellViews[row["name"] as! String]{
@@ -255,5 +262,6 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource {
             self.reloadData()
         }
     }
+
 }
 
