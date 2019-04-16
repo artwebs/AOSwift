@@ -22,13 +22,13 @@ class UIAOListViewRefresh: UIAOListView {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-//        let options = PullToRefreshOption()
-//        options.backgroundColor = UIColor.white
-//        self.addPullToRefresh(options, refreshCompletion: { [weak self] in
-//            // some code
-//            self?.page=1
-//            self?.refreshOperate(self!.page,self!.pageSize)
-//        })
+        let options = PullToRefreshOption()
+        options.backgroundColor = UIColor.white
+        self.addPullToRefresh(options, refreshCompletion: { [weak self] in
+            // some code
+            self?.page=1
+            self?.refreshOperate(self!.page,self!.pageSize)
+        })
     }
     
     /*

@@ -15,12 +15,13 @@ import UIKit
     @objc optional func listViewDidClick(listView:UIAOListView,index:IndexPath,row:[String:AnyObject])
 }
 
-class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
+class UIAOListView: UIScrollView,UITableViewDataSource,UITableViewDelegate {
     let listView = UITableView()
     var rows:[[String:AnyObject]] = []
     var listViewDelegate:UIAOListViewDelegate?
     var page = 1
     var pageSize = 10
+    var noticeView:UILabel?
     
     func reload() {
         self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)
@@ -45,6 +46,13 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         listView.delegate = self
         listView.tableFooterView = UIView()
         self.addSubview(listView)
+        
+        noticeView = UILabel(frame: listView.bounds)
+        noticeView?.text = "没有更多数据"
+        noticeView?.textColor = UIColor.lightGray
+        noticeView?.textAlignment = .center
+        listView.addSubview(noticeView!)
+        self.noticeView?.isHidden = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,11 +77,18 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     }
     
     func setData(data:[[String:AnyObject]]?){
-        print(data)
+        print(data) 
         self.rows.removeAll()
         if let val = data{
             for item in val{
                 self.rows.append(item)
+            }
+        }
+        DispatchQueue.main.async {
+            if self.rows.count>0{
+                self.noticeView?.isHidden = true
+            }else{
+                self.noticeView?.isHidden = false
             }
         }
     }
