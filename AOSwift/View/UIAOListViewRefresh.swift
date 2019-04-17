@@ -24,19 +24,13 @@ class UIAOListViewRefresh: UIAOListView {
         super.draw(rect)
         let options = PullToRefreshOption()
         options.backgroundColor = UIColor.white
-        self.addPullToRefresh(options, refreshCompletion: { [weak self] in
-            // some code
+        self.listView.addPullToRefresh(options, refreshCompletion: { [weak self] in
             self?.page=1
             self?.refreshOperate(self!.page,self!.pageSize)
         })
+        
     }
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
+    
 
 }

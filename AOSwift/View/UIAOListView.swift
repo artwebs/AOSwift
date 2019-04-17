@@ -15,7 +15,7 @@ import UIKit
     @objc optional func listViewDidClick(listView:UIAOListView,index:IndexPath,row:[String:AnyObject])
 }
 
-class UIAOListView: UIScrollView,UITableViewDataSource,UITableViewDelegate {
+class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     let listView = UITableView()
     var rows:[[String:AnyObject]] = []
     var listViewDelegate:UIAOListViewDelegate?
@@ -47,7 +47,8 @@ class UIAOListView: UIScrollView,UITableViewDataSource,UITableViewDelegate {
         listView.tableFooterView = UIView()
         self.addSubview(listView)
         
-        noticeView = UILabel(frame: listView.bounds)
+        noticeView = UILabel(frame: CGRect(x: 0, y: 0, width: rect.width, height: 44))
+        noticeView?.center = CGPoint(x:rect.width*0.5,y:rect.height*0.5)
         noticeView?.text = "没有更多数据"
         noticeView?.textColor = UIColor.lightGray
         noticeView?.textAlignment = .center
@@ -77,7 +78,7 @@ class UIAOListView: UIScrollView,UITableViewDataSource,UITableViewDelegate {
     }
     
     func setData(data:[[String:AnyObject]]?){
-        print(data) 
+//        print(data) 
         self.rows.removeAll()
         if let val = data{
             for item in val{
