@@ -29,6 +29,13 @@ class UIAOListViewRefresh: UIAOListView {
             self?.refreshOperate(self!.page,self!.pageSize)
         })
         
+        let moreOptions = PullToMoreOption()
+         moreOptions.backgroundColor = UIColor.white
+        self.listView.addPullToMore(moreOptions) { [weak self] in
+            self?.page  = self?.page ?? 0 + 1
+            self?.refreshOperate(self!.page,self!.pageSize)
+        }
+        
     }
     
     

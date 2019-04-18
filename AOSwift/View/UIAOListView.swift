@@ -22,10 +22,26 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     var page = 1
     var pageSize = 10
     var noticeView:UILabel?
+    var moreView:UIView{
+        get{
+            let view = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 44))
+            view.text = more.rawValue
+            view.textAlignment = .center
+            view.textColor = UIColor.lightGray
+            view.font = UIFont.systemFont(ofSize: 12)
+            return view
+        }
+    }
+    
+    enum MoreState:String {
+        case normal = "加载更多数据"
+        case loading = "正在加载数据"
+        case finish = "没有更多数据"
+    }
+    var more = MoreState.normal
     
     func reload() {
         self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)
-       
     }
     
     func reloadData() {
@@ -34,11 +50,17 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         }
     }
     
-    /*
-     // Only override draw() if you perform custom drawing.
-     // An empty implementation adversely affects performance during animation.
-     
-     */
+    func loadMore() {
+        if more == .loading || more == .finish{
+            return
+        }
+        more = .loading
+        listView.tableFooterView = nil
+        self.page = self.page + 1
+        self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)
+        
+    }
+    
     override func draw(_ rect: CGRect) {
         // Drawing code
         listView.frame = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
@@ -71,15 +93,25 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         }
         
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
+        if indexPath.row == self.rows.count - 1{
+            tableView.tableFooterView = moreView
+            loadMore()
+        }
         return cell!
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.listViewDelegate?.listViewDidClick?(listView: self, index: indexPath, row: self.rows[indexPath.row])
     }
     
     func setData(data:[[String:AnyObject]]?){
 //        print(data) 
-        self.rows.removeAll()
+//        self.rows.removeAll()
+        if data?.count == 0{
+            more = .finish
+            return
+        }
+        more = .normal
         if let val = data{
             for item in val{
                 self.rows.append(item)
@@ -93,6 +125,7 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
             }
         }
     }
+    
     
 
 }
