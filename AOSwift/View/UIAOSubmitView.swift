@@ -34,15 +34,13 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGe
         if let pms = self.submitViewdelegate?.submitViewForParam?(submitView: self){
             self.layoutParams = pms
         }
-        self.layoutValues = self.submitViewdelegate?.submitViewForValue?(submitView: self)
+        
         self.tableFooterView = UIView(frame: CGRect.zero)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
         self.tableFooterView = UIView()
-        
-
     }
     
     @objc func keyboardWillShow(notification: NSNotification){
@@ -82,6 +80,7 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:UIAOSubmitCellView?
+        self.layoutValues = self.submitViewdelegate?.submitViewForValue?(submitView: self)
         if let params = self.layoutParams{
             let param = params[indexPath.section]
             let row=param[indexPath.row]
@@ -157,6 +156,26 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGe
                         self.submitViewdelegate?.submitViewForValueChange?(submitView: self, cell: view, index: indexPath)
                     }
                 }
+            case "image":
+                cell=tableView.dequeueReusableCell(withIdentifier:name) as? UIAOSubmitCellViewImage
+                if cell == nil{
+                    cell = UIAOSubmitCellViewImage(style: .default, reuseIdentifier: name)
+                }
+                if let view = cell as? UIAOSubmitCellViewImage{
+                    view.reflect(row: row)
+                    if let values = self.layoutValues  {
+                        if let val = values[row["name"] as! String] as? String {
+                            view.setValue(val: val )
+                        }
+                    }
+                    self.submitViewdelegate?.submitViewForCell?(submitView: self, cell: view, index: indexPath.row)
+                    view.reload()
+                    
+                }
+               
+                    
+                    
+                
                 
             default:
                 break
