@@ -25,6 +25,7 @@ class UIAOListViewRefresh: UIAOListView {
         let options = PullToRefreshOption()
         options.backgroundColor = UIColor.white
         self.listView.addPullToRefresh(options, refreshCompletion: { [weak self] in
+            self?.rows.removeAll()
             self?.page=1
             self?.refreshOperate(self!.page,self!.pageSize)
         })

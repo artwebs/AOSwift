@@ -22,6 +22,7 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     var page = 1
     var pageSize = 10
     var noticeView:UILabel?
+    var total:Int?
     var moreView:UIView{
         get{
             let view = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 44))
@@ -111,11 +112,19 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
             more = .finish
             return
         }
-        more = .normal
+        
+        
         if let val = data{
             for item in val{
                 self.rows.append(item)
             }
+        }
+        if let t = self.total{
+            if t<=self.rows.count{
+                more = .finish
+            }
+        }else{
+            more = .normal
         }
         DispatchQueue.main.async {
             if self.rows.count>0{
