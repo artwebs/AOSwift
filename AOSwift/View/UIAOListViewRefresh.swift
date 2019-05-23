@@ -9,6 +9,7 @@
 import UIKit
 
 class UIAOListViewRefresh: UIAOListView {
+    private var isRefresh = true;
     fileprivate var refreshOperate :(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     fileprivate var moreOperate:(_ page :Int ,_ pageSize :Int)->() = {page,pageSize in }
     
@@ -25,9 +26,14 @@ class UIAOListViewRefresh: UIAOListView {
         let options = PullToRefreshOption()
         options.backgroundColor = UIColor.white
         self.listView.addPullToRefresh(options, refreshCompletion: { [weak self] in
+            if(self?.isRefresh ?? true){
+                return;
+            }
+            self?.isRefresh = true;
             self?.rows.removeAll()
             self?.page=1
             self?.refreshOperate(self!.page,self!.pageSize)
+            self?.isRefresh = false
         })
         
         let moreOptions = PullToMoreOption()
