@@ -32,4 +32,52 @@ class UtilHelper {
         }
         return subStr
     }
+    
+    ///设置状态栏背景颜色
+    static func setStatusBarBackgroundColor(color : UIColor) {
+        let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+        let statusBar : UIView = statusBarWindow.value(forKey: "statusBar") as! UIView
+        /*
+         if statusBar.responds(to:Selector("setBackgroundColor:")) {
+         statusBar.backgroundColor = color
+         }*/
+        if statusBar.responds(to:#selector(setter: UIView.backgroundColor)) {
+            statusBar.backgroundColor = color
+        }
+    }
+    
+    static func alert(view:UIView?,fail:String,res:HTTPURLResponse?,data:[String:AnyObject],success:@escaping (UIAlertAction)->Void){
+        var msg  = fail;
+        var cancelAction:UIAlertAction!;
+        if let code = res?.statusCode,code == 200{
+            msg = data["msg"] as! String
+            if data["succeed"] as? Int == 1{
+                cancelAction = UIAlertAction(title: "确定", style: .cancel, handler:success);
+            }
+        }
+        let alertController = UIAlertController(title: "提示",
+                                                message: msg, preferredStyle: .alert)
+        if cancelAction == nil{
+            cancelAction = UIAlertAction(title: "确定", style: .cancel, handler: nil)
+        }
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async(execute: {
+            view?.vController?.present(alertController, animated: true, completion: nil)
+        })
+        
+    }
+    
+    static func alert(view:UIView?,isSuccess:Bool,success:(text:String?,action:(UIAlertAction)->Void),fail:(text:String?,action:(UIAlertAction)->Void)){
+        let msg  = isSuccess ? success.text : fail.text;
+        var cancelAction:UIAlertAction!;
+        let alertController = UIAlertController(title: "提示",
+                                                message: msg, preferredStyle: .alert)
+        if cancelAction == nil{
+            cancelAction = UIAlertAction(title: "确定", style: .cancel, handler: isSuccess ? success.action : fail.action)
+        }
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async(execute: {
+            view?.vController?.present(alertController, animated: true, completion: nil)
+        })
+    }
 }
