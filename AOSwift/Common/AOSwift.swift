@@ -28,4 +28,9 @@ func instantViewController(_ identifier : String)->UIViewController{
     return  storyboard.instantiateViewController(withIdentifier: identifier)
 }
 
+func mainThread(_ f:@escaping ()->Void){
+    DispatchQueue.main.async{
+        f()
+    }
+}
 
