@@ -14,7 +14,7 @@ protocol APIDefine {
 }
 
 protocol APIClientListener{
-    func before(params: inout [String:Any]?,request:inout URLRequest)->Bool
+    func before(url:inout String,params: inout [String:Any]?)->(flag:Bool,request:URLRequest)
 }
 
 
@@ -30,12 +30,7 @@ class APIClient: NSObject {
     
     func get(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
         debugPrint(params)
-        //        if AppDefault.token == nil && path != API.login{
-        //            DispatchQueue.main.async {
-        //                self.view.vController?.navigationController?.pushViewController(LoginViewController(), animated: true)
-        //            }
-        //            return
-        //        }
+       
         
         let urlSession = URLSession.shared
         var urlStr = rootUrl+path.cmd+append
@@ -59,13 +54,13 @@ class APIClient: NSObject {
             request.addValue(val, forHTTPHeaderField: "token")
         }
         
-        
-        
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
         }
         dataTask.resume()
     }
+    
+    
     
     func get(path:APIDefine,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void) {
         get(path: path, append: "", params: params, callback:callback)
@@ -74,33 +69,53 @@ class APIClient: NSObject {
     func post(path:APIDefine,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void)  {
         var val = params
         let urlSession = URLSession.shared
-        let url = URL(string:rootUrl+path.cmd)!
-        var request:URLRequest = URLRequest(url: url)
-        request.timeoutInterval = 5.0 //设置请求超时为5秒
-        request.httpMethod = "POST"  //设置请求方法
-        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json",forHTTPHeaderField: "Accept")
-        if !(self.linstener?.before(params: &val, request: &request) ?? true){
+        
+        var url = rootUrl+path.cmd;
+        
+//        let url = URL(string:rootUrl+path.cmd)!
+//        request = URLRequest(url: url)
+//        request.timeoutInterval = 5.0 //设置请求超时为5秒
+//        request.httpMethod = "POST"  //设置请求方法
+//        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
+//        request.addValue("application/json",forHTTPHeaderField: "Accept")
+        let before = self.linstener?.before(url:&url,params: &val)
+        if !(before?.flag ?? true){
             return
         }
+        var request = before?.request ?? buildRequest(url: url)
+        request.httpMethod = "POST"
         debugPrint(url,val)
-        request.httpBody = try! JSONSerialization.data(withJSONObject: val, options: .prettyPrinted)
-        
-//        if let val=AppDefault.token  {
-//            request.addValue("Bearer \(val)", forHTTPHeaderField: "Authorization")
-//        }
-//        if var val = params{
-//            val["lang"] = "zh"
-//            request.httpBody = try! JSONSerialization.data(withJSONObject: val, options: .prettyPrinted)
-//        }else{
-//            request.httpBody = try! JSONSerialization.data(withJSONObject: ["lang":"zh"], options: .prettyPrinted)
-//        }
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             
             callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
         }
         dataTask.resume()
+    }
+    
+    func buildRequest(url:String)->URLRequest{
+        var request = URLRequest(url: URL(string:url)!)
+        request.timeoutInterval = 5.0 //设置请求超时为5秒
+        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json",forHTTPHeaderField: "Accept")
+        return request
+    }
+    
+    func paramToUrl(url:inout String,params:[String:Any]?) {
+        for item in params ?? [:] {
+            if url.contains("?"){
+                url = url + "&"
+            }else{
+                url = url + "?"
+            }
+            url = url+"\(item.key)=\(item.value)"
+        }
+    }
+    
+    func paramToJSON(request:inout URLRequest,params:[String:Any]?) {
+        if let tmp = params{
+            request.httpBody = try! JSONSerialization.data(withJSONObject: tmp, options: .prettyPrinted)
+        }
     }
     
     static func isSuccess(res:HTTPURLResponse?,data:[String:AnyObject])->(Bool,String){

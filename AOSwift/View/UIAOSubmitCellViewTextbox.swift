@@ -19,6 +19,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var placeHolder:String = ""
     @objc var views:Dictionary<String,UIView>=[:]
     @objc var model = "string"
+    @objc var secret = false
     
     var edit:UITextField?{
         get{
@@ -68,11 +69,11 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     
     override func reload() {
         if single{
-            views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+             views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
                 view.text = self.label
                 view.textColor = UIColor.black
             }
-            views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
+             views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
                 view.textAlignment = .right
                 view.setValue(12, forKey: "paddingLeft")
                 view.setValue(12, forKey: "paddingRight")
@@ -88,6 +89,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
                 case "asciiNumber":view.keyboardType=UIKeyboardType.asciiCapableNumberPad ;break;
                 default:break;
                 }
+                view.isSecureTextEntry  = self.secret
                 
                 if "".elementsEqual(self.value){
                     view.placeholder = placeHolder

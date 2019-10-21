@@ -55,7 +55,7 @@ class UIAONavView: UITableView,UITableViewDelegate,UITableViewDataSource  {
         if let params = self.navDelegate?.navViewForParam(navView: self){
             let param = params[indexPath.section]
             let row=param[indexPath.row]
-            cell!.views = cell!.layoutHelper(name: "ico", h: "H:|-18-[?(20)]", v: "V:|-15-[?(20)]", views: cell!.views, delegate: { (view:UIImageView) in
+             cell!.views = cell!.layoutHelper(name: "ico", h: "H:|-18-[?(20)]", v: "V:|-15-[?(20)]", views: cell!.views, delegate: { (view:UIImageView) in
                     view.image = UIImage(named: row["ico"] as! String)
                 })
             cell!.views = cell!.layoutHelper(name: "arrow", h: "H:[?(7)]-10-|", v: "V:|-18-[?(13)]", views: cell!.views, delegate: { (view:UIImageView) in

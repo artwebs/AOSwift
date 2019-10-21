@@ -45,7 +45,7 @@ class UIAOSubmitCellViewCombobox: UIAOSubmitCellView {
         self.reload()
     }
     override func reload() {
-        views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+       views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
             
             view.text = label
             view.textColor = UIColor.black

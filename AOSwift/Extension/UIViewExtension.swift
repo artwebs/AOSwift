@@ -73,10 +73,11 @@ extension UIView{
     }
     
     func layoutHelper<T:UIView>(name:String,h:String,v:String,delegate:(T)->Void)->Dictionary<String,UIView>{
-        return layoutHelper(name: name, h: h, v: v, views: self.initViews(), delegate: delegate)
+       return layoutHelper(name: name, h: h, v: v, views: self.initViews() , delegate: delegate)
+       
     }
     
-    func layoutHelper<T:UIView>(name:String,h:String,v:String,views:Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
+    func layoutHelper<T:UIView>(name:String,h:String,v:String, views: Dictionary<String,UIView>,delegate:(T)->Void)->Dictionary<String,UIView>{
         var _views = views
         if let view = _views[name] as? T{
             delegate(view)
@@ -84,8 +85,8 @@ extension UIView{
             _views=self.layoutInit(name: name, views: views, delegate: delegate)
             layoutDraw(views: _views, layout: h.replacingOccurrences(of: "?", with: name),v.replacingOccurrences(of: "?", with: name))
         }
-       
-        return _views
+        return _views;
+        
     }
     
 }
