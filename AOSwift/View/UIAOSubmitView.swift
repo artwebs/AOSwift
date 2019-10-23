@@ -76,8 +76,6 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGe
         }
     }
     
-    
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:UIAOSubmitCellView?
         self.layoutValues = self.submitViewdelegate?.submitViewForValue?(submitView: self)
@@ -172,11 +170,6 @@ class UIAOSubmitView: UITableView,UITableViewDelegate,UITableViewDataSource,UIGe
                     view.reload()
                     
                 }
-               
-                    
-                    
-                
-                
             default:
                 break
             }

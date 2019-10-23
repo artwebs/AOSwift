@@ -20,6 +20,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     @objc var views:Dictionary<String,UIView>=[:]
     @objc var model = "string"
     @objc var secret = false
+    @objc var layout:Dictionary<String,String>?
     
     var edit:UITextField?{
         get{
@@ -69,12 +70,23 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     
     override func reload() {
         if single{
-             views = self.layoutHelper(name: "label", h: "H:|-20-[?(120)]", v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
+             var labelWidth = 120
+             let labelLeft = 20
+            if "".elementsEqual(self.label){
+                labelWidth = 0
+            }
+            let labelLayout = self.layout?["label"] ?? "H:|-\(labelLeft)-[?(\(labelWidth))]"
+             views = self.layoutHelper(name: "label", h: labelLayout, v: "V:|-0-[label(40)]",views:views) { (view:UILabel) in
                 view.text = self.label
                 view.textColor = UIColor.black
             }
-             views = self.layoutHelper(name: "textbox", h: "H:[label]-0-[?]-10-|", v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
-                view.textAlignment = .right
+            let textboxLayout = self.layout?["textbox"] ?? "H:[label]-0-[?]-10-|"
+             views = self.layoutHelper(name: "textbox", h: textboxLayout, v: "V:|-4-[?(36)]",views:views) { (view:UITextField) in
+                if "".elementsEqual(self.label){
+                    view.textAlignment = .left
+                }else{
+                    view.textAlignment = .right
+                }
                 view.setValue(12, forKey: "paddingLeft")
                 view.setValue(12, forKey: "paddingRight")
                 view.delegate = self

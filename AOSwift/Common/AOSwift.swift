@@ -22,6 +22,13 @@ func setRootViewController(_ identifier : String){
     
 }
 
+func setRootViewController(_ controller : UIViewController){
+    let nvc: UINavigationController = UINavigationController(rootViewController: controller)
+    app().window?.rootViewController = nvc
+    app().window?.makeKeyAndVisible()
+    
+}
+
 
 func instantViewController(_ identifier : String)->UIViewController{
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
