@@ -7,6 +7,20 @@
 //
 
 import UIKit
+class AOSwift {
+    static func alert(view:UIView?,message:String,handler: ((UIAlertAction)->Void)?){
+        var cancelAction:UIAlertAction!;
+        cancelAction = UIAlertAction(title: "确定", style: .cancel, handler:handler);
+        let alertController = UIAlertController(title: "提示",
+                                                message: message, preferredStyle: .alert)
+        
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async(execute: {
+            view?.vController?.present(alertController, animated: true, completion: nil)
+        })
+        
+    }
+}
 
 func app()->AppDelegate{
     return UIApplication.shared.delegate as! AppDelegate
@@ -40,4 +54,5 @@ func mainThread(_ f:@escaping ()->Void){
         f()
     }
 }
+
 
