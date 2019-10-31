@@ -94,7 +94,7 @@ class APIClient: NSObject {
     }
     
     func buildRequest(url:String)->URLRequest{
-        var request = URLRequest(url: URL(string:url)!)
+        var request = URLRequest(url: URL(string:url.urlEncoded())!)
         request.timeoutInterval = 5.0 //设置请求超时为5秒
         request.addValue("application/json",forHTTPHeaderField: "Content-Type")
         request.addValue("application/json",forHTTPHeaderField: "Accept")
