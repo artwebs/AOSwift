@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AOCocoa
 
 class UtilHelper {
     class func drawGradual(view:UIView,rect:CGRect,startColor:UIColor,endColor:UIColor){
