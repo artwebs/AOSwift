@@ -26,6 +26,10 @@ func app()->AppDelegate{
     return UIApplication.shared.delegate as! AppDelegate
 }
 
+func statusBarHeight() -> CGFloat {
+    return UIApplication.shared.statusBarFrame.height
+}
+
 func setRootViewController(_ identifier : String){
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
     let rootViewController =  storyboard.instantiateViewController(withIdentifier: identifier)
