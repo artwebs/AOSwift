@@ -1,14 +1,14 @@
 //
-//  UIAOView.swift
-//  HongMengPF
+//  UIAOScrollView.swift
+//  Yixiang
 //
-//  Created by 刘洪彬 on 2019/10/28.
+//  Created by 刘洪彬 on 2019/11/1.
 //  Copyright © 2019 artwebs. All rights reserved.
 //
 
 import UIKit
 
-class UIAOView: UIView {
+class UIAOScrollView: UIScrollView {
     var views = Dictionary<String,UIView>()
     private var _listener = UIListener()
     override  var listener : UIListener{
@@ -21,10 +21,11 @@ class UIAOView: UIView {
     // An empty implementation adversely affects performance during animation.
  
  
- 
-
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         self.backgroundColor = UIColor.white
+        self.contentSize = CGSize(width: rect.width, height: rect.height+1600)
     }
-     */
+ */
+
 }

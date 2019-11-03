@@ -22,9 +22,25 @@ class AOSwift {
     }
 }
 
+var statusHeight:CGFloat{
+    get{
+        return UIApplication.shared.statusBarFrame.height
+    }
+}
+
+
 func app()->AppDelegate{
     return UIApplication.shared.delegate as! AppDelegate
 }
+
+func statusBackground(color:UIColor){
+    let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+    let statusBar : UIView = statusBarWindow.value(forKey: "statusBar") as! UIView
+    if statusBar.responds(to:#selector(setter: UIView.backgroundColor)) {
+        statusBar.backgroundColor = color
+    }
+}
+
 
 func setRootViewController(_ identifier : String){
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
