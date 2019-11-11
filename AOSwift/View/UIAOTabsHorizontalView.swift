@@ -91,7 +91,6 @@ class UIAOTabsHorizontalView: UIScrollView {
             view.removeFromSuperview()
         }
         tabData.removeAll()
-        
     }
     
     @objc func btnOnClick(_ sender:UIButton){
