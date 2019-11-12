@@ -22,11 +22,11 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 @objc protocol UIAOTabsViewDataSource{
-    func tabsViewCellCount(_ tabsHorizontalView : UIAOTabsView)->Int
-    @objc optional func tabsViewForCellSelectStyle(_ tabsHorizontalView : UIAOTabsView, cell :UIButton,index: Int)
-    @objc optional func tabsViewForCellUnSelectStyle(_ tabsHorizontalView : UIAOTabsView, cell :UIButton,index: Int)
-    func tabsViewForCell(_ tabsHorizontalView : UIAOTabsView,cell : UIButton,index: Int)
-    @objc optional func tabsViewLineView(_ tabsHorizontalView : UIAOTabsView)->UIView
+    func tabsViewCellCount(_ tabsView : UIAOTabsView)->Int
+    @objc optional func tabsViewForCellSelectStyle(_ tabsView : UIAOTabsView, cell :UIButton,index: Int)
+    @objc optional func tabsViewForCellUnSelectStyle(_ tabsView : UIAOTabsView, cell :UIButton,index: Int)
+    func tabsViewForCell(_ tabsView : UIAOTabsView,cell : UIButton,index: Int)
+    @objc optional func tabsViewLineView(_ tabsView : UIAOTabsView)->UIView
 }
 
 @objc protocol UIAOTabsViewDelegate{
