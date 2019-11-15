@@ -73,7 +73,12 @@ class UIAOToolsView: UIView {
             let sideLength = cellWidth>viewHeight ? viewHeight * imgZoom : cellWidth * imgZoom
             let button = UIButton(frame: CGRect(x: rowWidth, y: allHeight, width: cellWidth, height: 88))
             let ico = UIImageView(frame: CGRect(x: 0, y: 0, width: sideLength, height:sideLength))
-            ico.image = UIImage(named: items[i].ico)
+            if items[i].ico.hasPrefix("http"){
+                ico.image = Utils.loadImageCache(withUrl: items[i].ico, defaultImage: "AppIcon")
+            }else{
+                ico.image = UIImage(named: items[i].ico)
+            }
+            
             ico.center = CGPoint(x: cellWidth*0.5, y: sideLength*0.5+15)
             button.addSubview(ico)
             let label = UILabel(frame: CGRect(x: 0, y: sideLength, width: cellWidth, height: sideLength))
