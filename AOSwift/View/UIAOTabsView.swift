@@ -30,7 +30,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 @objc protocol UIAOTabsViewDelegate{
-    @objc optional func tabsViewDidSelectedCell(_ tabsHorizontalView : UIAOTabsView,index: Int)
+    @objc optional func tabsViewDidSelectedCell(_ tabsView : UIAOTabsView,index: Int)
 }
 
 class UIAOTabsView: UIAOScrollView {

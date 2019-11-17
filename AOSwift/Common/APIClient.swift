@@ -44,7 +44,6 @@ class APIClient: NSObject {
         var request = before?.request ?? buildRequest(url: url)
         request.httpMethod = "GET"
         debugPrint(url,val)
-        
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             var json:[String : AnyObject] = [:]
             if error == nil{
@@ -67,12 +66,12 @@ class APIClient: NSObject {
         let urlSession = URLSession.shared
         
         var url = rootUrl+path.cmd;
-        
         let before = self.linstener?.before(method:.POST, url:&url,params: &val)
         if !(before?.flag ?? true){
             return
         }
         var request = before?.request ?? buildRequest(url: url)
+        self.setHeaderJson(request: &request)
         request.httpMethod = "POST"
         debugPrint(url,val)
         
@@ -87,12 +86,40 @@ class APIClient: NSObject {
         dataTask.resume()
     }
     
+    func upload(path:APIDefine,image:UIImage,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
+        var val = params
+        var url = rootUrl+path.cmd;
+        let before = self.linstener?.before(method: .POST, url:&url,params: &val)
+        if !(before?.flag ?? true){
+            return
+        }
+        var request = before?.request ?? buildRequest(url: url)
+        request.httpMethod = "POST"
+        let boundary = "Boundary-\(UUID().uuidString)"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        //发起请求
+        request.httpBody = createBody(parameters: val as! [String : String],
+                                boundary: boundary,
+                                data: image.jpegData(compressionQuality: 1)!,
+                                mimeType: "image/jpg",
+                                filename: "file.jpg")
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest) { (data, res, error) in
+            callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
+        }
+        //请求开始
+        dataTask.resume()
+    }
+    
     func buildRequest(url:String)->URLRequest{
         var request = URLRequest(url: URL(string:url.urlEncoded())!)
         request.timeoutInterval = 5.0 //设置请求超时为5秒
+        return request
+    }
+    
+    func setHeaderJson(request:inout URLRequest){
         request.addValue("application/json",forHTTPHeaderField: "Content-Type")
         request.addValue("application/json",forHTTPHeaderField: "Accept")
-        return request
     }
     
     func paramToUrl(url:inout String,params:[String:Any]?) {
@@ -110,6 +137,31 @@ class APIClient: NSObject {
         if let tmp = params{
             request.httpBody = try! JSONSerialization.data(withJSONObject: tmp, options: .prettyPrinted)
         }
+    }
+    
+    func createBody(parameters: [String: String],
+                    boundary: String,
+                    data: Data,
+                    mimeType: String,
+                    filename: String) -> Data {
+        let body = NSMutableData()
+        
+        let boundaryPrefix = "--\(boundary)\r\n"
+        
+        for (key, value) in parameters {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
+        }
+        
+        body.appendString(boundaryPrefix)
+        body.appendString("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Type: \(mimeType)\r\n\r\n")
+        body.append(data)
+        body.appendString("\r\n")
+        body.appendString("--".appending(boundary.appending("--")))
+        
+        return body as Data
     }
     
     static func isSuccess(res:HTTPURLResponse?,data:[String:AnyObject])->(Bool,String){
