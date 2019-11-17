@@ -13,8 +13,13 @@ protocol APIDefine {
     var cmd : String{ get}
 }
 
+enum APIMethod:String{
+    case GET = "GET"
+    case POST = "POST"
+}
+
 protocol APIClientListener{
-    func before(url:inout String,params: inout [String:Any]?)->(flag:Bool,request:URLRequest)
+    func before(method:APIMethod, url:inout String,params: inout [String:Any]?)->(flag:Bool,request:URLRequest)
 }
 
 
@@ -29,33 +34,24 @@ class APIClient: NSObject {
     }
     
     func get(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
-        debugPrint(params)
-       
-        
+        var val = params
         let urlSession = URLSession.shared
-        var urlStr = rootUrl+path.cmd+append
-        debugPrint(urlStr)
-        for item in params ?? [:] {
-            if urlStr.contains("?"){
-                urlStr = urlStr + "&"
-            }else{
-                urlStr = urlStr + "?"
-            }
-            urlStr = urlStr+"\(item.key)=\(item.value)"
+        var url = rootUrl+path.cmd+append
+        let before = self.linstener?.before(method:.GET, url:&url,params: &val)
+        if !(before?.flag ?? true){
+            return
         }
-        let url = URL(string:urlStr.urlEncoded())!
-        
-        var request:URLRequest = URLRequest(url: url)
-        request.timeoutInterval = 5.0 //设置请求超时为5秒
-        
-        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json",forHTTPHeaderField: "Accept")
-        if let val=AppDefault.token  {
-            request.addValue(val, forHTTPHeaderField: "token")
-        }
+        var request = before?.request ?? buildRequest(url: url)
+        request.httpMethod = "GET"
+        debugPrint(url,val)
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
+            var json:[String : AnyObject] = [:]
+            if error == nil{
+                print(error)
+                json = try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+            }
+            callback(res as? HTTPURLResponse,json,error)
         }
         dataTask.resume()
     }
@@ -72,13 +68,7 @@ class APIClient: NSObject {
         
         var url = rootUrl+path.cmd;
         
-//        let url = URL(string:rootUrl+path.cmd)!
-//        request = URLRequest(url: url)
-//        request.timeoutInterval = 5.0 //设置请求超时为5秒
-//        request.httpMethod = "POST"  //设置请求方法
-//        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
-//        request.addValue("application/json",forHTTPHeaderField: "Accept")
-        let before = self.linstener?.before(url:&url,params: &val)
+        let before = self.linstener?.before(method:.POST, url:&url,params: &val)
         if !(before?.flag ?? true){
             return
         }
@@ -87,8 +77,12 @@ class APIClient: NSObject {
         debugPrint(url,val)
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            
-            callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
+            var json:[String : AnyObject] = [:]
+            if error == nil{
+                print(error)
+                json = try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+            }
+            callback(res as? HTTPURLResponse,json,error)
         }
         dataTask.resume()
     }
