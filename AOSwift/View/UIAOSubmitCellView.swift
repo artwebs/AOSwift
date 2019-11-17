@@ -33,6 +33,10 @@ class UIAOSubmitCellView:UITableViewCell{
         
     }
     
+    func getLabel() -> String {
+        return ""
+    }
+    
     func setLabel(val:String) {
         
     }
