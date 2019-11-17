@@ -94,6 +94,9 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         }
         
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
+        for item in cell!.builds{
+            item(self.rows[indexPath.row])
+        }
         if indexPath.row == self.rows.count - 1{
             tableView.tableFooterView = moreView
             loadMore()
@@ -141,6 +144,7 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
 
 class UIAOListViewCell: UITableViewCell {
     var views:[String:UIView] = [:]
+    var builds:[([String:AnyObject])->Void] = []
     private var _listener = UIListener()
     override  var listener : UIListener{
         get{
@@ -148,6 +152,9 @@ class UIAOListViewCell: UITableViewCell {
         }
     }
     
+    func build(act:@escaping ([String:AnyObject])->Void)  {
+        builds.append(act)
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
