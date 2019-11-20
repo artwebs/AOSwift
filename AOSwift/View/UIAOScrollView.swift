@@ -11,6 +11,8 @@ import UIKit
 class UIAOScrollView: UIScrollView {
     var views = Dictionary<String,UIView>()
     private var _listener = UIListener()
+    var view:UIAOView!
+    var viewSize:CGSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height+200)
     override  var listener : UIListener{
         get{
             return _listener
@@ -19,13 +21,12 @@ class UIAOScrollView: UIScrollView {
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
- 
- 
+     */
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        self.backgroundColor = UIColor.white
-        self.contentSize = CGSize(width: rect.width, height: rect.height+1600)
+        self.view = UIAOView(frame: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
+        self.contentSize = viewSize
+        self.addSubview(view)
     }
- */
-
 }
