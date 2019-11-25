@@ -20,6 +20,10 @@ class AOSwift {
         })
         
     }
+    
+    static func alert(message:String,handler: ((UIAlertAction)->Void)?){
+        alert(view: UIViewController.currentViewController()?.view, message: message, handler: handler)
+    }
 }
 
 var statusHeight:CGFloat{
@@ -32,6 +36,7 @@ var statusHeight:CGFloat{
 func app()->AppDelegate{
     return UIApplication.shared.delegate as! AppDelegate
 }
+
 
 func statusBackground(color:UIColor){
     let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
