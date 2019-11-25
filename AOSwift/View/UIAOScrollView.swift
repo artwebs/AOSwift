@@ -25,8 +25,8 @@ class UIAOScrollView: UIScrollView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        self.view = UIAOView(frame: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
-        self.contentSize = viewSize
-        self.addSubview(view)
+//        self.view = UIAOView(frame: CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height))
+//        self.contentSize = viewSize
+//        self.addSubview(view)
     }
 }

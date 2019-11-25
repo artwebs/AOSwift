@@ -32,6 +32,12 @@ var statusHeight:CGFloat{
     }
 }
 
+var screenSize:CGSize{
+    get{
+        return CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+    }
+}
+
 
 func app()->AppDelegate{
     return UIApplication.shared.delegate as! AppDelegate
