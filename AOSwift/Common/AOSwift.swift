@@ -22,7 +22,7 @@ class AOSwift {
     }
     
     static func alert(message:String,handler: ((UIAlertAction)->Void)?){
-        alert(view: UIViewController.currentViewController()?.view, message: message, handler: handler)
+        alert(view: UIViewController.current()?.view, message: message, handler: handler)
     }
 }
 

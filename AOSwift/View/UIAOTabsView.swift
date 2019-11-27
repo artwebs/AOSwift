@@ -70,7 +70,6 @@ class UIAOTabsView: UIAOScrollView {
             width = self.frame.width
         }
         
-        
         for index in 0 ..< self.dataSource!.tabsViewCellCount(self){
             let view = UIButton(frame: CGRect(x: allWith,y: allHeight,width: width,height: height))
             self.dataSource?.tabsViewForCell(self, cell: view, index: index)

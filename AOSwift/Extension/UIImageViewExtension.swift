@@ -61,4 +61,26 @@ extension UIImageView{
             }
         })
     }
+    
+    func drawLine(size:CGSize, color1:UIColor,color2:UIColor){
+        UIGraphicsBeginImageContext(size)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setLineCap(CGLineCap.square)
+        let lengths: [CGFloat] = [10,30,]// 绘制 跳过 无限循环
+        context?.setStrokeColor(color1.cgColor)//UIColor.red.cgColor
+        context?.setLineWidth(2)
+        context?.setLineDash(phase: 0, lengths: lengths)
+        context?.move(to: CGPoint(x: 0, y: 3))
+        context?.addLine(to: CGPoint(x: size.width, y: 3))
+        context?.strokePath()
+        
+        context?.setStrokeColor(color2.cgColor)//UIColor.blue.cgColor
+        context?.setLineWidth(2)
+        context?.setLineDash(phase: 0, lengths: lengths)
+        context?.move(to: CGPoint(x: 20, y: 3))
+        context?.addLine(to: CGPoint(x: size.width, y: 3))
+        context?.strokePath()
+        self.clipsToBounds = true
+        self.image = UIGraphicsGetImageFromCurrentImageContext()
+    }
 }

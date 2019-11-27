@@ -37,6 +37,7 @@ class APIClient: NSObject {
         var val = params
         let urlSession = URLSession.shared
         var url = rootUrl+path.cmd+append
+        self.urlWithParam(url: &url, params: params)
         let before = self.linstener?.before(method:.GET, url:&url,params: &val)
         if !(before?.flag ?? true){
             return
@@ -66,6 +67,7 @@ class APIClient: NSObject {
         let urlSession = URLSession.shared
         
         var url = rootUrl+path.cmd;
+        self.urlWithParam(url: &url, params: params)
         let before = self.linstener?.before(method:.POST, url:&url,params: &val)
         if !(before?.flag ?? true){
             return
@@ -120,6 +122,12 @@ class APIClient: NSObject {
     func setHeaderJson(request:inout URLRequest){
         request.addValue("application/json",forHTTPHeaderField: "Content-Type")
         request.addValue("application/json",forHTTPHeaderField: "Accept")
+    }
+    
+    func urlWithParam(url:inout String,params:[String:Any]?){
+        for item in params ?? [:] {
+            url = url.replacingOccurrences(of: "{\(item.key)}", with: "\(item.value)")
+        }
     }
     
     func paramToUrl(url:inout String,params:[String:Any]?) {
