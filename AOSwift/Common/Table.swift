@@ -172,4 +172,9 @@ class Table: NSObject {
         self.limit = " limit \(limit)"
         return self
     }
+    
+    func page(page:Int,pageSize:Int)->Table{
+        self.limit = " limit \((page-1)*pageSize),\(pageSize) "
+        return self
+    }
 }

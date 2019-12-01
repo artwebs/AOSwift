@@ -15,8 +15,8 @@ import UIKit
     @objc optional func listViewDidClick(listView:UIAOListView,index:IndexPath,row:[String:AnyObject])
 }
 
-class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
-    let listView = UITableView()
+class UIAOListView: UIAOView,UITableViewDataSource,UITableViewDelegate {
+    var listView:UITableView!
     var rows:[[String:AnyObject]] = []
     var listViewDelegate:UIAOListViewDelegate?
     var page = 1
@@ -42,6 +42,23 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
     var more = MoreState.normal
     
     func reload() {
+        self.views = self.layoutHelper(name: "listView", h: "|-0-[?]-0-|", v: "|-0-[?]-0-|", views: self.views, delegate: { (v:UITableView) in
+            v.dataSource = self
+            v.delegate = self
+            v.tableFooterView = UIView()
+            self.listView = v
+        })
+
+        
+        self.views = self.layoutHelper(name: "notice", h: "|-0-[?]-0-|", v: "|-0-[?(44)]", views: self.views, delegate: { (v:UILabel) in
+            self.noticeView = v
+            v.center = CGPoint(x:self.frame.width*0.5,y:self.frame.height*0.5)
+            v.text = "没有更多数据"
+            v.textColor = UIColor.lightGray
+            v.textAlignment = .center
+            listView.addSubview(noticeView!)
+            self.noticeView?.isHidden = true
+        })
         self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)
     }
     
@@ -62,22 +79,22 @@ class UIAOListView: UIView,UITableViewDataSource,UITableViewDelegate {
         
     }
     
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-        listView.frame = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
-        listView.dataSource = self
-        listView.delegate = self
-        listView.tableFooterView = UIView()
-        self.addSubview(listView)
-        
-        noticeView = UILabel(frame: CGRect(x: 0, y: 0, width: rect.width, height: 44))
-        noticeView?.center = CGPoint(x:rect.width*0.5,y:rect.height*0.5)
-        noticeView?.text = "没有更多数据"
-        noticeView?.textColor = UIColor.lightGray
-        noticeView?.textAlignment = .center
-        listView.addSubview(noticeView!)
-        self.noticeView?.isHidden = true
-    }
+//    override func draw(_ rect: CGRect) {
+//        // Drawing code
+//        //        listView.frame = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
+//        //        listView.dataSource = self
+//        //        listView.delegate = self
+//        //        listView.tableFooterView = UIView()
+//        //        self.addSubview(listView)
+//
+////        noticeView = UILabel(frame: CGRect(x: 0, y: 0, width: rect.width, height: 44))
+////        noticeView?.center = CGPoint(x:rect.width*0.5,y:rect.height*0.5)
+////        noticeView?.text = "没有更多数据"
+////        noticeView?.textColor = UIColor.lightGray
+////        noticeView?.textAlignment = .center
+////        listView.addSubview(noticeView!)
+////        self.noticeView?.isHidden = true
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rows.count
