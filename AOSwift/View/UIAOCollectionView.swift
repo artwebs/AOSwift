@@ -50,7 +50,7 @@ class UIAOCollectionView: UIAOView,UICollectionViewDelegate,UICollectionViewData
         layout.minimumInteritemSpacing = 4
         print(rect.width,rect.height)
         self.collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: rect.width, height: rect.height), collectionViewLayout: layout)
-        self.collectionView?.register(GoodsCollectionViewCell.self, forCellWithReuseIdentifier: "CellID")
+//        self.collectionView?.register(GoodsCollectionViewCell.self, forCellWithReuseIdentifier: "CellID")
         self.collectionView?.backgroundColor = UIColor.clear
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
@@ -116,8 +116,8 @@ class UIAOCollectionView: UIAOView,UICollectionViewDelegate,UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let  cell  = collectionView.dequeueReusableCell(withReuseIdentifier: "CellID", for: indexPath) as! GoodsCollectionViewCell
-        cell.reload(param: self.rows[indexPath.row])
+        let  cell  = collectionView.dequeueReusableCell(withReuseIdentifier: "CellID", for: indexPath) as! UICollectionViewCell
+//        cell.reload(param: self.rows[indexPath.row])
         return cell
     }
     

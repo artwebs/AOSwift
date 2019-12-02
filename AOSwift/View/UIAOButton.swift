@@ -12,7 +12,7 @@ class UIAOButton: UIButton {
     var views = Dictionary<String,UIView>()
     private var isOn = false
     private var isOnView:UIImageView?
-    var onChange:((UIAOButton,Bool)->Void)?
+    var onChange:((UIAOButton,Bool)->Bool)?
     var value:Int{
         set{
             isOn = newValue>0
@@ -31,10 +31,13 @@ class UIAOButton: UIButton {
     
  
     func radio(text:String,height:CGFloat) {
-        let size:CGFloat = 20
+        self.radio(text: text, height: height, size: 20)
+    }
+    
+    func radio(text:String,height:CGFloat,size:CGFloat) {
         var margin = (height - size) * 0.5
-        self.views = self.layoutHelper(name: "ico", h: "|-\(margin)-[?(20)]", v: "|-\(margin)-[?(\(size))]", views: self.views, delegate: { (v:UIImageView) in
-            v.layer.cornerRadius = 10
+        self.views = self.layoutHelper(name: "ico", h: "|-\(margin)-[?(\(size))]", v: "|-\(margin)-[?(\(size))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size * 0.5
             v.layer.masksToBounds = true
             v.layer.borderColor = AppDefault.DefaultBlue.cgColor
             v.layer.borderWidth = 1
@@ -42,8 +45,8 @@ class UIAOButton: UIButton {
         })
         
         margin = (height - size*0.8) * 0.5
-        self.views = self.layoutHelper(name: "ico_on", h: "|-\(margin)-[?(16)]", v: "|-\(margin)-[?(16)]", views: self.views, delegate: { (v:UIImageView) in
-            v.layer.cornerRadius = 8
+        self.views = self.layoutHelper(name: "ico_on", h: "|-\(margin)-[?(\(size*0.8))]", v: "|-\(margin)-[?(\(size*0.8))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size*0.8*0.5
             v.layer.masksToBounds = true
             v.backgroundColor = AppDefault.DefaultBlue
             isOnView = v
@@ -63,9 +66,10 @@ class UIAOButton: UIButton {
     
     
     private func change(){
-        isOn = !isOn
-        isOnView?.isHidden = isOn
-        self.onChange?(self,isOn)
+        if self.onChange?(self,!isOn) ?? true{
+            isOn = !isOn
+            isOnView?.isHidden = !isOn
+        }
     }
     
 
