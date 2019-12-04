@@ -48,8 +48,11 @@ class APIClient: NSObject {
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             var json:[String : AnyObject] = [:]
             if error == nil{
-                print(error)
-                json = try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                do {
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                } catch  {
+                    print(error.localizedDescription)
+                }
             }
             callback(res as? HTTPURLResponse,json,error)
         }
@@ -79,9 +82,10 @@ class APIClient: NSObject {
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             var json:[String : AnyObject] = [:]
-            if error == nil{
-                print(error)
-                json = try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+            do {
+                try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+            } catch  {
+                print(error.localizedDescription)
             }
             callback(res as? HTTPURLResponse,json,error)
         }

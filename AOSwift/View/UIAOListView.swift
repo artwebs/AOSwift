@@ -52,11 +52,13 @@ class UIAOListView: UIAOView,UITableViewDataSource,UITableViewDelegate {
         
         self.views = self.layoutHelper(name: "notice", h: "|-0-[?]-0-|", v: "|-0-[?(44)]", views: self.views, delegate: { (v:UILabel) in
             self.noticeView = v
-            v.center = CGPoint(x:self.frame.width*0.5,y:self.frame.height*0.5)
+//            v.center = CGPoint(x:UIScreen.main.bounds.width * 0.5,y:self.frame.height*0.5)
             v.text = "没有更多数据"
+            v.textAlignment = .center
+            v.font = UIFont.systemFont(ofSize: 14)
             v.textColor = UIColor.lightGray
             v.textAlignment = .center
-            listView.addSubview(noticeView!)
+//            listView.addSubview(noticeView!)
             self.noticeView?.isHidden = true
         })
         self.listViewDelegate?.listView(listView: self, page: page, pageSize: pageSize)

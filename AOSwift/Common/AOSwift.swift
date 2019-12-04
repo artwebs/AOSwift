@@ -8,6 +8,7 @@
 
 import UIKit
 class AOSwift {
+    static var isDebug = true
     static func alert(view:UIView?,message:String,handler: ((UIAlertAction)->Void)?){
         var cancelAction:UIAlertAction!;
         cancelAction = UIAlertAction(title: "确定", style: .cancel, handler:handler);
@@ -23,6 +24,21 @@ class AOSwift {
     
     static func alert(message:String,handler: ((UIAlertAction)->Void)?){
         alert(view: UIViewController.current()?.view, message: message, handler: handler)
+    }
+    
+    static func debugValue(param:[String:AnyObject])->[String:AnyObject]{
+        if (!isDebug){
+            return [:]
+        }
+        return param
+    }
+    
+    static func debugLog(tag:String, act:()->Void){
+        if (!isDebug){
+            return
+        }
+        print("\(tag) >>")
+        act()
     }
 }
 

@@ -75,6 +75,8 @@ class UIAOToolsView: UIView {
             let ico = UIImageView(frame: CGRect(x: 0, y: 0, width: sideLength, height:sideLength))
             if items[i].ico.hasPrefix("http"){
                 ico.image = Utils.loadImageCache(withUrl: items[i].ico, defaultImage: "AppIcon")
+            }else if(items[i].ico.hasPrefix("res:")){
+                ico.image = UIImage(named:items[i].ico.replacingOccurrences(of: "res:", with: ""))?.toGrayImage()
             }else{
                 ico.image = UIImage(named: items[i].ico)
             }
