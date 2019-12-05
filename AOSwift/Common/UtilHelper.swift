@@ -36,8 +36,8 @@ class UtilHelper {
     
     ///设置状态栏背景颜色
     static func setStatusBarBackgroundColor(color : UIColor) {
-        let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-        let statusBar : UIView = statusBarWindow.value(forKey: "statusBar") as! UIView
+        
+        let statusBar : UIView = AOSwift.statusBar()
         /*
          if statusBar.responds(to:Selector("setBackgroundColor:")) {
          statusBar.backgroundColor = color
@@ -46,6 +46,8 @@ class UtilHelper {
             statusBar.backgroundColor = color
         }
     }
+    
+
     
     static func alert(view:UIView?,fail:String,res:HTTPURLResponse?,data:[String:AnyObject],success:@escaping (UIAlertAction)->Void){
         var msg  = fail;

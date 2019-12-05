@@ -40,6 +40,17 @@ class AOSwift {
         print("\(tag) >>")
         act()
     }
+    
+    static func statusBar()->UIView{
+        if #available(iOS 13.0, *){
+            return UIView(frame: UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
+        }else{
+            let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
+            let statusBar : UIView = statusBarWindow.value(forKey: "statusBar") as! UIView
+            return statusBar
+        }
+    }
+
 }
 
 var statusHeight:CGFloat{
@@ -60,13 +71,14 @@ func app()->AppDelegate{
 }
 
 
+
 func statusBackground(color:UIColor){
-    let statusBarWindow : UIView = UIApplication.shared.value(forKey: "statusBarWindow") as! UIView
-    let statusBar : UIView = statusBarWindow.value(forKey: "statusBar") as! UIView
+    let statusBar : UIView = AOSwift.statusBar()
     if statusBar.responds(to:#selector(setter: UIView.backgroundColor)) {
         statusBar.backgroundColor = color
     }
 }
+
 
 
 func setRootViewController(_ identifier : String){
