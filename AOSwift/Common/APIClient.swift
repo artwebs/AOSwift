@@ -27,6 +27,11 @@ class APIClient: NSObject {
     var rootUrl:String=""
     var view:UIView?
     var linstener:APIClientListener?
+    var remoteErr:[String:AnyObject]{
+        get{
+            return [:]
+        }
+    }
     
     func view(v:UIView) -> APIClient {
         self.view = v
@@ -46,10 +51,10 @@ class APIClient: NSObject {
         request.httpMethod = "GET"
         debugPrint(url,val)
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            var json:[String : AnyObject] = [:]
+            var json:[String : AnyObject] = self.remoteErr
             if error == nil{
                 do {
-                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
                 } catch  {
                     print(error.localizedDescription)
                 }
@@ -81,9 +86,9 @@ class APIClient: NSObject {
         debugPrint(url,val)
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            var json:[String : AnyObject] = [:]
+            var json:[String : AnyObject] = self.remoteErr
             do {
-                try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
             } catch  {
                 print(error.localizedDescription)
             }

@@ -9,6 +9,9 @@
 import UIKit
 
 class UIAOButton: UIButton {
+//    enum location {
+//        case <#case#>
+//    }
     var views = Dictionary<String,UIView>()
     private var isOn = false
     private var isOnView:UIImageView?
@@ -64,6 +67,25 @@ class UIAOButton: UIButton {
         }
     }
     
+    func radio(height:CGFloat,size:CGFloat){
+        var margin = (height - size) * 0.5
+        self.views = self.layoutHelper(name: "ico", h: "|-\(margin)-[?(\(size))]", v: "|-\(margin)-[?(\(size))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size * 0.5
+            v.layer.masksToBounds = true
+            v.layer.borderColor = AppDefault.DefaultBlue.cgColor
+            v.layer.borderWidth = 1
+            v.backgroundColor = .white
+        })
+        
+        margin = (height - size*0.8) * 0.5
+        self.views = self.layoutHelper(name: "ico_on", h: "|-\(margin)-[?(\(size*0.8))]", v: "|-\(margin)-[?(\(size*0.8))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size*0.8*0.5
+            v.layer.masksToBounds = true
+            v.backgroundColor = AppDefault.DefaultBlue
+            isOnView = v
+            isOnView?.isHidden = !isOn
+        })
+    }
     
     private func change(){
         if self.onChange?(self,!isOn) ?? true{
