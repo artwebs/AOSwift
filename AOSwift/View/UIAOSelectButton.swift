@@ -9,23 +9,32 @@
 import UIKit
 import AOCocoa
 
-class UIAOSelectButton:UIAOView{
-    var data:[[String:String]] = []
+class UIAOSelectButton:UIAOView,UIAOFormControl{
+    private var _field = ""
+    var field: String{
+       set{ self._field = newValue}
+       get{ return self._field}
+       
+    }
+    var data:[[String:Any]] = []
     var lineCount = 3
     var btnViews:[UIButton] = []
     var selectIndex = 0
-    var selectRow:[String:String] = [:]
+    var selectRow:[String:Any] = [:]
     var onStyle:((UIButton)->Void)?
     var unStyle:((UIButton)->Void)?
+    var textField = "text"
+    var idField = "id"
+    var onSelected:((UIAOSelectButton)->Void)?
     
     
-    var value:String{
+    var value:Any{
         get{
-            return selectRow["id"] ?? ""
+            return selectRow[self.idField] ?? ""
         }
     }
     
-    func load(title:String,allWidth:CGFloat,items:[[String:String]]){
+    func load(title:String,allWidth:CGFloat,items:[[String:Any]]){
         for view in self.subviews{
             view.removeFromSuperview()
         }
@@ -50,11 +59,12 @@ class UIAOSelectButton:UIAOView{
             left = margin * CGFloat(index%lineCount + 1) + width * CGFloat(index%lineCount)
             top = CGFloat(index / lineCount) * height + margin * CGFloat(index / lineCount + 1)
             self.views = self.layoutHelper(name: "item\(index)", h: "|-\(left)-[?(\(width))]", v: "[line]-\(top)-[?(30)]", views: self.views, delegate: { (v:UIButton) in
-                v.setTitle(item["text"], for: .normal)
+                v.setTitle(item[self.textField] as? String, for: .normal)
                 self.unselectedStyle(v: v)
                 btnViews.append(v)
                 self.click(v, listener: {
                     self.toSelect(v: v)
+                    
                 })
             })
             index = index + 1
@@ -65,9 +75,10 @@ class UIAOSelectButton:UIAOView{
         toSelect(v: self.btnViews[index])
     }
     
-    func toSelectById(id:String){
+    func toSelectById(id:Any){
         for (i,row) in self.data.enumerated(){
-            if id == row["id"]{
+            
+            if (id as AnyObject).isEqual(row[self.idField]) {
                 toSelect(v: self.btnViews[i])
                 return
             }
@@ -85,6 +96,7 @@ class UIAOSelectButton:UIAOView{
                 self.unselectedStyle(v: item)
             }
         }
+        self.onSelected?(self)
     }
     
     func selectedStyle(v:UIButton) {

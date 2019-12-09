@@ -8,17 +8,20 @@
 
 import UIKit
 
-class UIAOButton: UIButton {
-//    enum location {
-//        case <#case#>
-//    }
+class UIAOButton: UIButton,UIAOFormControl {
+    private var _field = ""
+       var field: String{
+           set{ self._field = newValue}
+           get{ return self._field}
+           
+       }
     var views = Dictionary<String,UIView>()
     private var isOn = false
     private var isOnView:UIImageView?
     var onChange:((UIAOButton,Bool)->Bool)?
-    var value:Int{
+    var value:Any{
         set{
-            isOn = newValue>0
+            isOn = newValue as! Int>0
             isOnView?.isHidden = !isOn
         }
         get{

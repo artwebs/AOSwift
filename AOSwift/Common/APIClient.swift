@@ -116,7 +116,15 @@ class APIClient: NSObject {
                                 filename: "file.jpg")
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request as URLRequest) { (data, res, error) in
-            callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
+            var json:[String : AnyObject] = self.remoteErr
+            if error == nil{
+                do {
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
+                } catch  {
+                    print(error.localizedDescription)
+                }
+            }
+            callback(res as? HTTPURLResponse,json,error)
         }
         //请求开始
         dataTask.resume()
@@ -172,7 +180,7 @@ class APIClient: NSObject {
         }
         
         body.appendString(boundaryPrefix)
-        body.appendString("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Disposition: form-data; name=\"attach\"; filename=\"\(filename)\"\r\n")
         body.appendString("Content-Type: \(mimeType)\r\n\r\n")
         body.append(data)
         body.appendString("\r\n")
