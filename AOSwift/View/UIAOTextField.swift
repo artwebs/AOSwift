@@ -16,6 +16,12 @@ class UIAOTextField: UITextField,UIAOFormControl {
         
     }
     
+    private var _finish:((UIAOFormControl)->Void)?
+    var finish:((UIAOFormControl)->Void)?{
+        set{ self._finish = newValue}
+        get{ return self._finish}
+    }
+    
     var views = Dictionary<String,UIView>()
     private var _listener = UIListener()
     override  var listener : UIListener{
@@ -24,9 +30,9 @@ class UIAOTextField: UITextField,UIAOFormControl {
         }
     }
     var value: Any{
-        get{
-            return self.text ?? ""
-        }
+        set{ self.text = newValue as? String}
+        get{ return self.text ?? ""}
     }
+    
 
 }

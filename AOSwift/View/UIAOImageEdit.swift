@@ -9,17 +9,30 @@
 import UIKit
 import AOCocoa
 
-class UIAOImageEdit: UIAOView,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class UIAOImageEdit: UIAOView,UIAOFormControl, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+    private var _field = ""
+    var field: String{
+        set{ self._field = newValue}
+        get{ return self._field}
+        
+    }
+    
+    private var _finish:((UIAOFormControl)->Void)?
+    var finish:((UIAOFormControl)->Void)?{
+        set{ self._finish = newValue}
+        get{ return self._finish}
+        
+    }
     private var _value:String = ""
     var imageView:UIImageView?
     var onSelected:((UIAOImageEdit,UIImage)->Void)?
     var loadImage:((UIAOImageEdit,String)->Void)?
     
-    var value:String{
+    var value:Any{
         set{
-            self._value = newValue
+            self._value = newValue as? String ?? ""
             self.imageView?.isHidden  =  false
-            self.loadImage?(self,newValue)
+            self.loadImage?(self,self._value)
         }
         get{
             return self._value

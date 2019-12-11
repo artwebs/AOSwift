@@ -15,13 +15,20 @@ class UIAOButton: UIButton,UIAOFormControl {
            get{ return self._field}
            
        }
+    private var _finish:((UIAOFormControl)->Void)?
+    var finish:((UIAOFormControl)->Void)?{
+        set{ self._finish = newValue}
+        get{ return self._finish}
+        
+    }
+    
     var views = Dictionary<String,UIView>()
     private var isOn = false
     private var isOnView:UIImageView?
     var onChange:((UIAOButton,Bool)->Bool)?
     var value:Any{
         set{
-            isOn = newValue as! Int>0
+            isOn = newValue as? Int ?? 0>0
             isOnView?.isHidden = !isOn
         }
         get{

@@ -9,13 +9,19 @@
 import UIKit
 
 protocol UIAOFormControl{
+    var finish:((UIAOFormControl)->Void)?{
+        set
+        get
+    }
     var field:String{
         set
         get
     }
     var value:Any{
+        set
         get
     }
+    
 }
 
 class UIAOForm: UIAOView {
@@ -30,4 +36,14 @@ class UIAOForm: UIAOView {
         }
     }
     
+    class func valueSet(view:UIView,param:[String:Any]){
+        for vview in view.subviews{
+            if var ctl = vview as? UIAOFormControl,ctl.field != ""{
+                ctl.value = param[ctl.field]
+            }
+            if vview.subviews.count > 0{
+                UIAOForm.valueSet(view: vview, param: param)
+            }
+        }
+    }
 }

@@ -8,15 +8,37 @@
 
 import UIKit
 
-class UIAONumberBox: UIAOView {
-    private var text:UITextField?
+class UIAONumberBox: UIAOView,UIAOFormControl {
+    private var _field = ""
+    var field: String{
+        set{ self._field = newValue}
+        get{ return self._field}
+        
+    }
+    
+    private var _finish:((UIAOFormControl)->Void)?
+    var finish:((UIAOFormControl)->Void)?{
+        set{ self._finish = newValue}
+        get{ return self._finish}
+        
+    }
+    
+    private var _listener = UIListener()
+    override  var listener : UIListener{
+        get{
+            return _listener
+        }
+    }
+    
+    var textField:UITextField?
+    var onChange:((UIAOFormControl)->Void)?
     private var min:Int = 0
-    var value:String{
+    var value:Any{
         set{
-            self.text?.text = newValue
+            self.textField?.text = newValue as? String ?? "0"
         }
         get{
-            return self.text?.text ?? "0"
+            return self.textField?.text ?? "0"
         }
     }
     
@@ -40,6 +62,7 @@ class UIAONumberBox: UIAOView {
             v.titleLabel?.font = UIFont.systemFont(ofSize: 14)
             self.click(v, listener: {
                  self.change(v: 1)
+                 self.onChange?(self)
             })
         })
         
@@ -47,17 +70,20 @@ class UIAONumberBox: UIAOView {
             v.font = UIFont.systemFont(ofSize: 14)
             v.textColor = AppDefault.DefaultGray
             v.text = "0"
-            self.text = v
+            v.textAlignment = .center
+            self.textField = v
         })
     }
     
     func change(v:Int){
-        let val = self.text?.text ?? "0"
+        let val = self.textField?.text ?? "0"
         if Int(val)! + v < 0{
             return
         }
-        self.text?.text = "\(Int(val)!+v)"
+        self.textField?.text = "\(Int(val)!+v)"
     }
+    
+    
     
 
 
