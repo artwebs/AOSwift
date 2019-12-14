@@ -10,6 +10,11 @@ import UIKit
 import AOCocoa
 
 class UIAOSelectButton:UIAOView,UIAOFormControl{
+    private var _vaild:UIAOFormVaild?
+    var vaild:UIAOFormVaild?{
+        set{ self._vaild = newValue}
+        get{ return self._vaild}
+    }
     private var _field = ""
     var field: String{
        set{ self._field = newValue}

@@ -9,6 +9,11 @@
 import UIKit
 
 class UIAOTextField: UITextField,UIAOFormControl {
+    private var _vaild:UIAOFormVaild?
+    var vaild:UIAOFormVaild?{
+        set{ self._vaild = newValue}
+        get{ return self._vaild}
+    }
     private var _field = ""
     var field: String{
         set{ self._field = newValue}
@@ -32,6 +37,13 @@ class UIAOTextField: UITextField,UIAOFormControl {
     var value: Any{
         set{ self.text = newValue as? String}
         get{ return self.text ?? ""}
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.setValue(12, forKey: "paddingLeft")
+        self.setValue(12, forKey: "paddingRight")
+        self.addDoneButtonOnKeyboard()
     }
     
 

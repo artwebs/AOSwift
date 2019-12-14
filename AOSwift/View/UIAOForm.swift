@@ -8,7 +8,16 @@
 
 import UIKit
 
+struct UIAOFormVaild {
+    var regex:String
+    var msg:String
+}
+
 protocol UIAOFormControl{
+    var vaild:UIAOFormVaild?{
+        set
+        get
+    }
     var finish:((UIAOFormControl)->Void)?{
         set
         get
@@ -45,5 +54,29 @@ class UIAOForm: UIAOView {
                 UIAOForm.valueSet(view: vview, param: param)
             }
         }
+    }
+    
+    class func valueVaild(view:UIView,param: inout [String:Any],success:([String:Any])->Void,fail:(String)->Void){
+        for vview in view.subviews{
+            if let ctl = vview as? UIAOFormControl,ctl.field != ""{
+                if let vaild = ctl.vaild {
+                    if !UtilHelper.regex(pattern: vaild.regex, str: "\(ctl.value)"){
+                        fail(vaild.msg)
+                        return
+                    }
+                }
+                param[ctl.field] = ctl.value
+            }
+            if vview.subviews.count > 0{
+                UIAOForm.valueVaild(view: vview, param: &param,success: success,fail: fail)
+            }
+        }
+        success(param)
+    }
+    
+    class func valueVaild(view:UIView,param: inout [String:Any],success:([String:Any])->Void){
+        UIAOForm.valueVaild(view: view, param: &param, success: success,fail: {(msg) in 
+            AOSwift.alert(message: msg, handler: nil)
+        })
     }
 }

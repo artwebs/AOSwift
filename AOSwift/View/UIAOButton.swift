@@ -9,12 +9,17 @@
 import UIKit
 
 class UIAOButton: UIButton,UIAOFormControl {
+    private var _vaild:UIAOFormVaild?
+    var vaild:UIAOFormVaild?{
+        set{ self._vaild = newValue}
+        get{ return self._vaild}
+    }
     private var _field = ""
-       var field: String{
-           set{ self._field = newValue}
-           get{ return self._field}
-           
-       }
+   var field: String{
+       set{ self._field = newValue}
+       get{ return self._field}
+       
+   }
     private var _finish:((UIAOFormControl)->Void)?
     var finish:((UIAOFormControl)->Void)?{
         set{ self._finish = newValue}
@@ -42,6 +47,9 @@ class UIAOButton: UIButton,UIAOFormControl {
         }
     }
     
+    func click(listener: @escaping () -> ()) {
+        self.click(self, listener: listener)
+    }
  
     func radio(text:String,height:CGFloat) {
         self.radio(text: text, height: height, size: 20)
