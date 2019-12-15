@@ -38,6 +38,36 @@ class APIClient: NSObject {
         return self
     }
     
+    func delete(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
+        var val = params
+        let urlSession = URLSession.shared
+        var url = rootUrl+path.cmd+append
+        self.urlWithParam(url: &url, params: params)
+        let before = self.linstener?.before(method:.GET, url:&url,params: &val)
+        if !(before?.flag ?? true){
+            return
+        }
+        var request = before?.request ?? buildRequest(url: url)
+        request.httpMethod = "delete"
+        debugPrint(url,val)
+        let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
+            var json:[String : AnyObject] = self.remoteErr
+            if error == nil{
+                do {
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
+                } catch  {
+                    print(error.localizedDescription)
+                }
+            }
+            callback(res as? HTTPURLResponse,json,error)
+        }
+        dataTask.resume()
+    }
+    
+    func delete(path:APIDefine,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void) {
+        delete(path: path, append: "", params: params, callback:callback)
+    }
+    
     func get(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
         var val = params
         let urlSession = URLSession.shared
