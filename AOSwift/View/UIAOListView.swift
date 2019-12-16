@@ -115,7 +115,9 @@ class UIAOListView: UIAOView,UITableViewDataSource,UITableViewDelegate {
         if cell == nil{
             cell = UIAOListViewCell(style: .default, reuseIdentifier: UIAOListView.className)
         }
-        
+        if indexPath.row > self.rows.count{
+            return cell!
+        }
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
         for item in cell!.builds{
             item(self.rows[indexPath.row])
