@@ -56,20 +56,29 @@ class UIAOForm: UIAOView {
         }
     }
     
-    class func valueVaild(view:UIView,param: inout [String:Any],success:([String:Any])->Void,fail:(String)->Void){
+    private class func valueVaild(view:UIView,param: inout [String:Any],fail:(String)->Void)->Bool{
         for vview in view.subviews{
             if let ctl = vview as? UIAOFormControl,ctl.field != ""{
                 if let vaild = ctl.vaild {
                     if !UtilHelper.regex(pattern: vaild.regex, str: "\(ctl.value)"){
                         fail(vaild.msg)
-                        return
+                        return false
                     }
                 }
                 param[ctl.field] = ctl.value
             }
             if vview.subviews.count > 0{
-                UIAOForm.valueVaild(view: vview, param: &param,success: success,fail: fail)
+                if !UIAOForm.valueVaild(view: vview, param: &param,fail: fail){
+                    return false
+                }
             }
+        }
+        return true
+    }
+    
+    class func valueVaild(view:UIView,param: inout [String:Any],success:([String:Any])->Void,fail:(String)->Void){
+        if !UIAOForm.valueVaild(view: view, param: &param,fail: fail){
+            return
         }
         success(param)
     }

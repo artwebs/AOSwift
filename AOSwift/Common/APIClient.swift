@@ -127,7 +127,7 @@ class APIClient: NSObject {
         dataTask.resume()
     }
     
-    func upload(path:APIDefine,image:UIImage,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
+    func upload(path:APIDefine,name:String,image:UIImage,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
         var val = params
         var url = rootUrl+path.cmd;
         let before = self.linstener?.before(method: .POST, url:&url,params: &val)
@@ -139,7 +139,7 @@ class APIClient: NSObject {
         let boundary = "Boundary-\(UUID().uuidString)"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         //发起请求
-        request.httpBody = createBody(parameters: val as! [String : String],
+        request.httpBody = createBody(name:name,parameters: val as! [String : String],
                                 boundary: boundary,
                                 data: image.jpegData(compressionQuality: 1)!,
                                 mimeType: "image/jpg",
@@ -194,7 +194,8 @@ class APIClient: NSObject {
         }
     }
     
-    func createBody(parameters: [String: String],
+    
+    func createBody(name:String,parameters: [String: String],
                     boundary: String,
                     data: Data,
                     mimeType: String,
@@ -210,7 +211,7 @@ class APIClient: NSObject {
         }
         
         body.appendString(boundaryPrefix)
-        body.appendString("Content-Disposition: form-data; name=\"attach\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(filename)\"\r\n")
         body.appendString("Content-Type: \(mimeType)\r\n\r\n")
         body.append(data)
         body.appendString("\r\n")
