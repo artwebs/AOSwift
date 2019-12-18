@@ -7,23 +7,78 @@
 //
 
 import UIKit
+struct ConfirmConfig{var title:String,btn1:String,btn2:String}
+
 class AOSwift {
     static var isDebug = true
-    static func alert(view:UIView?,message:String,handler: ((UIAlertAction)->Void)?){
-        var cancelAction:UIAlertAction!;
-        cancelAction = UIAlertAction(title: "确定", style: .cancel, handler:handler);
-        let alertController = UIAlertController(title: "提示",
-                                                message: message, preferredStyle: .alert)
-        
-        alertController.addAction(cancelAction)
-        DispatchQueue.main.async(execute: {
-            view?.vController?.present(alertController, animated: true, completion: nil)
-        })
-        
+    
+    static func alert(size:CGSize,from:(UIAOView,UIAOView)->Void){
+        let rect = UIScreen.main.bounds
+        let alertView = UIAOView(frame: rect)
+        var width = size.width
+        var height = size.height
+        alertView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        width = width > rect.width-20 ? rect.width-20:width
+        height = height > rect.height-80 ? rect.height-20:height
+        let container = UIAOView(frame: CGRect(x: 10, y: 40, width: width, height: height))
+        container.layer.cornerRadius = 10
+        container.layer.masksToBounds = true
+        container.backgroundColor = UIColor.white
+        container.center = CGPoint(x: rect.width*0.5, y: rect.height*0.5)
+        alertView.addSubview(container)
+        UIViewController.current()?.view.addSubview(alertView)
+        from(container,alertView)
     }
     
     static func alert(message:String,handler: ((UIAlertAction)->Void)?){
-        alert(view: UIViewController.current()?.view, message: message, handler: handler)
+        let alertController = UIAlertController(title: "提示",
+                                                message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "确定", style: .default, handler:handler))
+        DispatchQueue.main.async(execute: {
+            UIViewController.current()?.present(alertController, animated: true, completion: nil)
+        })
+        
+    }
+    static func confirm(message:String,success:(()->Void)?){
+        confirm(message: message, success: success, fail: nil)
+    }
+    
+    static func confirm(message:String,success:(()->Void)?,fail:(()->Void)?){
+        confirm(message: message, config: ConfirmConfig(title: "提示", btn1:"确定", btn2:"取消"), success: success, fail: fail)
+    }
+    
+    static func confirm(message:String,config:ConfirmConfig, success:(()->Void)?,fail:(()->Void)?){
+        let alertController = UIAlertController(title: config.title,
+      message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title:config.btn1, style: .default, handler: {(alert) in
+            success?()
+        }))
+       alertController.addAction(UIAlertAction(title: config.btn2, style: .cancel, handler:{(alert) in
+           fail?()
+       }))
+       DispatchQueue.main.async(execute: {
+            UIViewController.current()?.present(alertController, animated: true, completion: nil)
+       })
+    }
+    
+    static func confirm(message:String,textView:((UITextField)->Void)?,success:((String?)->Void)?){
+        confirm(message: message, textView: textView, success: success, fail: nil)
+    }
+    
+    static func confirm(message:String,textView:((UITextField)->Void)?,success:((String?)->Void)?,fail:(()->Void)?){
+        let alertController = UIAlertController(title: "提示",message: message, preferredStyle: .alert)
+        alertController.addTextField { (textField) in
+            textView?(textField)
+        }
+        alertController.addAction(UIAlertAction(title: "确定", style: .default, handler: {(alert) in
+            success?(alertController.textFields?.first?.text)
+        }))
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler:{(alert) in
+           fail?()
+        }))
+        DispatchQueue.main.async(execute: {
+            UIViewController.current()?.present(alertController, animated: true, completion: nil)
+        })
     }
     
     static func debugValue(param:[String:AnyObject])->[String:AnyObject]{

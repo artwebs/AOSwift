@@ -31,6 +31,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 @objc protocol UIAOTabsHorizontalViewDelegate{
     @objc optional func tabsHorizontalViewDidSelectedCell(_ tabsHorizontalView : UIAOTabsHorizontalView,index: Int)
+    @objc optional func tabsHorizontalViewWillSelectCell(_ tabsHorizontalView : UIAOTabsHorizontalView,index: Int)->Bool
 }
 
 
@@ -98,6 +99,11 @@ class UIAOTabsHorizontalView: UIScrollView {
     }
     
     func selectItem(_ index : Int, isDelegateSelect:Bool){
+        if let willSelect = self.tabDelegate?.tabsHorizontalViewWillSelectCell?(self, index: index){
+            if !willSelect{
+                return
+            }
+        }
         if let count = self.dataSource?.tabsHorizontalViewCellCount(self){
             for i in 0 ..< count{
                 let item = self.viewWithTag(tagStart+i) as! UIButton
