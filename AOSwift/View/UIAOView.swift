@@ -28,14 +28,5 @@ class UIAOView: UIView {
     }
      */
     
-    func color(startColor:UIColor,endColor:UIColor){
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
-        self.layer.addSublayer(gradientLayer)
-        gradientLayer.colors = [startColor,endColor]
-        let gradientLocations:[NSNumber] = [0.0,1.0]
-        gradientLayer.locations = gradientLocations
-        gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint.init(x: 1, y: 1)
-    }
+    
 }
