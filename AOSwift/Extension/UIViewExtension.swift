@@ -104,6 +104,18 @@ extension UIView{
         }
     }
     
+    func color(startColor:UIColor,endColor:UIColor){
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+        
+        gradientLayer.colors = [startColor,endColor]
+        let gradientLocations:[NSNumber] = [0.0,1.0]
+        gradientLayer.locations = gradientLocations
+        gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint.init(x: 1, y: 1)
+        self.layer.addSublayer(gradientLayer)
+    }
+    
 }
 
 

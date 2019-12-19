@@ -9,6 +9,7 @@
 import UIKit
 
 class UIAOButton: UIButton,UIAOFormControl {
+    let gradient: CAGradientLayer = CAGradientLayer()
     private var _vaild:UIAOFormVaild?
     var vaild:UIAOFormVaild?{
         set{ self._vaild = newValue}
@@ -112,5 +113,16 @@ class UIAOButton: UIButton,UIAOFormControl {
         }
     }
     
-
+    func applyGradient(_ colors: [UIColor], locations: [NSNumber]?) {
+        gradient.colors = colors
+        gradient.locations = locations
+        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        layer.insertSublayer(gradient, at: 0)
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        gradient.frame = self.bounds
+    }
 }
