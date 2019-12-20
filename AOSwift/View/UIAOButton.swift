@@ -106,7 +106,7 @@ class UIAOButton: UIButton,UIAOFormControl {
         })
     }
     
-    private func change(){
+    func change(){
         if self.onChange?(self,!isOn) ?? true{
             isOn = !isOn
             isOnView?.isHidden = !isOn
