@@ -11,6 +11,7 @@ struct ConfirmConfig{var title:String,btn1:String,btn2:String}
 
 class AOSwift {
     static var isDebug = true
+    static var debugTag:[String] = []
     
     static func alert(size:CGSize,from:(UIAOView,UIAOView)->Void){
         let rect = UIScreen.main.bounds
@@ -89,6 +90,9 @@ class AOSwift {
     }
     
     static func debugLog(tag:String, act:()->Void){
+        if debugTag.count > 0 && !debugTag.contains(tag) {
+            return
+        }
         if (!isDebug){
             return
         }
