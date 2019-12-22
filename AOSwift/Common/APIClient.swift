@@ -49,7 +49,7 @@ class APIClient: NSObject {
         }
         var request = before?.request ?? buildRequest(url: url)
         request.httpMethod = "delete"
-        debugPrint(url,val)
+        debugPrint(request.httpMethod,url,val)
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
             var json:[String : AnyObject] = self.remoteErr
             if error == nil{
