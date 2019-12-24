@@ -13,4 +13,10 @@ extension Date {
         let components = Calendar.current.dateComponents([.day], from: self, to: toDate)
        return components.day ?? 0
     }
+    
+    func secondBetween(toDate:Date)->Int{
+        let components = Calendar.current.dateComponents([.second], from: self, to: toDate)
+        return components.second ?? 0
+    }
+    
 }
