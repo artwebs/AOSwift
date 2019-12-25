@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UIAOTextField: UITextField,UIAOFormControl {
+class UIAOTextField: UITextField,UIAOFormControl,UITextFieldDelegate {
     private var _vaild:UIAOFormVaild?
     var vaild:UIAOFormVaild?{
         set{ self._vaild = newValue}
@@ -43,7 +43,23 @@ class UIAOTextField: UITextField,UIAOFormControl {
         super.draw(rect)
         self.setValue(12, forKey: "paddingLeft")
         self.setValue(12, forKey: "paddingRight")
+        self.delegate = self
         self.addDoneButtonOnKeyboard()
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        self.value = textField.text
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.resignFirstResponder()
+        self.finish?(self)
+        return true
+    }
+    
+    override func doneButtonAction() {
+        super.doneButtonAction()
+        self.finish?(self)
     }
     
     

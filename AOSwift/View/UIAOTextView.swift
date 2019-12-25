@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UIAOTextView: UITextView,UIAOFormControl {
+class UIAOTextView: UITextView,UIAOFormControl,UITextFieldDelegate {
     private var _vaild:UIAOFormVaild?
     var vaild:UIAOFormVaild?{
         set{ self._vaild = newValue}
