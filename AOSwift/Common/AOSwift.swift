@@ -14,6 +14,10 @@ class AOSwift {
     static var debugTag:[String] = []
     
     static func alert(size:CGSize,from:(UIAOView,UIAOView)->Void){
+        alert(view: UIViewController.current()?.view, size: size, from: from)
+    }
+    
+    static func alert(view:UIView?,size:CGSize,from:(UIAOView,UIAOView)->Void){
         let rect = UIScreen.main.bounds
         let alertView = UIAOView(frame: rect)
         var width = size.width
@@ -27,7 +31,7 @@ class AOSwift {
         container.backgroundColor = UIColor.white
         container.center = CGPoint(x: rect.width*0.5, y: rect.height*0.5)
         alertView.addSubview(container)
-        UIViewController.current()?.view.addSubview(alertView)
+        view?.addSubview(alertView)
         from(container,alertView)
     }
     
