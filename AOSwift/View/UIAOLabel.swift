@@ -36,8 +36,19 @@ class UIAOLabel: UILabel ,UIAOFormControl {
     }
 
     var value:Any{
-        set{ self.text = newValue as? String}
+        set{
+            if let opt = convert{
+                self.text = opt(newValue)
+            }else if let val = newValue as? Int{
+                self.text = "\(val)"
+            }else if let val = newValue as? Double{
+                self.text = "\(val)"
+            }else{
+                self.text = newValue as? String
+            }
+        }
         get{ return self.text ?? "" }
     }
 
+    var convert:((Any)->String)?
 }

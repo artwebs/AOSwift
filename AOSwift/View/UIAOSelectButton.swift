@@ -9,23 +9,8 @@
 import UIKit
 import AOCocoa
 
-class UIAOSelectButton:UIAOView,UIAOFormControl{
-    private var _vaild:UIAOFormVaild?
-    var vaild:UIAOFormVaild?{
-        set{ self._vaild = newValue}
-        get{ return self._vaild}
-    }
-    private var _field = ""
-    var field: String{
-       set{ self._field = newValue}
-       get{ return self._field}
-    }
-    private var _finish:((UIAOFormControl)->Void)?
-    var finish:((UIAOFormControl)->Void)?{
-        set{ self._finish = newValue}
-        get{ return self._finish}
-        
-    }
+class UIAOSelectButton:UIAOView{
+    
     var data:[[String:Any]] = []
     var lineCount = 3
     var btnViews:[UIButton] = []
@@ -38,7 +23,7 @@ class UIAOSelectButton:UIAOView,UIAOFormControl{
     var onSelected:((UIAOSelectButton)->Void)?
     
     
-    var value:Any{
+    override var value:Any{
         set{ self.toSelectById(id: newValue) }
         get{return selectRow[self.idField] ?? ""}
     }

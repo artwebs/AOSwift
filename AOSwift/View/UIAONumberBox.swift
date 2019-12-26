@@ -8,25 +8,8 @@
 
 import UIKit
 
-class UIAONumberBox: UIAOView,UIAOFormControl {
+class UIAONumberBox: UIAOView {
     private var _vaild:UIAOFormVaild?
-    var vaild:UIAOFormVaild?{
-        set{ self._vaild = newValue}
-        get{ return self._vaild}
-    }
-    private var _field = ""
-    var field: String{
-        set{ self._field = newValue}
-        get{ return self._field}
-        
-    }
-    
-    private var _finish:((UIAOFormControl)->Void)?
-    var finish:((UIAOFormControl)->Void)?{
-        set{ self._finish = newValue}
-        get{ return self._finish}
-        
-    }
     
     private var _listener = UIListener()
     override  var listener : UIListener{
@@ -38,7 +21,7 @@ class UIAONumberBox: UIAOView,UIAOFormControl {
     var textField:UITextField?
     var onChange:((UIAOFormControl)->Void)?
     private var min:Int = 0
-    var value:Any{
+    override var value:Any{
         set{
             self.textField?.text = newValue as? String ?? "0"
         }

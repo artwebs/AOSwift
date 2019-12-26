@@ -30,4 +30,17 @@ class UIAOScrollView: UIScrollView {
         self.addSubview(view)
     }
     
+    func addHeight(v:UIView,height:CGFloat){
+        if height == 0 {
+            return
+        }
+        self.viewSize = CGSize(width: self.viewSize.width, height: self.viewSize.height + height)
+        mainThread {
+            v.frame = CGRect(x: v.frame.origin.x, y: v.frame.origin.y, width:self.viewSize.width , height: self.viewSize.height+height)
+            self.view.frame  = CGRect(x: self.view.frame.origin.x, y:  self.view.frame.origin.y, width:v.frame.width , height: v.frame.height+height)
+            self.contentSize = self.viewSize
+        }
+        
+    }
+    
 }

@@ -16,6 +16,7 @@ class UIAOToolsView: UIView {
     var lineCount = 3
     var isShowTitle = true
     var imgZoom:CGFloat = 0.8
+    var itemHeight:CGFloat?
  
     override var listener: UIListener{
         get{
@@ -61,7 +62,7 @@ class UIAOToolsView: UIView {
         for i in 0..<items.count{
             if(i != 0 && i%lineCount==0){
                 rowWidth=0
-                allHeight+=viewHeight
+                allHeight+=viewHeight+20
                 viewHeight = lineWidth
                 let lineView = UIImageView(frame: CGRect(x: 0, y: allHeight, width: allWidth, height: viewHeight))
                 lineView.image = Utils.createImage(with: AppDefault.DefaultLightGray)
@@ -69,9 +70,9 @@ class UIAOToolsView: UIView {
                 allHeight+=viewHeight
             }
             
-            viewHeight = 88
+            viewHeight = self.itemHeight ?? CGFloat(88 + 30)
             let sideLength = cellWidth>viewHeight ? viewHeight * imgZoom : cellWidth * imgZoom
-            let button = UIButton(frame: CGRect(x: rowWidth, y: allHeight, width: cellWidth, height: 88))
+            let button = UIButton(frame: CGRect(x: rowWidth, y: allHeight, width: cellWidth, height: viewHeight - 30 ))
             let ico = UIImageView(frame: CGRect(x: 0, y: 0, width: sideLength, height:sideLength))
             if items[i].ico.hasPrefix("http"){
                 ico.image = Utils.loadImageCache(withUrl: items[i].ico, defaultImage: "AppIcon")

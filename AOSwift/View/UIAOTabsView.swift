@@ -23,6 +23,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 @objc protocol UIAOTabsViewDataSource{
     func tabsViewCellCount(_ tabsView : UIAOTabsView)->Int
+    @objc optional func tabsViewCellSize()->CGSize
     @objc optional func tabsViewForCellSelectStyle(_ tabsView : UIAOTabsView, cell :UIButton,index: Int)
     @objc optional func tabsViewForCellUnSelectStyle(_ tabsView : UIAOTabsView, cell :UIButton,index: Int)
     func tabsViewForCell(_ tabsView : UIAOTabsView,cell : UIButton,index: Int)
@@ -68,6 +69,10 @@ class UIAOTabsView: UIAOScrollView {
         }else{
             height = 44
             width = self.frame.width
+        }
+        if let size = self.dataSource?.tabsViewCellSize?(){
+            width = size.width
+            height = size.height
         }
         
         for index in 0 ..< self.dataSource!.tabsViewCellCount(self){
