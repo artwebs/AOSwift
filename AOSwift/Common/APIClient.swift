@@ -27,10 +27,45 @@ class APIClient: NSObject {
     var rootUrl:String=""
     var view:UIView?
     var linstener:APIClientListener?
+    var remoteErr:[String:AnyObject]{
+        get{
+            return [:]
+        }
+    }
     
     func view(v:UIView) -> APIClient {
         self.view = v
         return self
+    }
+    
+    func delete(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
+        var val = params
+        let urlSession = URLSession.shared
+        var url = rootUrl+path.cmd+append
+        self.urlWithParam(url: &url, params: params)
+        let before = self.linstener?.before(method:.GET, url:&url,params: &val)
+        if !(before?.flag ?? true){
+            return
+        }
+        var request = before?.request ?? buildRequest(url: url)
+        request.httpMethod = "delete"
+        debugPrint(url,val)
+        let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
+            var json:[String : AnyObject] = self.remoteErr
+            if error == nil{
+                do {
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
+                } catch  {
+                    print(error.localizedDescription)
+                }
+            }
+            callback(res as? HTTPURLResponse,json,error)
+        }
+        dataTask.resume()
+    }
+    
+    func delete(path:APIDefine,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void) {
+        delete(path: path, append: "", params: params, callback:callback)
     }
     
     func get(path:APIDefine,append:String,params:[String:Any]?,callback:@escaping (_ res:HTTPURLResponse?, _ data:[String:AnyObject]?, _ error:Error?)->Void){
@@ -46,10 +81,10 @@ class APIClient: NSObject {
         request.httpMethod = "GET"
         debugPrint(url,val)
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            var json:[String : AnyObject] = [:]
+            var json:[String : AnyObject] = self.remoteErr
             if error == nil{
                 do {
-                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
                 } catch  {
                     print(error.localizedDescription)
                 }
@@ -81,9 +116,9 @@ class APIClient: NSObject {
         debugPrint(url,val)
         
         let dataTask=urlSession.dataTask(with: request) { (data, res, error) in
-            var json:[String : AnyObject] = [:]
+            var json:[String : AnyObject] = self.remoteErr
             do {
-                try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? [:]
+                try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
             } catch  {
                 print(error.localizedDescription)
             }
@@ -111,7 +146,15 @@ class APIClient: NSObject {
                                 filename: "file.jpg")
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request as URLRequest) { (data, res, error) in
-            callback(res as? HTTPURLResponse,try!JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject],error)
+            var json:[String : AnyObject] = self.remoteErr
+            if error == nil{
+                do {
+                    try json = JSONSerialization.jsonObject(with: data ?? Data(), options: .allowFragments) as? [String:AnyObject] ?? self.remoteErr
+                } catch  {
+                    print(error.localizedDescription)
+                }
+            }
+            callback(res as? HTTPURLResponse,json,error)
         }
         //请求开始
         dataTask.resume()
@@ -167,7 +210,7 @@ class APIClient: NSObject {
         }
         
         body.appendString(boundaryPrefix)
-        body.appendString("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n")
+        body.appendString("Content-Disposition: form-data; name=\"attach\"; filename=\"\(filename)\"\r\n")
         body.appendString("Content-Type: \(mimeType)\r\n\r\n")
         body.append(data)
         body.appendString("\r\n")

@@ -49,5 +49,28 @@ extension UIImage{
         return UIImage(cgImage: image, scale: 0, orientation: self.imageOrientation)
     }
     
+    public func reSize(size: CGSize) -> UIImage? {
+        if self.size.height > size.height {
+            let width = size.height / self.size.height * self.size.width
+            let newImgSize = CGSize(width: width, height: size.height)
+            UIGraphicsBeginImageContext(newImgSize)
+            self.draw(in: CGRect(x: 0, y: 0, width: newImgSize.width, height: newImgSize.height))
+            let theImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            guard let newImg = theImage else { return  nil}
+            return newImg
+            
+        } else {
+            let newImgSize = CGSize(width: size.width, height: size.height)
+            UIGraphicsBeginImageContext(newImgSize)
+            self.draw(in: CGRect(x: 0, y: 0, width: newImgSize.width, height: newImgSize.height))
+            let theImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            guard let newImg = theImage else { return  nil}
+            return newImg
+        }
+    
+    }
+    
     
 }

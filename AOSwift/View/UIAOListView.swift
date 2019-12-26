@@ -102,6 +102,10 @@ class UIAOListView: UIAOView,UITableViewDataSource,UITableViewDelegate {
         return rows.count
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
        return self.listViewDelegate?.listViewForCellHeight?(listView: self, index: indexPath) ?? CGFloat(88)
     }
@@ -111,7 +115,9 @@ class UIAOListView: UIAOView,UITableViewDataSource,UITableViewDelegate {
         if cell == nil{
             cell = UIAOListViewCell(style: .default, reuseIdentifier: UIAOListView.className)
         }
-        
+        if indexPath.row > self.rows.count{
+            return cell!
+        }
         self.listViewDelegate?.listView(listView: self, cell: cell!,index:indexPath,row: self.rows[indexPath.row])
         for item in cell!.builds{
             item(self.rows[indexPath.row])
@@ -176,7 +182,6 @@ class UIAOListViewCell: UITableViewCell {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

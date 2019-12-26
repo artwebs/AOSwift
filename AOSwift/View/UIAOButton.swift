@@ -8,14 +8,32 @@
 
 import UIKit
 
-class UIAOButton: UIButton {
+class UIAOButton: UIButton,UIAOFormControl {
+    private var _vaild:UIAOFormVaild?
+    var vaild:UIAOFormVaild?{
+        set{ self._vaild = newValue}
+        get{ return self._vaild}
+    }
+    private var _field = ""
+   var field: String{
+       set{ self._field = newValue}
+       get{ return self._field}
+       
+   }
+    private var _finish:((UIAOFormControl)->Void)?
+    var finish:((UIAOFormControl)->Void)?{
+        set{ self._finish = newValue}
+        get{ return self._finish}
+        
+    }
+    
     var views = Dictionary<String,UIView>()
     private var isOn = false
     private var isOnView:UIImageView?
     var onChange:((UIAOButton,Bool)->Bool)?
-    var value:Int{
+    var value:Any{
         set{
-            isOn = newValue>0
+            isOn = newValue as? Int ?? 0>0
             isOnView?.isHidden = !isOn
         }
         get{
@@ -29,6 +47,9 @@ class UIAOButton: UIButton {
         }
     }
     
+    func click(listener: @escaping () -> ()) {
+        self.click(self, listener: listener)
+    }
  
     func radio(text:String,height:CGFloat) {
         self.radio(text: text, height: height, size: 20)
@@ -64,6 +85,25 @@ class UIAOButton: UIButton {
         }
     }
     
+    func radio(height:CGFloat,size:CGFloat){
+        var margin = (height - size) * 0.5
+        self.views = self.layoutHelper(name: "ico", h: "|-\(margin)-[?(\(size))]", v: "|-\(margin)-[?(\(size))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size * 0.5
+            v.layer.masksToBounds = true
+            v.layer.borderColor = AppDefault.DefaultBlue.cgColor
+            v.layer.borderWidth = 1
+            v.backgroundColor = .white
+        })
+        
+        margin = (height - size*0.8) * 0.5
+        self.views = self.layoutHelper(name: "ico_on", h: "|-\(margin)-[?(\(size*0.8))]", v: "|-\(margin)-[?(\(size*0.8))]", views: self.views, delegate: { (v:UIImageView) in
+            v.layer.cornerRadius = size*0.8*0.5
+            v.layer.masksToBounds = true
+            v.backgroundColor = AppDefault.DefaultBlue
+            isOnView = v
+            isOnView?.isHidden = !isOn
+        })
+    }
     
     private func change(){
         if self.onChange?(self,!isOn) ?? true{

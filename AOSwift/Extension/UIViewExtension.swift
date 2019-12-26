@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AOCocoa
 var AOSwiftViewID = 10000
 
 extension UIView{
@@ -97,7 +98,11 @@ extension UIView{
         
     }
     
-    
+    func line(){
+        self.layoutHelper(name: "line", h: "|-0-[?]-0-|", v: "[?(2)]-0-|") { (v:UIImageView) in
+            v.image = Utils.createImage(with: AppDefault.DefaultLightGray)
+        }
+    }
     
 }
 

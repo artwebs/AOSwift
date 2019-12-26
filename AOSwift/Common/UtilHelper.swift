@@ -24,6 +24,13 @@ class UtilHelper {
         view.layer.addSublayer(layer)
     }
     
+    class func regex(pattern:String, str:String) -> Bool {
+        if NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: str) {
+            return true
+        }
+        return false
+    }
+    
     class func regexGetSub(pattern:String, str:String) -> [String] {
         var subStr = [String]()
         let regex = try! NSRegularExpression(pattern: pattern, options:[])
