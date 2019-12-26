@@ -53,6 +53,7 @@ class UIAOSubmitCellViewTextbox:UIAOSubmitCellView,UITextFieldDelegate{
     
     override func setValue(val: String) {
         self.value = val
+        self.edit?.text = val
     }
     
     override func getName() -> String {
