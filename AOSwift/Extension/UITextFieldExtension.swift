@@ -27,6 +27,7 @@ extension UITextField{
     
     @objc func doneButtonAction() {
         self.resignFirstResponder()
+        self.endEditing(true)
     }
     
     func addKeyboardLayout(parent:UIView){

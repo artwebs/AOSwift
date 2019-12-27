@@ -48,7 +48,7 @@ class UIAOTextField: UITextField,UIAOFormControl,UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        self.value = textField.text
+        self.value = textField.text as? String ?? ""
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -58,7 +58,7 @@ class UIAOTextField: UITextField,UIAOFormControl,UITextFieldDelegate {
     }
     
     override func doneButtonAction() {
-        super.doneButtonAction()
+        self.resignFirstResponder()
         self.finish?(self)
     }
     
