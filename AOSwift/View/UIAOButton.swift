@@ -36,6 +36,7 @@ class UIAOButton: UIButton,UIAOFormControl {
         set{
             isOn = newValue as? Int ?? 0>0
             isOnView?.isHidden = !isOn
+            self.convert?(newValue)
         }
         get{
             return isOn ? 1 : 0
@@ -47,6 +48,7 @@ class UIAOButton: UIButton,UIAOFormControl {
             return _listener
         }
     }
+    var convert:((Any)->String)?
     
     func click(listener: @escaping () -> ()) {
         self.click(self, listener: listener)
