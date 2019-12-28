@@ -56,6 +56,10 @@ class UIAOTabsView: UIAOScrollView {
     }
     
     func reload(didSelected sindex:Int){
+        self.reload(didSelected: sindex, isDelegateSelect: false)
+    }
+    
+    func reload(didSelected sindex:Int,isDelegateSelect:Bool){
         self.backgroundColor = UIColor.clear
         self.clear()
         if self.dataSource == nil {
@@ -94,9 +98,11 @@ class UIAOTabsView: UIAOScrollView {
             lineView!.isHidden = true
         }
         if self.dataSource!.tabsViewCellCount(self)>0{
-            self.selectItem(sindex, isDelegateSelect: false)
+            self.selectItem(sindex, isDelegateSelect: isDelegateSelect)
         }
     }
+    
+    
     
     func clear(){
         allWith=0;
