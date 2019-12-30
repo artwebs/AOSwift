@@ -35,6 +35,7 @@ class UIAOButton: UIButton,UIAOFormControl {
     var value:Any{
         set{
             isOn = newValue as? Int ?? 0>0
+            self.onChange?(self,isOn)
             isOnView?.isHidden = !isOn
             self.convert?(newValue)
         }
