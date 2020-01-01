@@ -98,6 +98,14 @@ class UIAOSelectButton:UIAOView{
         
     }
     
+    func clearSelect(){
+        for (_,item) in btnViews.enumerated(){
+            self.selectIndex = 0
+            self.selectRow.removeAll()
+            self.unselectedStyle(v: item)
+        }
+    }
+    
     func selectedStyle(v:UIButton) {
         if let act  = onStyle{
             act(v)

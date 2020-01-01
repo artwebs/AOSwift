@@ -19,4 +19,18 @@ extension Date {
         return components.second ?? 0
     }
     
+    static func strFormat(from:String,format:String)->String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        if let time = dateFormatter.date(from: from){
+            dateFormatter.dateFormat = format
+            return dateFormatter.string(from: time)
+        }
+        return ""
+    }
+    
+    static func strFormatDate(from:String)->String{
+        return strFormat(from: from, format: "yyyy-MM-dd")
+    }
+    
 }
